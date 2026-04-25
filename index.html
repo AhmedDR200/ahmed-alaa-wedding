@@ -1,0 +1,1334 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ahmed & Alaa — December 9, 2026</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Jost:wght@200;300;400;500&family=Amiri:ital,wght@0,400;1,400&family=Cairo:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --gold:      #B8975A;
+      --gold-lt:   #D4B483;
+      --gold-pale: #EEE0C4;
+      --ivory:     #F7F4EF;
+      --cream:     #FAF8F5;
+      --charcoal:  #1C1C1E;
+      --dark:      #111110;
+      --muted:     #8C8070;
+      --white:     #FFFFFF;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Jost', sans-serif;
+      font-weight: 300;
+      background: var(--ivory);
+      color: var(--charcoal);
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* ── LOADER ── */
+    #loader {
+      position: fixed;
+      inset: 0;
+      background: var(--charcoal);
+      z-index: 10000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity .9s ease, visibility .9s;
+    }
+    #loader.hide { opacity: 0; visibility: hidden; pointer-events: none; }
+
+    .loader-inner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+      animation: loaderFadeIn .8s ease forwards;
+    }
+    @keyframes loaderFadeIn {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: none; }
+    }
+
+    .loader-ring {
+      width: 110px;
+      height: 110px;
+      border-radius: 50%;
+      border: 1px solid var(--gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 22px;
+      color: var(--gold);
+      animation: loaderPulse 2s ease-in-out infinite;
+    }
+    @keyframes loaderPulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(184,151,90,.4); }
+      50%       { box-shadow: 0 0 0 12px rgba(184,151,90,0); }
+    }
+
+    .loader-divider {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .loader-line {
+      height: 1px;
+      background: var(--gold-lt);
+      width: 0;
+      animation: lineGrow .9s cubic-bezier(.22,1,.36,1) .4s forwards;
+    }
+    @keyframes lineGrow { to { width: 70px; } }
+    .loader-diamond {
+      width: 7px; height: 7px;
+      background: var(--gold);
+      transform: rotate(45deg);
+    }
+
+    .loader-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 20px;
+      font-weight: 300;
+      letter-spacing: .22em;
+      color: rgba(255,255,255,.7);
+      opacity: 0;
+      animation: fadeIn .8s ease .9s forwards;
+    }
+    @keyframes fadeIn { to { opacity: 1; } }
+
+    /* ── LANG TOGGLE ── */
+    #lang-btn {
+      position: fixed;
+      top: 24px;
+      right: 24px;
+      z-index: 9000;
+      background: rgba(28,28,30,.7);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(184,151,90,.4);
+      color: var(--gold-lt);
+      padding: 9px 20px;
+      font-family: 'Jost', sans-serif;
+      font-size: 12px;
+      letter-spacing: .12em;
+      cursor: pointer;
+      transition: background .3s, border-color .3s;
+    }
+    #lang-btn:hover { background: rgba(184,151,90,.2); border-color: var(--gold); }
+
+    /* ── MILESTONE BANNER ── */
+    .milestone-banner {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 8000;
+      background: linear-gradient(135deg, var(--charcoal), #2a1f0e);
+      border-bottom: 1px solid var(--gold);
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      transform: translateY(-100%);
+      transition: transform .6s cubic-bezier(.22,1,.36,1);
+    }
+    .milestone-banner.show { transform: translateY(0); }
+    .milestone-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 18px;
+      color: var(--gold-lt);
+      letter-spacing: .04em;
+    }
+    .milestone-close {
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-size: 14px;
+      cursor: pointer;
+      padding: 4px 8px;
+      position: absolute;
+      right: 20px;
+    }
+    .milestone-close:hover { color: var(--gold); }
+
+    /* ── CURSOR SPARKLES ── */
+    body { cursor: none; }
+    .cursor-dot {
+      position: fixed;
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--gold);
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: transform .1s ease;
+    }
+    .cursor-ring {
+      position: fixed;
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      border: 1px solid rgba(184,151,90,.5);
+      pointer-events: none;
+      z-index: 9998;
+      transform: translate(-50%, -50%);
+      transition: transform .18s ease, width .2s, height .2s;
+    }
+    .sparkle {
+      position: fixed;
+      pointer-events: none;
+      z-index: 9997;
+      color: var(--gold);
+      transform: translate(-50%, -50%);
+      animation: sparkleFly .9s ease forwards;
+      user-select: none;
+      line-height: 1;
+    }
+    @keyframes sparkleFly {
+      0%   { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+      100% { opacity: 0; transform: translate(calc(-50% + var(--dx,0px)), calc(-50% - 28px)) scale(0.2); }
+    }
+
+    /* ── WEDDING DAY CELEBRATION ── */
+    .celebration-wrap {
+      text-align: center;
+      padding: 20px 0;
+    }
+    .celebration-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(36px, 7vw, 72px);
+      font-weight: 300;
+      color: var(--charcoal);
+      line-height: 1.1;
+      margin-bottom: 12px;
+    }
+    .celebration-title em { font-style: italic; color: var(--gold); }
+    .celebration-sub {
+      font-size: 11px;
+      letter-spacing: .28em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* ── CANVAS ── */
+    #petals-canvas {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+    #confetti-canvas {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9989;
+    }
+
+    /* ── FADE-IN ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity .9s cubic-bezier(.22,1,.36,1), transform .9s cubic-bezier(.22,1,.36,1);
+    }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      height: 100vh;
+      min-height: 620px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 1;
+      direction: ltr;
+    }
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background-image: url('WhatsApp Image 2026-04-25 at 16.13.13.jpeg');
+      background-size: cover;
+      background-position: center 20%;
+      transform: scale(1.08);
+      will-change: transform;
+      direction: ltr;
+    }
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom,
+        rgba(17,17,16,.55) 0%,
+        rgba(17,17,16,.35) 40%,
+        rgba(17,17,16,.72) 100%);
+    }
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      color: var(--white);
+      padding: 0 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 28px;
+    }
+    .monogram {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .monogram-line { width: 60px; height: 1px; background: var(--gold-lt); }
+    .monogram-circle {
+      width: 64px; height: 64px;
+      border-radius: 50%;
+      border: 1px solid var(--gold-lt);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 18px;
+      font-style: italic;
+      color: var(--gold-lt);
+    }
+    .hero-names {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(52px, 10vw, 96px);
+      font-weight: 300;
+      line-height: 1;
+      letter-spacing: .02em;
+      color: var(--white);
+    }
+    .hero-names em {
+      font-style: italic;
+      color: var(--gold-lt);
+      font-size: .55em;
+      display: block;
+      letter-spacing: .18em;
+      margin: 8px 0;
+    }
+    .hero-date-line {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .hero-date-line span {
+      font-family: 'Jost', sans-serif;
+      font-weight: 300;
+      font-size: 12px;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.75);
+    }
+    .hero-date-line::before,
+    .hero-date-line::after {
+      content: '';
+      width: 40px; height: 1px;
+      background: rgba(255,255,255,.35);
+    }
+    .scroll-cue {
+      position: absolute;
+      bottom: 36px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+    .scroll-cue span {
+      font-size: 9px;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.45);
+    }
+    .scroll-arrow {
+      width: 1px; height: 48px;
+      background: linear-gradient(to bottom, rgba(255,255,255,.4), transparent);
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+    @keyframes scrollPulse {
+      0%, 100% { opacity: .4; }
+      50%       { opacity: 1; }
+    }
+
+    /* ── ORNAMENT ── */
+    .ornament {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      padding: 0 24px;
+    }
+    .ornament-line { flex: 1; max-width: 180px; height: 1px; background: var(--gold-pale); }
+    .ornament-diamond { width: 8px; height: 8px; background: var(--gold); transform: rotate(45deg); }
+
+    /* ── COUNTDOWN ── */
+    .countdown-section {
+      position: relative;
+      z-index: 1;
+      padding: 90px 24px 60px;
+      text-align: center;
+      background: var(--white);
+    }
+    .section-eyebrow {
+      font-size: 10px;
+      letter-spacing: .28em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 52px;
+    }
+    .countdown-row {
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      gap: clamp(20px, 5vw, 72px);
+      flex-wrap: wrap;
+    }
+    .count-unit {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+    }
+    .count-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(56px, 10vw, 100px);
+      font-weight: 300;
+      line-height: 1;
+      color: var(--charcoal);
+      min-width: 2ch;
+      text-align: center;
+    }
+    .count-sep {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 60px;
+      font-weight: 300;
+      color: var(--gold-pale);
+      line-height: 1;
+      padding-bottom: 24px;
+    }
+    .count-bar { width: 100%; height: 1px; background: var(--gold); }
+    .count-label {
+      font-size: 9px;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* ── STATS ── */
+    .stats-section {
+      position: relative;
+      z-index: 1;
+      padding: 48px 24px;
+      background: var(--white);
+    }
+    .stats-row {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .stat-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0 40px;
+    }
+    .stat-item + .stat-item { border-left: 1px solid var(--gold-pale); }
+    .stat-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 42px;
+      font-weight: 300;
+      color: var(--charcoal);
+      line-height: 1;
+    }
+    .stat-label {
+      font-size: 9px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+
+    /* ── SECTION WRAPPER ── */
+    .section-wrap {
+      position: relative;
+      z-index: 1;
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 90px 32px;
+    }
+    .section-heading {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(28px, 4vw, 42px);
+      font-weight: 300;
+      text-align: center;
+      margin-bottom: 12px;
+      color: var(--charcoal);
+    }
+    .section-heading em { font-style: italic; color: var(--gold); }
+    .section-sub {
+      font-size: 11px;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-align: center;
+      margin-bottom: 56px;
+    }
+
+    /* ── QUOTE ── */
+    .quote-section {
+      background: var(--charcoal);
+      padding: 90px 32px;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+      overflow: hidden;
+    }
+    .quote-section::before {
+      content: '\201C';
+      position: absolute;
+      top: -40px; left: 50%;
+      transform: translateX(-50%);
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 280px;
+      color: rgba(184,151,90,.07);
+      line-height: 1;
+      pointer-events: none;
+    }
+    .quote-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(20px, 3.5vw, 30px);
+      font-weight: 300;
+      color: var(--white);
+      line-height: 1.7;
+      max-width: 600px;
+      margin: 0 auto 24px;
+    }
+    .quote-attr {
+      font-size: 10px;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--gold);
+    }
+
+    /* ── TIMELINE ── */
+    .timeline { display: flex; flex-direction: column; }
+    .tl-item {
+      display: grid;
+      grid-template-columns: 120px 1px 1fr;
+      gap: 0 32px;
+      min-height: 90px;
+    }
+    .tl-date-col { text-align: right; padding-top: 4px; }
+    .tl-date {
+      font-size: 10px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--gold);
+      line-height: 1.4;
+    }
+    .tl-line-col { display: flex; flex-direction: column; align-items: center; }
+    .tl-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: var(--gold);
+      border: 2px solid var(--ivory);
+      box-shadow: 0 0 0 1px var(--gold);
+      flex-shrink: 0;
+      margin-top: 4px;
+    }
+    .tl-connector { flex: 1; width: 1px; background: var(--gold-pale); margin-top: 6px; }
+    .tl-item:last-child .tl-connector { display: none; }
+    .tl-body { padding-bottom: 48px; }
+    .tl-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      font-weight: 400;
+      margin-bottom: 8px;
+      color: var(--charcoal);
+    }
+    .tl-desc { font-size: 14px; font-weight: 300; color: var(--muted); line-height: 1.8; }
+
+    /* ── WISHES ── */
+    .wishes-section { background: var(--cream); }
+    .wish-form { display: flex; flex-direction: column; gap: 28px; }
+    .field-wrap { position: relative; }
+    .field-wrap input,
+    .field-wrap textarea {
+      width: 100%;
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid var(--gold-pale);
+      padding: 12px 0;
+      font-family: 'Jost', sans-serif;
+      font-weight: 300;
+      font-size: 15px;
+      color: var(--charcoal);
+      outline: none;
+      resize: none;
+      transition: border-color .3s;
+    }
+    .field-wrap input:focus,
+    .field-wrap textarea:focus { border-bottom-color: var(--gold); }
+    .field-wrap input::placeholder,
+    .field-wrap textarea::placeholder { color: var(--muted); font-style: italic; }
+    .btn-wish {
+      align-self: flex-start;
+      background: transparent;
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      padding: 13px 36px;
+      font-family: 'Jost', sans-serif;
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: background .3s, color .3s;
+    }
+    .btn-wish:hover { background: var(--gold); color: var(--white); }
+    .wishes-wall { margin-top: 52px; display: flex; flex-direction: column; gap: 24px; }
+    .wish-bubble {
+      padding: 24px 0;
+      border-bottom: 1px solid var(--gold-pale);
+      animation: fadeUp .5s ease;
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: none; }
+    }
+    .wish-name {
+      font-size: 10px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 8px;
+    }
+    .wish-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 18px;
+      font-weight: 300;
+      color: var(--charcoal);
+      line-height: 1.7;
+    }
+
+    /* ── SHARE ── */
+    .share-section {
+      position: relative;
+      z-index: 1;
+      padding: 90px 32px;
+      text-align: center;
+      background: var(--white);
+    }
+    .share-btns {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 40px;
+    }
+    .btn-s {
+      padding: 14px 32px;
+      font-family: 'Jost', sans-serif;
+      font-size: 10px;
+      font-weight: 400;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      cursor: pointer;
+      border: none;
+      transition: opacity .2s, transform .2s;
+    }
+    .btn-s:hover { opacity: .85; transform: translateY(-2px); }
+    .btn-copy     { background: var(--charcoal); color: var(--white); }
+    .btn-whatsapp { background: #25d366; color: var(--white); }
+    .btn-download { background: var(--gold); color: var(--white); }
+
+    /* ── FOOTER ── */
+    footer {
+      position: relative;
+      z-index: 1;
+      background: var(--charcoal);
+      text-align: center;
+      padding: 48px 24px;
+      color: rgba(255,255,255,.3);
+      font-size: 11px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+    footer strong { color: var(--gold); font-weight: 400; }
+
+    /* ── TOAST ── */
+    .toast {
+      position: fixed;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%) translateY(16px);
+      background: var(--charcoal);
+      color: var(--white);
+      padding: 13px 28px;
+      font-size: 12px;
+      letter-spacing: .1em;
+      opacity: 0;
+      transition: all .35s;
+      z-index: 9990;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* ── ARABIC / RTL ── */
+    [lang="ar"] body,
+    [lang="ar"] .count-label,
+    [lang="ar"] .stat-label,
+    [lang="ar"] .section-sub,
+    [lang="ar"] .section-eyebrow,
+    [lang="ar"] .quote-attr,
+    [lang="ar"] .wish-name,
+    [lang="ar"] .tl-date,
+    [lang="ar"] .tl-desc,
+    [lang="ar"] .btn-wish,
+    [lang="ar"] .btn-s {
+      font-family: 'Cairo', sans-serif;
+    }
+    [lang="ar"] .section-heading,
+    [lang="ar"] .hero-names,
+    [lang="ar"] .tl-title,
+    [lang="ar"] .quote-text,
+    [lang="ar"] .wish-text,
+    [lang="ar"] .count-num,
+    [lang="ar"] .stat-num,
+    [lang="ar"] .loader-name,
+    [lang="ar"] .monogram-circle {
+      font-family: 'Amiri', serif;
+    }
+    [lang="ar"] .tl-date-col { text-align: left; }
+    [lang="ar"] #lang-btn { left: 24px; right: auto; }
+    [lang="ar"] .hero-date-line span { letter-spacing: .08em; }
+    [lang="ar"] .milestone-close { right: auto; left: 20px; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      .section-wrap { padding: 64px 24px; }
+      .countdown-section { padding: 64px 24px 48px; }
+      .stats-section { padding: 36px 24px; }
+      .share-section { padding: 64px 24px; }
+    }
+    @media (max-width: 600px) {
+      .hero-names { font-size: clamp(40px, 14vw, 64px); }
+      .monogram-line { width: 32px; }
+      .monogram-circle { width: 52px; height: 52px; font-size: 15px; }
+      .hero-date-line::before,
+      .hero-date-line::after { width: 20px; }
+      .count-sep { display: none; }
+      .countdown-row { gap: 20px 32px; }
+      .count-num { font-size: clamp(44px, 14vw, 72px); }
+      .stats-row { flex-direction: column; gap: 28px; }
+      .stat-item { padding: 0; }
+      .stat-item + .stat-item { border-left: none; border-top: 1px solid var(--gold-pale); padding-top: 28px; }
+      .tl-item { grid-template-columns: 1px 1fr; grid-template-rows: auto auto; gap: 0 16px; }
+      .tl-date-col { grid-column: 2; grid-row: 1; text-align: left; padding-bottom: 6px; }
+      .tl-line-col { grid-column: 1; grid-row: 1 / 3; }
+      .tl-body { grid-column: 2; grid-row: 2; }
+      .share-btns { flex-direction: column; align-items: stretch; }
+      .btn-s { text-align: center; }
+      .toast { width: calc(100% - 48px); text-align: center; }
+      .ornament-line { max-width: 60px; }
+      .wish-form { gap: 20px; }
+      #lang-btn { top: 16px; right: 16px; padding: 8px 14px; }
+      [lang="ar"] #lang-btn { left: 16px; right: auto; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══ LOADER ══ -->
+<div id="loader">
+  <div class="loader-inner">
+    <div class="loader-ring">A &amp; A</div>
+    <div class="loader-divider">
+      <div class="loader-line"></div>
+      <div class="loader-diamond"></div>
+      <div class="loader-line"></div>
+    </div>
+    <div class="loader-name">Ahmed &amp; Alaa</div>
+  </div>
+</div>
+
+<!-- ══ CUSTOM CURSOR ══ -->
+<div class="cursor-dot"  id="cur-dot"></div>
+<div class="cursor-ring" id="cur-ring"></div>
+
+<!-- ══ LANG TOGGLE ══ -->
+<button id="lang-btn" onclick="toggleLang()">عربي</button>
+
+<!-- ══ MILESTONE BANNER ══ -->
+<div class="milestone-banner" id="milestone-banner">
+  <span class="milestone-text" id="milestone-text"></span>
+  <button class="milestone-close" onclick="closeMilestone()">✕</button>
+</div>
+
+<!-- ══ CANVAS LAYERS ══ -->
+<canvas id="petals-canvas"></canvas>
+<canvas id="confetti-canvas"></canvas>
+
+<!-- ══ HERO ══ -->
+<section class="hero">
+  <div class="hero-bg" id="hero-bg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <div class="monogram">
+      <div class="monogram-line"></div>
+      <div class="monogram-circle" id="monogram-circle">A &amp; A</div>
+      <div class="monogram-line"></div>
+    </div>
+    <div class="hero-names" id="hero-names">
+      Ahmed
+      <em>&amp;</em>
+      Alaa
+    </div>
+    <div class="hero-date-line">
+      <span class="t" data-en="Wednesday · December 9 · 2026" data-ar="الأربعاء · ٩ ديسمبر · ٢٠٢٦">Wednesday · December 9 · 2026</span>
+    </div>
+  </div>
+  <div class="scroll-cue">
+    <span class="t" data-en="Scroll" data-ar="للأسفل">Scroll</span>
+    <div class="scroll-arrow"></div>
+  </div>
+</section>
+
+<!-- ══ COUNTDOWN ══ -->
+<div class="countdown-section reveal" id="countdown-section">
+  <div class="section-eyebrow t" data-en="Until We Say I Do" data-ar="حتى يحين موعد الزفاف">Until We Say I Do</div>
+  <div class="countdown-row" id="countdown-row">
+    <div class="count-unit">
+      <div class="count-num" id="cd-days">--</div>
+      <div class="count-bar"></div>
+      <div class="count-label t" data-en="Days" data-ar="أيام">Days</div>
+    </div>
+    <div class="count-sep">·</div>
+    <div class="count-unit">
+      <div class="count-num" id="cd-hours">--</div>
+      <div class="count-bar"></div>
+      <div class="count-label t" data-en="Hours" data-ar="ساعات">Hours</div>
+    </div>
+    <div class="count-sep">·</div>
+    <div class="count-unit">
+      <div class="count-num" id="cd-mins">--</div>
+      <div class="count-bar"></div>
+      <div class="count-label t" data-en="Minutes" data-ar="دقائق">Minutes</div>
+    </div>
+    <div class="count-sep">·</div>
+    <div class="count-unit">
+      <div class="count-num" id="cd-secs">--</div>
+      <div class="count-bar"></div>
+      <div class="count-label t" data-en="Seconds" data-ar="ثواني">Seconds</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ STATS ══ -->
+<div class="stats-section reveal">
+  <div class="ornament" style="margin-bottom:40px;">
+    <div class="ornament-line"></div>
+    <div class="ornament-diamond"></div>
+    <div class="ornament-line"></div>
+  </div>
+  <div class="stats-row">
+    <div class="stat-item">
+      <div class="stat-num" id="stat-weekends">--</div>
+      <div class="stat-label t" data-en="Weekends Left" data-ar="عطلة نهاية أسبوع">Weekends Left</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num" id="stat-sleeps">--</div>
+      <div class="stat-label t" data-en="Sleeps to Go" data-ar="ليلة متبقية">Sleeps to Go</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-num" id="stat-fridays">--</div>
+      <div class="stat-label t" data-en="Fridays to Plan" data-ar="جمعة للتخطيط">Fridays to Plan</div>
+    </div>
+  </div>
+  <div class="ornament" style="margin-top:40px;">
+    <div class="ornament-line"></div>
+    <div class="ornament-diamond"></div>
+    <div class="ornament-line"></div>
+  </div>
+</div>
+
+<!-- ══ QUOTE ══ -->
+<div class="quote-section reveal">
+  <div class="quote-text t"
+    data-en='"In all the world, there is no heart for me like yours. In all the world, there is no love for you like mine."'
+    data-ar='"في كل أرجاء العالم، لا يوجد قلب مثل قلبك. وفي كل أرجاء العالم، لا يوجد حبٌّ لك مثل حبي."'>
+    "In all the world, there is no heart for me like yours. In all the world, there is no love for you like mine."
+  </div>
+  <div class="quote-attr t" data-en="— Maya Angelou" data-ar="— مايا أنجيلو">— Maya Angelou</div>
+</div>
+
+<!-- ══ TIMELINE ══ -->
+<div class="section-wrap reveal">
+  <div class="section-heading" id="heading-story">Our <em>Story</em></div>
+  <div class="section-sub t" data-en="The moments that led us here" data-ar="اللحظات التي قادتنا إلى هنا">The moments that led us here</div>
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-date-col"><div class="tl-date">March 19<br/>2023</div></div>
+      <div class="tl-line-col"><div class="tl-dot"></div><div class="tl-connector"></div></div>
+      <div class="tl-body">
+        <div class="tl-title t" data-en="We First Met" data-ar="أول لقاء">We First Met</div>
+        <div class="tl-desc t"
+          data-en="Every great love story has a beginning. Ours was no different — and we wouldn't change a single moment of it."
+          data-ar="كل قصة حب عظيمة لها بداية. قصتنا لم تكن مختلفة — ولن نغير منها لحظة واحدة.">
+          Every great love story has a beginning. Ours was no different — and we wouldn't change a single moment of it.
+        </div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-date-col"><div class="tl-date">December 9<br/>2025</div></div>
+      <div class="tl-line-col"><div class="tl-dot"></div><div class="tl-connector"></div></div>
+      <div class="tl-body">
+        <div class="tl-title t" data-en="He Asked, She Said Yes" data-ar="سألها... فقالت نعم">He Asked, She Said Yes</div>
+        <div class="tl-desc t"
+          data-en="The question that changed everything. Two words that meant the whole world. One year later, we make it forever."
+          data-ar="السؤال الذي غيّر كل شيء. كلمتان تعنيان العالم بأسره. وبعد عام، نجعلها إلى الأبد.">
+          The question that changed everything. Two words that meant the whole world. One year later, we make it forever.
+        </div>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-date-col"><div class="tl-date">December 9<br/>2026</div></div>
+      <div class="tl-line-col"><div class="tl-dot"></div><div class="tl-connector"></div></div>
+      <div class="tl-body">
+        <div class="tl-title t" data-en="The Wedding Day" data-ar="يوم الزفاف">The Wedding Day</div>
+        <div class="tl-desc t"
+          data-en="The day we say 'I do' and begin our forever together. We can't wait to celebrate surrounded by the people we love most."
+          data-ar="اليوم الذي نقول فيه 'نعم' ونبدأ معاً إلى الأبد. لا نستطيع الانتظار للاحتفال بمن نحبّهم.">
+          The day we say "I do" and begin our forever together. We can't wait to celebrate surrounded by the people we love most.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ WISHES ══ -->
+<div class="wishes-section">
+  <div class="section-wrap reveal">
+    <div class="section-heading" id="heading-wish">Leave a <em>Wish</em></div>
+    <div class="section-sub t" data-en="Your words mean the world to us" data-ar="كلماتكم تعني لنا الكثير">Your words mean the world to us</div>
+    <div class="wish-form">
+      <div class="field-wrap">
+        <input id="wish-name" type="text" maxlength="50"
+          placeholder="Your name"
+          data-en-ph="Your name"
+          data-ar-ph="اسمك" />
+      </div>
+      <div class="field-wrap">
+        <textarea id="wish-text" rows="3"
+          placeholder="Write your wish or message for Ahmed & Alaa..."
+          data-en-ph="Write your wish or message for Ahmed & Alaa..."
+          data-ar-ph="اكتب أمنيتك لأحمد وآلاء..."></textarea>
+      </div>
+      <button class="btn-wish t" data-en="Send Your Wish" data-ar="أرسل أمنيتك" onclick="submitWish()">Send Your Wish</button>
+    </div>
+    <div class="wishes-wall" id="wishes-wall"></div>
+  </div>
+</div>
+
+<!-- ══ SHARE ══ -->
+<div class="share-section reveal">
+  <div class="section-eyebrow t" data-en="Spread the Joy" data-ar="شاركوا الفرحة">Spread the Joy</div>
+  <div class="section-heading" id="heading-share">Share <em>Our Day</em></div>
+  <p style="color:var(--muted);font-size:14px;margin-top:8px;" class="t"
+    data-en="Let your loved ones know about our celebration"
+    data-ar="أخبر أحبّاءك عن يوم احتفالنا">
+    Let your loved ones know about our celebration
+  </p>
+  <div class="share-btns">
+    <button class="btn-s btn-copy t"     data-en="Copy Link"  data-ar="نسخ الرابط"  onclick="copyLink()">Copy Link</button>
+    <button class="btn-s btn-whatsapp t" data-en="WhatsApp"   data-ar="واتساب"      onclick="shareWhatsApp()">WhatsApp</button>
+    <button class="btn-s btn-download t" data-en="Save Card"  data-ar="حفظ البطاقة" onclick="downloadCard()">Save Card</button>
+  </div>
+</div>
+
+<!-- ══ FOOTER ══ -->
+<footer>
+  <strong>Ahmed &amp; Alaa</strong> &nbsp;·&nbsp; December 9, 2026 &nbsp;·&nbsp;
+  <span class="t" data-en="Made with love" data-ar="صُنع بكل محبة">Made with love</span>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  // ══ LOADER ══
+  window.addEventListener('load', () => {
+    setTimeout(() => document.getElementById('loader').classList.add('hide'), 2400);
+  });
+
+  // ══ CUSTOM CURSOR ══
+  const dot  = document.getElementById('cur-dot');
+  const ring = document.getElementById('cur-ring');
+  let mx = -100, my = -100, rx = -100, ry = -100;
+
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    dot.style.left = mx + 'px';
+    dot.style.top  = my + 'px';
+    maybeSparkle(mx, my);
+  });
+
+  (function ringLoop() {
+    rx += (mx - rx) * .14;
+    ry += (my - ry) * .14;
+    ring.style.left = rx + 'px';
+    ring.style.top  = ry + 'px';
+    requestAnimationFrame(ringLoop);
+  })();
+
+  document.querySelectorAll('a,button,input,textarea').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      ring.style.width  = '44px';
+      ring.style.height = '44px';
+    });
+    el.addEventListener('mouseleave', () => {
+      ring.style.width  = '28px';
+      ring.style.height = '28px';
+    });
+  });
+
+  // ══ SPARKLES ══
+  const CHARS = ['✦','✧','✺','·','⋆'];
+  let lastSparkle = 0;
+
+  function maybeSparkle(x, y) {
+    const now = Date.now();
+    if (now - lastSparkle < 55) return;
+    lastSparkle = now;
+    for (let i = 0; i < 2; i++) {
+      const el = document.createElement('div');
+      el.className = 'sparkle';
+      el.textContent = CHARS[Math.floor(Math.random() * CHARS.length)];
+      el.style.left     = (x + (Math.random() - .5) * 18) + 'px';
+      el.style.top      = (y + (Math.random() - .5) * 18) + 'px';
+      el.style.fontSize = (8 + Math.random() * 9) + 'px';
+      el.style.setProperty('--dx', (Math.random() - .5) * 32 + 'px');
+      el.style.animationDuration = (.6 + Math.random() * .4) + 's';
+      document.body.appendChild(el);
+      setTimeout(() => el.remove(), 1000);
+    }
+  }
+
+  // ══ LANG TOGGLE ══
+  let currentLang = 'en';
+
+  const HEADINGS = {
+    en: {
+      story: 'Our <em>Story</em>',
+      wish:  'Leave a <em>Wish</em>',
+      share: 'Share <em>Our Day</em>',
+    },
+    ar: {
+      story: 'قصّتنا <em>المشتركة</em>',
+      wish:  'اتركوا <em>أمنية</em>',
+      share: 'شاركوا <em>يومنا</em>',
+    }
+  };
+
+  function toggleLang() {
+    currentLang = currentLang === 'en' ? 'ar' : 'en';
+    const html = document.documentElement;
+    html.lang = currentLang;
+    html.dir  = currentLang === 'ar' ? 'rtl' : 'ltr';
+
+    // Update all simple text nodes
+    document.querySelectorAll('.t[data-en]').forEach(el => {
+      el.textContent = el.dataset[currentLang];
+    });
+
+    // Update complex headings with em tags
+    document.getElementById('heading-story').innerHTML = HEADINGS[currentLang].story;
+    document.getElementById('heading-wish').innerHTML  = HEADINGS[currentLang].wish;
+    document.getElementById('heading-share').innerHTML = HEADINGS[currentLang].share;
+
+    // Update placeholders
+    document.querySelectorAll('[data-en-ph]').forEach(el => {
+      el.placeholder = currentLang === 'ar' ? el.dataset.arPh : el.dataset.enPh;
+    });
+
+    // Update monogram and hero names
+    const isAr = currentLang === 'ar';
+    document.getElementById('monogram-circle').textContent = isAr ? 'أ & أ' : 'A & A';
+    document.getElementById('hero-names').innerHTML = isAr
+      ? 'أحمد <em>&amp;</em> ألاء'
+      : 'Ahmed <em>&amp;</em> Alaa';
+
+    // Toggle button label
+    document.getElementById('lang-btn').textContent = isAr ? 'English' : 'عربي';
+  }
+
+  // ══ COUNTDOWN ══
+  const TARGET = new Date('2026-12-09T00:00:00');
+  const MILESTONES = new Set([300, 200, 100, 50, 30, 14, 7, 1]);
+  const shownMilestones = new Set();
+
+  function pad(n) { return String(n).padStart(2, '0'); }
+
+  function tick() {
+    const now  = new Date();
+    const diff = TARGET - now;
+
+    // Wedding day!
+    if (diff <= 0) {
+      showWeddingDay();
+      return;
+    }
+
+    const days  = Math.floor(diff / 86400000);
+    const hours = Math.floor((diff % 86400000) / 3600000);
+    const mins  = Math.floor((diff % 3600000)  / 60000);
+    const secs  = Math.floor((diff % 60000)    / 1000);
+
+    document.getElementById('cd-days').textContent  = pad(days);
+    document.getElementById('cd-hours').textContent = pad(hours);
+    document.getElementById('cd-mins').textContent  = pad(mins);
+    document.getElementById('cd-secs').textContent  = pad(secs);
+
+    document.getElementById('stat-sleeps').textContent   = days;
+    document.getElementById('stat-weekends').textContent = Math.floor(days / 7) + Math.ceil((days % 7) / 5);
+    document.getElementById('stat-fridays').textContent  = Math.ceil(days / 7);
+
+    // Milestone check (once per session per milestone)
+    if (MILESTONES.has(days) && !shownMilestones.has(days)) {
+      shownMilestones.add(days);
+      showMilestone(days);
+    }
+  }
+
+  tick();
+  setInterval(tick, 1000);
+
+  // ══ MILESTONE BANNER ══
+  let milestoneTimer;
+
+  const MILESTONE_EN = d => `✦ Only ${d} day${d === 1 ? '' : 's'} to go — the countdown is almost over!`;
+  const MILESTONE_AR = d => `✦ ${d} يوم${d === 1 ? '' : ''} فقط — العد التنازلي يقترب من نهايته!`;
+
+  function showMilestone(days) {
+    clearTimeout(milestoneTimer);
+    const banner = document.getElementById('milestone-banner');
+    document.getElementById('milestone-text').textContent =
+      currentLang === 'ar' ? MILESTONE_AR(days) : MILESTONE_EN(days);
+    banner.classList.add('show');
+    milestoneTimer = setTimeout(closeMilestone, 7000);
+  }
+
+  function closeMilestone() {
+    document.getElementById('milestone-banner').classList.remove('show');
+  }
+
+  // Demo milestone: press Shift+M
+  document.addEventListener('keydown', e => {
+    if (e.shiftKey && e.key === 'M') showMilestone(100);
+    if (e.shiftKey && e.key === 'C') startConfetti();
+    if (e.shiftKey && e.key === 'W') showWeddingDay();
+  });
+
+  // ══ WEDDING DAY ══
+  function showWeddingDay() {
+    const section = document.getElementById('countdown-section');
+    section.innerHTML = `
+      <div class="celebration-wrap">
+        <div class="celebration-title">Today Is <em>The Day!</em></div>
+        <div class="celebration-sub">Ahmed &amp; Alaa — December 9, 2026</div>
+      </div>`;
+    startConfetti();
+  }
+
+  // ══ CONFETTI ══
+  const confettiCanvas = document.getElementById('confetti-canvas');
+  const cctx = confettiCanvas.getContext('2d');
+  let cW, cH, cPieces = [], cActive = false;
+
+  function resizeConfetti() {
+    cW = confettiCanvas.width  = innerWidth;
+    cH = confettiCanvas.height = innerHeight;
+  }
+  resizeConfetti();
+  window.addEventListener('resize', resizeConfetti);
+
+  const CONF_COLORS = ['#B8975A','#D4B483','#EEE0C4','#FFFFFF','#F7F4EF','#C9A96E','#fff8ee'];
+
+  function ConfettiPiece() {
+    this.x    = Math.random() * cW;
+    this.y    = Math.random() * -cH;
+    this.w    = 5 + Math.random() * 9;
+    this.h    = 3 + Math.random() * 5;
+    this.col  = CONF_COLORS[Math.floor(Math.random() * CONF_COLORS.length)];
+    this.rot  = Math.random() * Math.PI * 2;
+    this.drot = (Math.random() - .5) * .14;
+    this.vy   = 2 + Math.random() * 3;
+    this.vx   = (Math.random() - .5) * 1.5;
+    this.update = function() {
+      this.x += this.vx; this.y += this.vy; this.rot += this.drot;
+      if (this.y > cH + 20) { this.y = -20; this.x = Math.random() * cW; }
+    };
+    this.draw = function() {
+      cctx.save();
+      cctx.translate(this.x, this.y);
+      cctx.rotate(this.rot);
+      cctx.fillStyle = this.col;
+      cctx.fillRect(-this.w / 2, -this.h / 2, this.w, this.h);
+      cctx.restore();
+    };
+  }
+
+  function startConfetti() {
+    confettiCanvas.style.display = 'block';
+    cActive = true;
+    cPieces = [];
+    for (let i = 0; i < 160; i++) cPieces.push(new ConfettiPiece());
+    confettiLoop();
+    setTimeout(stopConfetti, 9000);
+  }
+
+  function stopConfetti() {
+    cActive = false;
+    cPieces = [];
+    confettiCanvas.style.display = 'none';
+  }
+
+  function confettiLoop() {
+    if (!cActive) return;
+    cctx.clearRect(0, 0, cW, cH);
+    cPieces.forEach(p => { p.update(); p.draw(); });
+    requestAnimationFrame(confettiLoop);
+  }
+
+  // ══ PARALLAX ══
+  const heroBg = document.getElementById('hero-bg');
+  window.addEventListener('scroll', () => {
+    heroBg.style.transform = `scale(1.08) translateY(${window.scrollY * 0.3}px)`;
+  }, { passive: true });
+
+  // ══ SCROLL REVEAL ══
+  const revealObs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); revealObs.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+
+  // ══ WISHES ══
+  const DEFAULTS = [
+    { name: 'Mama & Baba', text: 'May your home be filled with laughter, your hearts with joy, and your lives with love. So proud of you both.' },
+    { name: 'Best Friend', text: 'Finally! Wishing you a lifetime of happiness — you truly deserve every beautiful thing.' },
+  ];
+  function esc(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+  function loadWishes() {
+    try { return JSON.parse(localStorage.getItem('wedding_wishes') || 'null') || DEFAULTS; }
+    catch { return DEFAULTS; }
+  }
+  function saveWishes(list) { localStorage.setItem('wedding_wishes', JSON.stringify(list)); }
+  function renderWishes(list) {
+    document.getElementById('wishes-wall').innerHTML = list.map(w =>
+      `<div class="wish-bubble"><div class="wish-name">${esc(w.name)}</div><div class="wish-text">${esc(w.text)}</div></div>`
+    ).join('');
+  }
+  function submitWish() {
+    const name = document.getElementById('wish-name').value.trim();
+    const text = document.getElementById('wish-text').value.trim();
+    if (!name || !text) { showToast(currentLang === 'ar' ? 'من فضلك أدخل اسمك وأمنيتك' : 'Please enter your name and wish'); return; }
+    const list = loadWishes();
+    list.unshift({ name, text });
+    saveWishes(list);
+    renderWishes(list);
+    document.getElementById('wish-name').value = '';
+    document.getElementById('wish-text').value = '';
+    showToast(currentLang === 'ar' ? 'تم إرسال أمنيتك ✦' : 'Your wish was sent ✦');
+  }
+  renderWishes(loadWishes());
+
+  // ══ SHARE ══
+  function copyLink() {
+    navigator.clipboard.writeText(window.location.href)
+      .then(() => showToast(currentLang === 'ar' ? 'تم نسخ الرابط' : 'Link copied'));
+  }
+  function shareWhatsApp() {
+    const msg = encodeURIComponent('Ahmed & Alaa are getting married on December 9, 2026! 💍\n' + window.location.href);
+    window.open('https://wa.me/?text=' + msg, '_blank');
+  }
+  function downloadCard() {
+    const days = parseInt(document.getElementById('cd-days').textContent) || 0;
+    const w = window.open('', '_blank');
+    w.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;1,300&family=Jost:wght@300&display=swap" rel="stylesheet"/>
+    <style>*{margin:0;padding:0;box-sizing:border-box;}body{background:#111;display:flex;align-items:center;justify-content:center;min-height:100vh;}
+    .card{background:#F7F4EF;width:420px;padding:60px 48px;text-align:center;}
+    .mono{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:14px;color:#B8975A;letter-spacing:.1em;margin-bottom:28px;}
+    h1{font-family:'Cormorant Garamond',serif;font-weight:300;font-size:48px;color:#1C1C1E;}
+    .amp{font-style:italic;color:#B8975A;}.line{width:60px;height:1px;background:#B8975A;margin:24px auto;}
+    .num{font-family:'Cormorant Garamond',serif;font-weight:300;font-size:80px;color:#1C1C1E;line-height:1;}
+    .lbl{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:#8C8070;margin-top:6px;margin-bottom:24px;}
+    .date{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:#B8975A;}</style></head><body>
+    <div class="card"><div class="mono">Save the Date</div>
+    <h1>Ahmed <span class="amp">&amp;</span> Alaa</h1>
+    <div class="line"></div><div class="num">${days}</div>
+    <div class="lbl">Days to go</div>
+    <div class="date">Wednesday · December 9 · 2026</div></div>
+    <script>setTimeout(()=>window.print(),500)<\/script></body></html>`);
+    w.document.close();
+  }
+
+  // ══ TOAST ══
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2600);
+  }
+
+  // ══ PETALS ══
+  const canvas = document.getElementById('petals-canvas');
+  const ctx    = canvas.getContext('2d');
+  let W, H;
+  function resize() { W = canvas.width = innerWidth; H = canvas.height = innerHeight; }
+  resize();
+  window.addEventListener('resize', resize);
+  const PCOLS = ['rgba(184,151,90,.18)','rgba(212,180,131,.22)','rgba(238,224,196,.28)','rgba(255,255,255,.12)'];
+  function Petal() {
+    this.reset = function(init) {
+      this.x = Math.random() * W; this.y = init ? Math.random() * H : -16;
+      this.r = 3 + Math.random() * 6; this.rot = Math.random() * Math.PI * 2;
+      this.drot = (Math.random() - .5) * .03; this.vy = .5 + Math.random() * 1;
+      this.vx = (Math.random() - .5) * .6; this.col = PCOLS[Math.floor(Math.random() * PCOLS.length)];
+      this.wave = Math.random() * Math.PI * 2;
+    };
+    this.reset(true);
+    this.update = function() {
+      this.wave += .02; this.x += this.vx + Math.sin(this.wave) * .4;
+      this.y += this.vy; this.rot += this.drot;
+      if (this.y > H + 20) this.reset(false);
+    };
+    this.draw = function() {
+      ctx.save(); ctx.translate(this.x, this.y); ctx.rotate(this.rot);
+      ctx.beginPath(); ctx.ellipse(0, 0, this.r, this.r * .5, 0, 0, Math.PI * 2);
+      ctx.fillStyle = this.col; ctx.fill(); ctx.restore();
+    };
+  }
+  const petals = Array.from({length: 30}, () => new Petal());
+  (function loop() {
+    ctx.clearRect(0, 0, W, H);
+    petals.forEach(p => { p.update(); p.draw(); });
+    requestAnimationFrame(loop);
+  })();
+</script>
+</body>
+</html>
