@@ -720,6 +720,184 @@
     [lang="ar"] .hero-date-line span { letter-spacing: .08em; }
     [lang="ar"] .milestone-close { right: auto; left: 20px; }
 
+    /* ── REASONS I LOVE YOU ── */
+    .reasons-section {
+      background: var(--charcoal);
+      position: relative;
+      z-index: 1;
+      overflow: hidden;
+    }
+    .reasons-section::before {
+      content: '♡';
+      position: absolute;
+      font-size: 400px;
+      color: rgba(184,151,90,.04);
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      line-height: 1;
+    }
+    .reasons-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .reason-item {
+      display: grid;
+      grid-template-columns: 56px 1fr;
+      gap: 0 28px;
+      padding: 32px 0;
+      border-bottom: 1px solid rgba(184,151,90,.15);
+      opacity: 0;
+      transform: translateX(-24px);
+      transition: opacity .7s ease, transform .7s ease;
+    }
+    .reason-item:last-child { border-bottom: none; }
+    .reason-item.revealed { opacity: 1; transform: none; }
+    .reason-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 42px;
+      font-weight: 300;
+      color: rgba(184,151,90,.35);
+      line-height: 1;
+      text-align: right;
+      padding-top: 2px;
+    }
+    .reason-body {}
+    .reason-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      font-weight: 400;
+      color: var(--white);
+      margin-bottom: 6px;
+      line-height: 1.2;
+    }
+    .reason-desc {
+      font-size: 14px;
+      font-weight: 300;
+      color: rgba(255,255,255,.5);
+      line-height: 1.8;
+    }
+    [lang="ar"] .reason-item { grid-template-columns: 1fr 56px; transform: translateX(24px); }
+    [lang="ar"] .reason-num { text-align: left; }
+    [lang="ar"] .reason-item.revealed { transform: none; }
+
+    /* ── LOVE LETTER ── */
+    .letter-section {
+      background: var(--ivory);
+      position: relative;
+      z-index: 1;
+    }
+    .letter-paper {
+      background: var(--white);
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 64px 56px;
+      box-shadow:
+        0 2px 4px rgba(0,0,0,.04),
+        0 12px 40px rgba(0,0,0,.08),
+        0 40px 80px rgba(0,0,0,.06);
+      position: relative;
+    }
+    .letter-paper::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 56px; right: 56px;
+      height: 3px;
+      background: linear-gradient(to right, transparent, var(--gold), transparent);
+    }
+    .letter-monogram {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    .letter-monogram-circle {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 54px; height: 54px;
+      border-radius: 50%;
+      border: 1px solid var(--gold-pale);
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 16px;
+      color: var(--gold);
+    }
+    .letter-date {
+      font-size: 10px;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 36px;
+    }
+    .letter-salutation {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 26px;
+      font-weight: 400;
+      font-style: italic;
+      color: var(--charcoal);
+      margin-bottom: 28px;
+    }
+    .letter-body {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 18px;
+      font-weight: 300;
+      color: #3a3530;
+      line-height: 2;
+      margin-bottom: 20px;
+    }
+    .letter-body + .letter-body { margin-top: 0; }
+    .letter-closing {
+      margin-top: 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .letter-closing-line {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 17px;
+      font-style: italic;
+      color: var(--muted);
+    }
+    .letter-signature {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 34px;
+      font-weight: 400;
+      font-style: italic;
+      color: var(--charcoal);
+      margin-top: 4px;
+    }
+    .letter-seal {
+      position: absolute;
+      bottom: 40px;
+      right: 48px;
+      width: 52px; height: 52px;
+      border-radius: 50%;
+      border: 1px solid var(--gold-pale);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 13px;
+      color: var(--gold);
+      opacity: .6;
+    }
+    [lang="ar"] .letter-paper { direction: rtl; }
+    [lang="ar"] .letter-body,
+    [lang="ar"] .letter-salutation,
+    [lang="ar"] .letter-closing-line,
+    [lang="ar"] .letter-signature { font-family: 'Amiri', serif; }
+    [lang="ar"] .letter-seal { right: auto; left: 48px; }
+    @media (max-width: 600px) {
+      .letter-paper { padding: 48px 28px; }
+      .letter-paper::before { left: 28px; right: 28px; }
+      .letter-body { font-size: 16px; }
+      .letter-seal { display: none; }
+      .reason-item { grid-template-columns: 40px 1fr; gap: 0 16px; }
+      .reason-num { font-size: 32px; }
+      .reason-title { font-size: 19px; }
+    }
+
     /* ── RESPONSIVE ── */
     @media (max-width: 768px) {
       .section-wrap { padding: 64px 24px; }
@@ -920,6 +1098,117 @@
           The day we say "I do" and begin our forever together. We can't wait to celebrate surrounded by the people we love most.
         </div>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ REASONS I LOVE YOU ══ -->
+<div class="reasons-section">
+  <div class="section-wrap reveal">
+    <div class="section-heading" style="color:var(--white);">Reasons I <em>Love You</em></div>
+    <div class="section-sub" style="color:rgba(255,255,255,.4);">For Alaa, from Ahmed — with every piece of me</div>
+    <div class="reasons-grid" id="reasons-grid">
+
+      <div class="reason-item">
+        <div class="reason-num">01</div>
+        <div class="reason-body">
+          <div class="reason-title">The way you smile</div>
+          <div class="reason-desc">That smile — the one that starts slow, like it's deciding whether the moment deserves it. It always does. And every single time, it takes me completely off guard.</div>
+        </div>
+      </div>
+
+      <div class="reason-item">
+        <div class="reason-num">02</div>
+        <div class="reason-body">
+          <div class="reason-title">How you make every room warmer</div>
+          <div class="reason-desc">You walk in and something shifts. The air gets lighter. People laugh more. I don't think you even know you do it — that's the most beautiful part.</div>
+        </div>
+      </div>
+
+      <div class="reason-item">
+        <div class="reason-num">03</div>
+        <div class="reason-body">
+          <div class="reason-title">Your heart</div>
+          <div class="reason-desc">The way you care — deeply, quietly, without asking for anything in return. I've never met anyone who loves the way you do. It changed me.</div>
+        </div>
+      </div>
+
+      <div class="reason-item">
+        <div class="reason-num">04</div>
+        <div class="reason-body">
+          <div class="reason-title">The small things you remember</div>
+          <div class="reason-desc">You remember everything I said once, in passing, that I've already forgotten. And somehow it shows up exactly when I need it. You pay attention in a way no one else does.</div>
+        </div>
+      </div>
+
+      <div class="reason-item">
+        <div class="reason-num">05</div>
+        <div class="reason-body">
+          <div class="reason-title">How you see the world</div>
+          <div class="reason-desc">Through your eyes, ordinary things become extraordinary. You taught me to slow down and actually look. I'm still learning. I want to keep learning — with you.</div>
+        </div>
+      </div>
+
+      <div class="reason-item">
+        <div class="reason-num">06</div>
+        <div class="reason-body">
+          <div class="reason-title">The way you love me back</div>
+          <div class="reason-desc">I didn't know I could feel this seen. This chosen. You make me want to be better — not because you ask me to, but because I want to deserve you.</div>
+        </div>
+      </div>
+
+      <div class="reason-item">
+        <div class="reason-num">07</div>
+        <div class="reason-body">
+          <div class="reason-title">Every quiet moment with you</div>
+          <div class="reason-desc">No words. No plans. Just us — and somehow it's always enough. More than enough. It's the kind of peace I spent years looking for.</div>
+        </div>
+      </div>
+
+      <div class="reason-item">
+        <div class="reason-num">08</div>
+        <div class="reason-body">
+          <div class="reason-title">Because home is wherever you are</div>
+          <div class="reason-desc">I didn't understand that word until you. Now I do. And on December 9th, I get to make it official — forever.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ══ LOVE LETTER ══ -->
+<div class="letter-section">
+  <div class="section-wrap reveal">
+    <div class="section-heading">A <em>Letter</em> to You</div>
+    <div class="section-sub">Written from my heart, kept forever</div>
+    <div class="letter-paper">
+      <div class="letter-paper::before"></div>
+      <div class="letter-monogram">
+        <div class="letter-monogram-circle">A &amp; A</div>
+      </div>
+      <div class="letter-date">December 9, 2026</div>
+      <div class="letter-salutation">My dearest Alaa,</div>
+      <p class="letter-body">
+        I've started this letter a hundred times. I never know where to begin — because where do you begin when someone is everything? When they are the reason you understand what people mean when they say "I knew"?
+      </p>
+      <p class="letter-body">
+        I knew on March 19, 2023. I don't think I admitted it to myself right away, but I knew. There was something in the way you carried yourself — quietly certain, effortlessly kind — that made the rest of the world feel less complicated. You still do that. Every single day.
+      </p>
+      <p class="letter-body">
+        I asked you on December 9th, 2025. And when you said yes, something in me exhaled that had been holding its breath for a very long time.
+      </p>
+      <p class="letter-body">
+        And now — one year later, same date — I get to stand in front of everyone we love and say what I've known since the beginning: that I choose you. Today. Tomorrow. Every quiet morning and every loud, messy, beautiful day in between. I choose you.
+      </p>
+      <p class="letter-body">
+        You are my home, Alaa. And I cannot wait to spend the rest of my life making sure you never forget that.
+      </p>
+      <div class="letter-closing">
+        <span class="letter-closing-line">Yours, always and completely —</span>
+        <span class="letter-signature">Ahmed</span>
+      </div>
+      <div class="letter-seal">A &amp; A</div>
     </div>
   </div>
 </div>
@@ -1228,6 +1517,21 @@
     entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); revealObs.unobserve(e.target); } });
   }, { threshold: 0.12 });
   document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+
+  // ══ REASONS STAGGER REVEAL ══
+  const reasonObs = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const items = entry.target.querySelectorAll('.reason-item');
+        items.forEach((item, i) => {
+          setTimeout(() => item.classList.add('revealed'), i * 160);
+        });
+        reasonObs.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.08 });
+  const reasonsGrid = document.getElementById('reasons-grid');
+  if (reasonsGrid) reasonObs.observe(reasonsGrid);
 
   // ══ WISHES ══
   const DEFAULTS = [
