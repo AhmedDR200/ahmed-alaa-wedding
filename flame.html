@@ -631,6 +631,40 @@
 </div>
 
 <script>
+  // ── JSONBIN ──
+  const JB = {
+    key:     '$2a$10$KbNF/mCJtyHlUvHzwELTKOdQ0Sybn.GKVOW/1S8XJqeZQrYSwULwq',
+    flameId: '69efe637aaba88219745476c',
+  };
+  const LOCAL_KEY = 'flame_v1';
+
+  async function jbLoad() {
+    try {
+      const r = await fetch(`https://api.jsonbin.io/v3/b/${JB.flameId}/latest`, {
+        headers: { 'X-Access-Key': JB.key }
+      });
+      if (r.ok) {
+        const j = await r.json();
+        if (j.record) {
+          localStorage.setItem(LOCAL_KEY, JSON.stringify(j.record));
+          return j.record;
+        }
+      }
+    } catch {}
+    try { return JSON.parse(localStorage.getItem(LOCAL_KEY)) || {}; } catch { return {}; }
+  }
+
+  async function jbSave(d) {
+    localStorage.setItem(LOCAL_KEY, JSON.stringify(d));
+    try {
+      await fetch(`https://api.jsonbin.io/v3/b/${JB.flameId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', 'X-Access-Key': JB.key },
+        body: JSON.stringify(d)
+      });
+    } catch(e) { console.warn('Sync failed (offline?):', e); }
+  }
+
   // ── PASSWORD GATE ──
   const AUTH_KEY = 'flame_auth_v1';
   const gate = document.getElementById('gate');
@@ -642,7 +676,7 @@
     if (input.value === 'loving-husband') {
       localStorage.setItem(AUTH_KEY, 'yes');
       gate.classList.add('hide');
-      render();
+      init();
     } else {
       input.value = '';
       err.textContent = 'That\'s not the secret ♡';
@@ -659,28 +693,24 @@
 
   if (localStorage.getItem(AUTH_KEY) === 'yes') {
     gate.classList.add('hide');
+    init();
   }
 
   // ── UTILS ──
-  function todayStr() {
-    return new Date().toISOString().slice(0,10);
-  }
-  function addDays(d, n) {
-    const r = new Date(d); r.setDate(r.getDate() + n); return r;
-  }
+  function todayStr() { return new Date().toISOString().slice(0,10); }
+  function addDays(d, n) { const r = new Date(d); r.setDate(r.getDate() + n); return r; }
   function ds(d) { return d instanceof Date ? d.toISOString().slice(0,10) : d; }
 
   // ── DATA ──
-  const KEY = 'flame_v1';
-  function load() {
-    try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch { return {}; }
-  }
-  function save(data) { localStorage.setItem(KEY, JSON.stringify(data)); }
+  let data = {};
 
-  let data = load();
-  if (!data.ahmed)   data.ahmed   = {};  // { "2026-04-28": true }
-  if (!data.alaa)    data.alaa    = {};
-  if (!data.best)    data.best    = 0;
+  async function init() {
+    data = await jbLoad();
+    if (!data.ahmed) data.ahmed = {};
+    if (!data.alaa)  data.alaa  = {};
+    if (!data.best)  data.best  = 0;
+    render();
+  }
 
   // ── STREAK LOGIC ──
   function completeDays() {
@@ -734,38 +764,29 @@
   };
 
   // ── TAP ──
-  function tap(who, event) {
+  async function tap(who, event) {
     const today = todayStr();
-    if (data[who][today]) return; // already tapped today
+    if (data[who][today]) return;
 
-    // Ripple effect
-    const btn = event.currentTarget;
+    // Ripple (instant feedback)
+    const btn  = event.currentTarget;
     const rect = btn.getBoundingClientRect();
-    const ripple = document.createElement('div');
-    ripple.className = 'ripple';
+    const rip  = document.createElement('div');
+    rip.className = 'ripple';
     const size = Math.max(rect.width, rect.height);
-    ripple.style.cssText = `width:${size}px;height:${size}px;left:${(rect.width-size)/2}px;top:${(rect.height-size)/2}px`;
-    btn.appendChild(ripple);
-    setTimeout(() => ripple.remove(), 700);
+    rip.style.cssText = `width:${size}px;height:${size}px;left:${(rect.width-size)/2}px;top:${(rect.height-size)/2}px`;
+    btn.appendChild(rip);
+    setTimeout(() => rip.remove(), 700);
 
-    // Save
     data[who][today] = true;
-    save(data);
 
-    // Check if complete
-    const ahmed = !!data.ahmed[today];
-    const alaa  = !!data.alaa[today];
-    if (ahmed && alaa) {
-      // Recalculate best
-      const days = completeDays();
-      const streak = calcStreak(days);
-      const best = Math.max(calcBest(days), data.best);
-      data.best = best;
-      save(data);
+    if (data.ahmed[today] && data.alaa[today]) {
+      data.best = Math.max(calcBest(completeDays()), data.best || 0);
       burstParticles();
     }
 
-    render();
+    render();           // instant UI
+    await jbSave(data); // sync to cloud
   }
 
   // ── PARTICLES ──
@@ -908,8 +929,6 @@
     render();
   }
 
-  // ── INIT ──
-  render();
 </script>
 </body>
 </html>

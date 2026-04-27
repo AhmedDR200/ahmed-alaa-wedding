@@ -564,69 +564,6 @@
     }
     .tl-desc { font-size: 14px; font-weight: 300; color: var(--muted); line-height: 1.8; }
 
-    /* ── WISHES ── */
-    .wishes-section { background: var(--cream); }
-    .wish-form { display: flex; flex-direction: column; gap: 28px; }
-    .field-wrap { position: relative; }
-    .field-wrap input,
-    .field-wrap textarea {
-      width: 100%;
-      background: transparent;
-      border: none;
-      border-bottom: 1px solid var(--gold-pale);
-      padding: 12px 0;
-      font-family: 'Jost', sans-serif;
-      font-weight: 300;
-      font-size: 15px;
-      color: var(--charcoal);
-      outline: none;
-      resize: none;
-      transition: border-color .3s;
-    }
-    .field-wrap input:focus,
-    .field-wrap textarea:focus { border-bottom-color: var(--gold); }
-    .field-wrap input::placeholder,
-    .field-wrap textarea::placeholder { color: var(--muted); font-style: italic; }
-    .btn-wish {
-      align-self: flex-start;
-      background: transparent;
-      border: 1px solid var(--gold);
-      color: var(--gold);
-      padding: 13px 36px;
-      font-family: 'Jost', sans-serif;
-      font-size: 10px;
-      font-weight: 400;
-      letter-spacing: .22em;
-      text-transform: uppercase;
-      cursor: pointer;
-      transition: background .3s, color .3s;
-    }
-    .btn-wish:hover { background: var(--gold); color: var(--white); }
-    .wishes-wall { margin-top: 52px; display: flex; flex-direction: column; gap: 24px; }
-    .wish-bubble {
-      padding: 24px 0;
-      border-bottom: 1px solid var(--gold-pale);
-      animation: fadeUp .5s ease;
-    }
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(12px); }
-      to   { opacity: 1; transform: none; }
-    }
-    .wish-name {
-      font-size: 10px;
-      letter-spacing: .18em;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 8px;
-    }
-    .wish-text {
-      font-family: 'Cormorant Garamond', serif;
-      font-style: italic;
-      font-size: 18px;
-      font-weight: 300;
-      color: var(--charcoal);
-      line-height: 1.7;
-    }
 
     /* ── SHARE ── */
     .share-section {
@@ -1164,7 +1101,6 @@
       .btn-s { text-align: center; }
       .toast { width: calc(100% - 48px); text-align: center; }
       .ornament-line { max-width: 60px; }
-      .wish-form { gap: 20px; }
       #lang-btn { top: 16px; right: 16px; padding: 8px 14px; }
       [lang="ar"] #lang-btn { left: 16px; right: auto; }
     }
@@ -1555,30 +1491,6 @@
   </div>
 </div>
 
-<!-- ══ WISHES ══ -->
-<div class="wishes-section">
-  <div class="section-wrap reveal">
-    <div class="section-heading" id="heading-wish">Leave a <em>Wish</em></div>
-    <div class="section-sub t" data-en="Your words mean the world to us" data-ar="كلماتكم تعني لنا الكثير">Your words mean the world to us</div>
-    <div class="wish-form">
-      <div class="field-wrap">
-        <input id="wish-name" type="text" maxlength="50"
-          placeholder="Your name"
-          data-en-ph="Your name"
-          data-ar-ph="اسمك" />
-      </div>
-      <div class="field-wrap">
-        <textarea id="wish-text" rows="3"
-          placeholder="Write your wish or message for Ahmed & Alaa..."
-          data-en-ph="Write your wish or message for Ahmed & Alaa..."
-          data-ar-ph="اكتب أمنيتك لأحمد وآلاء..."></textarea>
-      </div>
-      <button class="btn-wish t" data-en="Send Your Wish" data-ar="أرسل أمنيتك" onclick="submitWish()">Send Your Wish</button>
-    </div>
-    <div class="wishes-wall" id="wishes-wall"></div>
-  </div>
-</div>
-
 <!-- ══ SHARE ══ -->
 <div class="share-section reveal">
   <div class="section-eyebrow t" data-en="Spread the Joy" data-ar="شاركوا الفرحة">Spread the Joy</div>
@@ -1698,14 +1610,12 @@
       story:   'Our <em>Story</em>',
       reasons: 'Reasons I <em>Love You</em>',
       letter:  'A <em>Letter</em> to You',
-      wish:    'Leave a <em>Wish</em>',
       share:   'Share <em>Our Day</em>',
     },
     ar: {
       story:   'قصّتنا <em>المشتركة</em>',
       reasons: 'أسباب <em>حبي لكِ</em>',
       letter:  'رسالة <em>إليكِ</em>',
-      wish:    'اتركوا <em>أمنية</em>',
       share:   'شاركوا <em>يومنا</em>',
     }
   };
@@ -1726,7 +1636,6 @@
     document.getElementById('heading-streak').innerHTML  = HEADINGS[currentLang].streak;
     document.getElementById('heading-reasons').innerHTML = HEADINGS[currentLang].reasons;
     document.getElementById('heading-letter').innerHTML  = HEADINGS[currentLang].letter;
-    document.getElementById('heading-wish').innerHTML    = HEADINGS[currentLang].wish;
     document.getElementById('heading-share').innerHTML   = HEADINGS[currentLang].share;
 
     // Update placeholders
@@ -1910,35 +1819,6 @@
   const reasonsGrid = document.getElementById('reasons-grid');
   if (reasonsGrid) reasonObs.observe(reasonsGrid);
 
-  // ══ WISHES ══
-  const DEFAULTS = [
-    { name: 'Mama & Baba', text: 'May your home be filled with laughter, your hearts with joy, and your lives with love. So proud of you both.' },
-    { name: 'Best Friend', text: 'Finally! Wishing you a lifetime of happiness — you truly deserve every beautiful thing.' },
-  ];
-  function esc(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-  function loadWishes() {
-    try { return JSON.parse(localStorage.getItem('wedding_wishes') || 'null') || DEFAULTS; }
-    catch { return DEFAULTS; }
-  }
-  function saveWishes(list) { localStorage.setItem('wedding_wishes', JSON.stringify(list)); }
-  function renderWishes(list) {
-    document.getElementById('wishes-wall').innerHTML = list.map(w =>
-      `<div class="wish-bubble"><div class="wish-name">${esc(w.name)}</div><div class="wish-text">${esc(w.text)}</div></div>`
-    ).join('');
-  }
-  function submitWish() {
-    const name = document.getElementById('wish-name').value.trim();
-    const text = document.getElementById('wish-text').value.trim();
-    if (!name || !text) { showToast(currentLang === 'ar' ? 'من فضلك أدخل اسمك وأمنيتك' : 'Please enter your name and wish'); return; }
-    const list = loadWishes();
-    list.unshift({ name, text });
-    saveWishes(list);
-    renderWishes(list);
-    document.getElementById('wish-name').value = '';
-    document.getElementById('wish-text').value = '';
-    showToast(currentLang === 'ar' ? 'تم إرسال أمنيتك ✦' : 'Your wish was sent ✦');
-  }
-  renderWishes(loadWishes());
 
   // ══ SHARE ══
   function copyLink() {
@@ -1980,7 +1860,9 @@
   }
 
   // ══ STREAK WIDGET ══
-  (function() {
+  (async function() {
+    const JB_KEY      = '$2a$10$KbNF/mCJtyHlUvHzwELTKOdQ0Sybn.GKVOW/1S8XJqeZQrYSwULwq';
+    const JB_VISITS   = '69efe653856a6821897d39fd';
     const WEDDING  = new Date('2026-12-09T00:00:00');
     const PROPOSAL = new Date('2025-12-09T00:00:00');
     const TODAY    = new Date(); TODAY.setHours(0,0,0,0);
@@ -1988,12 +1870,33 @@
     function ds(d) { return d.toISOString().slice(0,10); }
     function addD(d,n) { const r=new Date(d); r.setDate(r.getDate()+n); return r; }
 
-    // Load visited days, mark today
+    // Load from JSONBin, merge with localStorage
     let visited;
-    try { visited = new Set(JSON.parse(localStorage.getItem('streak_visits')||'[]')); }
-    catch(e) { visited = new Set(); }
+    try {
+      const r = await fetch(`https://api.jsonbin.io/v3/b/${JB_VISITS}/latest`, {
+        headers: { 'X-Access-Key': JB_KEY }
+      });
+      const local = JSON.parse(localStorage.getItem('streak_visits') || '[]');
+      let remote = [];
+      if (r.ok) { const j = await r.json(); remote = j.record?.dates || []; }
+      visited = new Set([...remote, ...local]);
+    } catch {
+      try { visited = new Set(JSON.parse(localStorage.getItem('streak_visits') || '[]')); }
+      catch { visited = new Set(); }
+    }
+
+    // Mark today, save everywhere
+    const isNew = !visited.has(ds(TODAY));
     visited.add(ds(TODAY));
-    localStorage.setItem('streak_visits', JSON.stringify([...visited]));
+    const arr = [...visited].sort();
+    localStorage.setItem('streak_visits', JSON.stringify(arr));
+    if (isNew) {
+      fetch(`https://api.jsonbin.io/v3/b/${JB_VISITS}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', 'X-Access-Key': JB_KEY },
+        body: JSON.stringify({ dates: arr })
+      }).catch(() => {});
+    }
 
     // Streak calculations
     function currentStreak() {
