@@ -1055,9 +1055,10 @@
     /* ── FLOATING FLAME BUTTON ── */
     #flame-fab {
       position: fixed;
-      bottom: 36px;
-      left: 50%;
-      transform: translateX(-50%);
+      bottom: 32px;
+      right: 32px;
+      left: auto;
+      top: auto;
       z-index: 8500;
       display: flex;
       flex-direction: column;
@@ -1065,6 +1066,7 @@
       gap: 8px;
       text-decoration: none;
       cursor: pointer;
+      transform: none;
     }
     .fab-glow {
       position: absolute;
@@ -1131,6 +1133,7 @@
       opacity: .8;
     }
     [lang="ar"] .fab-label { font-family: 'Cairo', sans-serif; letter-spacing: .04em; }
+    [lang="ar"] #flame-fab { right: auto; left: 32px; }
 
     /* ── RESPONSIVE ── */
     @media (max-width: 768px) {
