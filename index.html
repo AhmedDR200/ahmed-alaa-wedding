@@ -1616,8 +1616,25 @@
 
 <script>
   // ══ LOADER ══
-  window.addEventListener('load', () => {
-    setTimeout(() => document.getElementById('loader').classList.add('hide'), 2400);
+  function hideLoader() {
+    const l = document.getElementById('loader');
+    if (!l || l.dataset.hiding) return;
+    l.dataset.hiding = '1';
+    if (document.hidden) {
+      l.style.display = 'none';
+    } else {
+      l.style.transition = 'opacity .7s ease';
+      l.style.opacity = '0';
+      setTimeout(() => { l.style.display = 'none'; }, 750);
+    }
+  }
+  // Hard backup — always hides after 2.5s even if load event never fires
+  setTimeout(hideLoader, 2500);
+  // Normal path — hide 1.4s after all resources finish
+  window.addEventListener('load', () => setTimeout(hideLoader, 1400));
+  // If timeout fired while tab was hidden, hide the moment tab gets focus
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) hideLoader();
   });
 
   // ══ CUSTOM CURSOR ══
