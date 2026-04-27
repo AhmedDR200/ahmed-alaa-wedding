@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Our Daily Flame — Ahmed & Alaa</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@200;300;400;500&family=Amiri:ital,wght@0,400;1,400&family=Cairo:wght@300;400&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --gold:     #B8975A;
+      --gold-lt:  #D4B483;
+      --gold-dim: rgba(184,151,90,.18);
+      --charcoal: #1C1C1E;
+      --dark:     #111110;
+      --muted:    rgba(255,255,255,.4);
+      --white:    #FFFFFF;
+    }
+
+    html, body {
+      min-height: 100vh;
+      background: var(--dark);
+      color: var(--white);
+      font-family: 'Jost', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    .nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 28px;
+      background: linear-gradient(to bottom, rgba(17,17,16,.9), transparent);
+    }
+    .nav-back {
+      font-size: 10px;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color .2s;
+    }
+    .nav-back:hover { color: var(--gold-lt); }
+    .nav-mono {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 16px;
+      color: var(--gold);
+    }
+    .nav-lang {
+      font-size: 10px;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--muted);
+      cursor: pointer;
+      background: none;
+      border: 1px solid rgba(184,151,90,.3);
+      padding: 6px 14px;
+      color: var(--gold-lt);
+      transition: border-color .2s;
+    }
+    .nav-lang:hover { border-color: var(--gold); }
+
+    /* ── MAIN ── */
+    .page {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 100px 24px 60px;
+      gap: 0;
+    }
+
+    /* ── STREAK HEADER ── */
+    .streak-header { text-align: center; margin-bottom: 48px; }
+    .streak-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(72px, 18vw, 120px);
+      font-weight: 300;
+      line-height: 1;
+      color: var(--white);
+      transition: all .6s cubic-bezier(.22,1,.36,1);
+    }
+    .streak-num.pop { animation: numPop .5s cubic-bezier(.22,1,.36,1); }
+    @keyframes numPop {
+      0%   { transform: scale(1); }
+      50%  { transform: scale(1.15); color: var(--gold-lt); }
+      100% { transform: scale(1); }
+    }
+    .streak-label {
+      font-size: 9px;
+      letter-spacing: .28em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+    .streak-best {
+      font-size: 11px;
+      letter-spacing: .14em;
+      color: var(--gold);
+      margin-top: 10px;
+    }
+
+    /* ── FLAME ── */
+    .flame-wrap {
+      position: relative;
+      width: 140px;
+      height: 220px;
+      margin: 0 auto 52px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+    }
+
+    .flame-glow {
+      position: absolute;
+      bottom: -20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 120px;
+      height: 80px;
+      border-radius: 50%;
+      background: radial-gradient(ellipse, rgba(184,151,90,.5) 0%, transparent 70%);
+      filter: blur(12px);
+      transition: opacity .8s ease, transform .8s ease;
+    }
+
+    .flame-layer {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      border-radius: 50% 50% 30% 30% / 60% 60% 40% 40%;
+      transform-origin: bottom center;
+      transition: opacity .8s ease, height .8s cubic-bezier(.22,1,.36,1), width .8s cubic-bezier(.22,1,.36,1);
+    }
+
+    .flame-a {
+      width: 90px; height: 170px;
+      background: radial-gradient(ellipse 80% 100% at 50% 100%,
+        rgba(184,151,90,.9) 0%,
+        rgba(130,90,30,.7) 50%,
+        transparent 100%);
+      filter: blur(3px);
+      animation: sway 3s ease-in-out infinite alternate;
+    }
+    .flame-b {
+      width: 60px; height: 130px;
+      background: radial-gradient(ellipse 70% 100% at 50% 100%,
+        rgba(220,185,100,1) 0%,
+        rgba(184,151,90,.8) 45%,
+        transparent 100%);
+      filter: blur(1.5px);
+      animation: sway 2s ease-in-out infinite alternate-reverse;
+    }
+    .flame-c {
+      width: 34px; height: 80px;
+      background: radial-gradient(ellipse 60% 100% at 50% 100%,
+        rgba(255,245,200,1) 0%,
+        rgba(230,200,100,1) 40%,
+        rgba(184,151,90,.5) 70%,
+        transparent 100%);
+      animation: sway 1.4s ease-in-out infinite alternate;
+    }
+    .flame-d {
+      width: 14px; height: 36px;
+      background: radial-gradient(ellipse at 50% 100%,
+        rgba(255,255,255,1) 0%,
+        rgba(255,250,220,.9) 60%,
+        transparent 100%);
+      animation: sway 1s ease-in-out infinite alternate-reverse;
+    }
+
+    .wick {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 4px;
+      height: 16px;
+      background: linear-gradient(to top, #3a2800, #6b4a00);
+      border-radius: 2px;
+    }
+
+    @keyframes sway {
+      0%   { transform: translateX(-50%) rotate(-4deg) scaleX(1); }
+      100% { transform: translateX(-50%) rotate(4deg) scaleX(.88); }
+    }
+
+    /* Flame states */
+    .flame-wrap.dim .flame-a  { height: 70px;  width: 50px;  opacity: .4; }
+    .flame-wrap.dim .flame-b  { height: 50px;  width: 34px;  opacity: .4; }
+    .flame-wrap.dim .flame-c  { height: 30px;  width: 18px;  opacity: .5; }
+    .flame-wrap.dim .flame-d  { height: 14px;  width: 7px;   opacity: .5; }
+    .flame-wrap.dim .flame-glow { opacity: .2; transform: translateX(-50%) scale(.5); }
+
+    .flame-wrap.half .flame-a { height: 120px; width: 70px;  opacity: .7; }
+    .flame-wrap.half .flame-b { height: 90px;  width: 48px;  opacity: .8; }
+    .flame-wrap.half .flame-c { height: 56px;  width: 26px;  opacity: .9; }
+    .flame-wrap.half .flame-d { height: 24px;  width: 10px;  opacity: 1; }
+    .flame-wrap.half .flame-glow { opacity: .55; }
+
+    .flame-wrap.full .flame-glow {
+      opacity: 1;
+      width: 180px; height: 120px;
+      background: radial-gradient(ellipse, rgba(212,180,131,.7) 0%, rgba(184,151,90,.3) 50%, transparent 70%);
+    }
+
+    /* ── STATUS ROW ── */
+    .status-row {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      margin-bottom: 40px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .status-divider {
+      width: 1px;
+      height: 40px;
+      background: rgba(184,151,90,.2);
+    }
+
+    /* ── HEART BUTTONS ── */
+    .heart-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      background: none;
+      border: 1px solid rgba(184,151,90,.25);
+      padding: 24px 36px;
+      cursor: pointer;
+      transition: border-color .3s, background .3s, transform .15s;
+      min-width: 150px;
+      position: relative;
+      overflow: hidden;
+    }
+    .heart-btn:hover { border-color: var(--gold); }
+    .heart-btn:active { transform: scale(.96); }
+
+    .heart-btn.tapped {
+      border-color: var(--gold);
+      background: rgba(184,151,90,.08);
+    }
+
+    .heart-icon {
+      font-size: 40px;
+      line-height: 1;
+      transition: transform .4s cubic-bezier(.22,1,.36,1), color .3s;
+      color: rgba(255,255,255,.3);
+    }
+    .heart-btn.tapped .heart-icon { color: var(--gold); transform: scale(1.15); }
+
+    .heart-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      font-weight: 300;
+      color: var(--white);
+      letter-spacing: .04em;
+    }
+    .heart-status-text {
+      font-size: 9px;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--muted);
+      transition: color .3s;
+    }
+    .heart-btn.tapped .heart-status-text { color: var(--gold); }
+
+    /* Ripple */
+    .ripple {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(184,151,90,.3);
+      transform: scale(0);
+      animation: rippleOut .6s ease-out forwards;
+      pointer-events: none;
+    }
+    @keyframes rippleOut {
+      to { transform: scale(4); opacity: 0; }
+    }
+
+    /* ── MESSAGE ── */
+    .flame-message {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 18px;
+      color: var(--muted);
+      text-align: center;
+      margin-bottom: 48px;
+      min-height: 28px;
+      transition: color .5s;
+    }
+    .flame-message.lit { color: var(--gold-lt); }
+
+    /* ── HISTORY DOTS ── */
+    .history-wrap {
+      width: 100%;
+      max-width: 480px;
+      margin-bottom: 36px;
+    }
+    .history-label {
+      font-size: 9px;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 12px;
+      text-align: center;
+    }
+    .history-dots {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .h-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      transition: transform .2s;
+    }
+    .h-dot:hover { transform: scale(1.4); }
+    .h-dot.complete { background: var(--gold); }
+    .h-dot.partial  { background: rgba(184,151,90,.35); }
+    .h-dot.empty    { background: rgba(255,255,255,.08); }
+    .h-dot.today-dot {
+      box-shadow: 0 0 6px rgba(212,180,131,.8);
+      border: 1px solid var(--gold-lt);
+    }
+
+    /* ── ORNAMENT ── */
+    .ornament {
+      display: flex; align-items: center; gap: 16px;
+      width: 100%; max-width: 360px; margin-bottom: 32px;
+    }
+    .ornament-line { flex: 1; height: 1px; background: rgba(184,151,90,.2); }
+    .ornament-diamond { width: 6px; height: 6px; background: var(--gold); transform: rotate(45deg); opacity: .5; }
+
+    /* ── STATS FOOTER ── */
+    .stats-footer {
+      display: flex;
+      gap: 0;
+      border-top: 1px solid rgba(184,151,90,.15);
+      padding-top: 32px;
+      width: 100%;
+      max-width: 400px;
+      justify-content: center;
+    }
+    .sf-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0 28px;
+    }
+    .sf-item + .sf-item { border-left: 1px solid rgba(184,151,90,.15); }
+    .sf-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 32px;
+      font-weight: 300;
+      color: var(--white);
+    }
+    .sf-label {
+      font-size: 8px;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 4px;
+      text-align: center;
+    }
+
+    /* ── PARTICLES ── */
+    .particle {
+      position: fixed;
+      pointer-events: none;
+      z-index: 999;
+      font-size: 18px;
+      animation: particleFly 1.4s ease-out forwards;
+    }
+    @keyframes particleFly {
+      0%   { opacity: 1; transform: translate(0,0) scale(1); }
+      100% { opacity: 0; transform: translate(var(--px), var(--py)) scale(0); }
+    }
+
+    /* ── ARABIC ── */
+    [lang="ar"] body { font-family: 'Cairo', sans-serif; }
+    [lang="ar"] .streak-num,
+    [lang="ar"] .heart-name,
+    [lang="ar"] .flame-message,
+    [lang="ar"] .streak-best { font-family: 'Amiri', serif; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 480px) {
+      .heart-btn { padding: 20px 24px; min-width: 130px; }
+      .sf-item { padding: 0 18px; }
+      .stats-footer { max-width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <a class="nav-back" href="index.html">← Back</a>
+  <div class="nav-mono">A &amp; A</div>
+  <button class="nav-lang" onclick="toggleLang()">عربي</button>
+</nav>
+
+<div class="page">
+
+  <!-- STREAK -->
+  <div class="streak-header">
+    <div class="streak-num" id="streak-num">0</div>
+    <div class="streak-label t" data-en="Day Streak" data-ar="أيام متتالية">Day Streak</div>
+    <div class="streak-best" id="streak-best"></div>
+  </div>
+
+  <!-- FLAME -->
+  <div class="flame-wrap dim" id="flame-wrap">
+    <div class="flame-glow"></div>
+    <div class="flame-layer flame-a"></div>
+    <div class="flame-layer flame-b"></div>
+    <div class="flame-layer flame-c"></div>
+    <div class="flame-layer flame-d"></div>
+    <div class="wick"></div>
+  </div>
+
+  <!-- MESSAGE -->
+  <div class="flame-message" id="flame-msg">Keep the flame alive today</div>
+
+  <!-- HEARTS -->
+  <div class="status-row">
+    <button class="heart-btn" id="btn-ahmed" onclick="tap('ahmed', event)">
+      <div class="heart-icon" id="heart-ahmed">♡</div>
+      <div class="heart-name">Ahmed</div>
+      <div class="heart-status-text t" id="status-ahmed" data-en="Tap to connect" data-ar="اضغط للتواصل">Tap to connect</div>
+    </button>
+
+    <div class="status-divider"></div>
+
+    <button class="heart-btn" id="btn-alaa" onclick="tap('alaa', event)">
+      <div class="heart-icon" id="heart-alaa">♡</div>
+      <div class="heart-name">Alaa</div>
+      <div class="heart-status-text t" id="status-alaa" data-en="Tap to connect" data-ar="اضغط للتواصل">Tap to connect</div>
+    </button>
+  </div>
+
+  <!-- ORNAMENT -->
+  <div class="ornament">
+    <div class="ornament-line"></div>
+    <div class="ornament-diamond"></div>
+    <div class="ornament-line"></div>
+  </div>
+
+  <!-- HISTORY -->
+  <div class="history-wrap">
+    <div class="history-label t" data-en="Last 30 Days" data-ar="آخر ٣٠ يوماً">Last 30 Days</div>
+    <div class="history-dots" id="history-dots"></div>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats-footer">
+    <div class="sf-item">
+      <div class="sf-num" id="stat-best">0</div>
+      <div class="sf-label t" data-en="Best Streak" data-ar="أطول سلسلة">Best Streak</div>
+    </div>
+    <div class="sf-item">
+      <div class="sf-num" id="stat-total">0</div>
+      <div class="sf-label t" data-en="Days Together" data-ar="أيام معاً">Days Together</div>
+    </div>
+    <div class="sf-item">
+      <div class="sf-num" id="stat-missed">0</div>
+      <div class="sf-label t" data-en="Days Missed" data-ar="أيام فائتة">Days Missed</div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // ── UTILS ──
+  function todayStr() {
+    return new Date().toISOString().slice(0,10);
+  }
+  function addDays(d, n) {
+    const r = new Date(d); r.setDate(r.getDate() + n); return r;
+  }
+  function ds(d) { return d instanceof Date ? d.toISOString().slice(0,10) : d; }
+
+  // ── DATA ──
+  const KEY = 'flame_v1';
+  function load() {
+    try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch { return {}; }
+  }
+  function save(data) { localStorage.setItem(KEY, JSON.stringify(data)); }
+
+  let data = load();
+  if (!data.ahmed)   data.ahmed   = {};  // { "2026-04-28": true }
+  if (!data.alaa)    data.alaa    = {};
+  if (!data.best)    data.best    = 0;
+
+  // ── STREAK LOGIC ──
+  function completeDays() {
+    // days where BOTH tapped
+    const ahmedDays = new Set(Object.keys(data.ahmed));
+    const alaaDays  = new Set(Object.keys(data.alaa));
+    return [...ahmedDays].filter(d => alaaDays.has(d)).sort();
+  }
+
+  function calcStreak(days) {
+    if (!days.length) return 0;
+    const today = todayStr();
+    let streak = 0;
+    let d = new Date(today);
+    while (days.includes(ds(d))) {
+      streak++;
+      d = addDays(d, -1);
+    }
+    // Also count if today isn't complete yet but yesterday's streak was active
+    return streak;
+  }
+
+  function calcBest(days) {
+    if (!days.length) return 0;
+    let best = 0, cur = 0, prev = null;
+    for (const s of days) {
+      const d = new Date(s);
+      cur = prev && (d - prev) === 86400000 ? cur + 1 : 1;
+      best = Math.max(best, cur);
+      prev = d;
+    }
+    return best;
+  }
+
+  // ── MESSAGES ──
+  const MSGS = {
+    en: {
+      none:    'Keep the flame alive today',
+      ahmed:   'Ahmed connected — waiting for Alaa ♡',
+      alaa:    'Alaa connected — waiting for Ahmed ♡',
+      both:    'The flame burns bright — {n} days strong ✦',
+      already: 'Both connected today — come back tomorrow ♡',
+    },
+    ar: {
+      none:    'أبقوا الشعلة حية اليوم',
+      ahmed:   'تواصل أحمد — في انتظار آلاء ♡',
+      alaa:    'تواصلت آلاء — في انتظار أحمد ♡',
+      both:    'الشعلة تتقد بقوة — {n} يوماً متتالياً ✦',
+      already: 'كلاكما تواصل اليوم — عودوا غداً ♡',
+    }
+  };
+
+  // ── TAP ──
+  function tap(who, event) {
+    const today = todayStr();
+    if (data[who][today]) return; // already tapped today
+
+    // Ripple effect
+    const btn = event.currentTarget;
+    const rect = btn.getBoundingClientRect();
+    const ripple = document.createElement('div');
+    ripple.className = 'ripple';
+    const size = Math.max(rect.width, rect.height);
+    ripple.style.cssText = `width:${size}px;height:${size}px;left:${(rect.width-size)/2}px;top:${(rect.height-size)/2}px`;
+    btn.appendChild(ripple);
+    setTimeout(() => ripple.remove(), 700);
+
+    // Save
+    data[who][today] = true;
+    save(data);
+
+    // Check if complete
+    const ahmed = !!data.ahmed[today];
+    const alaa  = !!data.alaa[today];
+    if (ahmed && alaa) {
+      // Recalculate best
+      const days = completeDays();
+      const streak = calcStreak(days);
+      const best = Math.max(calcBest(days), data.best);
+      data.best = best;
+      save(data);
+      burstParticles();
+    }
+
+    render();
+  }
+
+  // ── PARTICLES ──
+  function burstParticles() {
+    const chars = ['✦', '♡', '✧', '⋆', '♥'];
+    const cx = window.innerWidth / 2;
+    const cy = window.innerHeight / 2;
+    for (let i = 0; i < 22; i++) {
+      setTimeout(() => {
+        const el = document.createElement('div');
+        el.className = 'particle';
+        el.textContent = chars[Math.floor(Math.random() * chars.length)];
+        el.style.left = cx + 'px';
+        el.style.top  = cy + 'px';
+        el.style.color = Math.random() > .5 ? '#D4B483' : '#B8975A';
+        const angle = Math.random() * Math.PI * 2;
+        const dist  = 80 + Math.random() * 180;
+        el.style.setProperty('--px', Math.cos(angle) * dist + 'px');
+        el.style.setProperty('--py', Math.sin(angle) * dist + 'px');
+        document.body.appendChild(el);
+        setTimeout(() => el.remove(), 1500);
+      }, i * 40);
+    }
+  }
+
+  // ── RENDER ──
+  function render() {
+    const today  = todayStr();
+    const ahmed  = !!data.ahmed[today];
+    const alaa   = !!data.alaa[today];
+    const both   = ahmed && alaa;
+    const lang   = document.documentElement.lang || 'en';
+    const msgs   = MSGS[lang] || MSGS.en;
+
+    // Flame state
+    const flame = document.getElementById('flame-wrap');
+    flame.className = 'flame-wrap ' + (both ? 'full' : ahmed || alaa ? 'half' : 'dim');
+
+    // Hearts
+    const btnA = document.getElementById('btn-ahmed');
+    const btnL = document.getElementById('btn-alaa');
+    const hA   = document.getElementById('heart-ahmed');
+    const hL   = document.getElementById('heart-alaa');
+    const sA   = document.getElementById('status-ahmed');
+    const sL   = document.getElementById('status-alaa');
+
+    btnA.classList.toggle('tapped', ahmed);
+    btnL.classList.toggle('tapped', alaa);
+    hA.textContent = ahmed ? '♥' : '♡';
+    hL.textContent = alaa  ? '♥' : '♡';
+
+    const connected   = lang === 'ar' ? 'تواصل اليوم ✓' : 'Connected today ✓';
+    const tapToday    = lang === 'ar' ? 'اضغط للتواصل' : 'Tap to connect';
+    const waitingText = lang === 'ar' ? 'في الانتظار...' : 'Waiting for you...';
+
+    sA.textContent = ahmed ? connected : (alaa ? waitingText : tapToday);
+    sL.textContent = alaa  ? connected : (ahmed ? waitingText : tapToday);
+
+    // Message
+    const msg = document.getElementById('flame-msg');
+    const days = completeDays();
+    const streak = calcStreak(days);
+
+    if (both) {
+      msg.textContent = msgs.both.replace('{n}', streak);
+      msg.classList.add('lit');
+    } else if (ahmed && !alaa) {
+      msg.textContent = msgs.ahmed;
+      msg.classList.remove('lit');
+    } else if (alaa && !ahmed) {
+      msg.textContent = msgs.alaa;
+      msg.classList.remove('lit');
+    } else {
+      msg.textContent = msgs.none;
+      msg.classList.remove('lit');
+    }
+
+    // Streak number
+    const numEl = document.getElementById('streak-num');
+    const prevNum = parseInt(numEl.textContent) || 0;
+    numEl.textContent = streak;
+    if (streak > prevNum) { numEl.classList.remove('pop'); void numEl.offsetWidth; numEl.classList.add('pop'); }
+
+    // Best streak
+    const best = Math.max(calcBest(days), data.best || 0);
+    document.getElementById('streak-best').textContent =
+      best > 0 ? (lang === 'ar' ? `أطول سلسلة: ${best} يوم` : `Best: ${best} day${best===1?'':'s'}`) : '';
+
+    // Stats
+    document.getElementById('stat-best').textContent   = best;
+    document.getElementById('stat-total').textContent  = days.length;
+
+    // Missed days: from first complete day to today, how many days with no entry
+    const firstDay = days[0] || today;
+    const totalSince = Math.round((new Date(today) - new Date(firstDay)) / 86400000);
+    document.getElementById('stat-missed').textContent = Math.max(0, totalSince - days.length);
+
+    // History dots
+    renderDots(days);
+  }
+
+  function renderDots(completeDays) {
+    const container = document.getElementById('history-dots');
+    container.innerHTML = '';
+    const today = todayStr();
+    const set   = new Set(completeDays);
+
+    for (let i = 29; i >= 0; i--) {
+      const d   = addDays(new Date(), -i);
+      const str = ds(d);
+      const dot = document.createElement('div');
+      dot.className = 'h-dot';
+      dot.title = d.toLocaleDateString('en', { month: 'short', day: 'numeric' });
+
+      const ahmedTapped = !!data.ahmed[str];
+      const alaaTapped  = !!data.alaa[str];
+
+      if      (set.has(str))                dot.classList.add('complete');
+      else if (ahmedTapped || alaaTapped)   dot.classList.add('partial');
+      else                                   dot.classList.add('empty');
+
+      if (str === today) dot.classList.add('today-dot');
+      container.appendChild(dot);
+    }
+  }
+
+  // ── LANG TOGGLE ──
+  let lang = 'en';
+  function toggleLang() {
+    lang = lang === 'en' ? 'ar' : 'en';
+    const html = document.documentElement;
+    html.lang = lang;
+    html.dir  = lang === 'ar' ? 'rtl' : 'ltr';
+    document.querySelector('.nav-lang').textContent = lang === 'ar' ? 'English' : 'عربي';
+
+    document.querySelectorAll('.t[data-en]').forEach(el => {
+      el.textContent = el.dataset[lang];
+    });
+
+    render();
+  }
+
+  // ── INIT ──
+  render();
+</script>
+</body>
+</html>
