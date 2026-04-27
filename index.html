@@ -898,6 +898,152 @@
       .reason-title { font-size: 19px; }
     }
 
+    /* ── STREAK WIDGET ── */
+    .streak-section { background: var(--cream); position: relative; z-index: 1; }
+
+    .streak-stats {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 48px;
+      flex-wrap: wrap;
+    }
+    .streak-stat {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0 32px;
+    }
+    .streak-stat + .streak-stat { border-left: 1px solid var(--gold-pale); }
+    .streak-stat-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 42px;
+      font-weight: 300;
+      color: var(--charcoal);
+      line-height: 1;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .streak-fire { color: var(--gold); font-size: 28px; }
+    .streak-stat-label {
+      font-size: 9px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 6px;
+      text-align: center;
+    }
+
+    .streak-scroll {
+      overflow-x: auto;
+      padding-bottom: 10px;
+      cursor: grab;
+    }
+    .streak-scroll:active { cursor: grabbing; }
+    .streak-scroll::-webkit-scrollbar { height: 3px; }
+    .streak-scroll::-webkit-scrollbar-track { background: var(--gold-pale); border-radius: 2px; }
+    .streak-scroll::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 2px; }
+
+    .streak-month-row {
+      display: flex;
+      gap: 3px;
+      width: max-content;
+      margin-bottom: 6px;
+    }
+    .streak-month-cell {
+      font-size: 9px;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      line-height: 1;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    .streak-body { display: flex; gap: 3px; width: max-content; }
+
+    .streak-day-labels {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      margin-right: 6px;
+      flex-shrink: 0;
+    }
+    .streak-day-label {
+      height: 12px;
+      font-size: 8px;
+      letter-spacing: .06em;
+      color: var(--muted);
+      line-height: 12px;
+      text-transform: uppercase;
+    }
+
+    .streak-col { display: flex; flex-direction: column; gap: 3px; }
+
+    .streak-tile {
+      width: 12px;
+      height: 12px;
+      border-radius: 2px;
+      transition: transform .12s;
+      position: relative;
+    }
+    .streak-tile:hover { transform: scale(1.5); z-index: 10; }
+    .s-empty    { background: rgba(184,151,90,.07); }
+    .s-out      { background: transparent; pointer-events: none; }
+    .s-future   { background: rgba(184,151,90,.07); }
+    .s-missed   { background: rgba(184,151,90,.16); }
+    .s-visited  { background: var(--gold); }
+    .s-today    { background: var(--gold-lt); box-shadow: 0 0 7px rgba(212,180,131,.7); border: 1px solid var(--gold); }
+    .s-wedding  {
+      background: linear-gradient(135deg, var(--gold), #e8c97a);
+      box-shadow: 0 0 10px rgba(184,151,90,.6);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 7px; color: #fff; border-radius: 50%;
+    }
+
+    .streak-legend {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 6px;
+      margin-top: 14px;
+    }
+    .legend-label { font-size: 9px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+    .legend-tiles { display: flex; gap: 3px; }
+    .legend-tile  { width: 12px; height: 12px; border-radius: 2px; }
+
+    .streak-progress {
+      margin-top: 36px;
+    }
+    .streak-progress-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 9px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+    .streak-progress-pct { color: var(--gold); font-family: 'Cormorant Garamond', serif; font-size: 14px; }
+    .streak-track {
+      height: 3px;
+      background: var(--gold-pale);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .streak-fill {
+      height: 100%;
+      width: 0;
+      background: linear-gradient(to right, var(--gold), var(--gold-lt));
+      border-radius: 2px;
+      transition: width 1.4s cubic-bezier(.22,1,.36,1);
+    }
+
+    @media (max-width: 600px) {
+      .streak-stat { padding: 0 18px; }
+      .streak-stat-num { font-size: 32px; }
+    }
+
     /* ── RESPONSIVE ── */
     @media (max-width: 768px) {
       .section-wrap { padding: 64px 24px; }
@@ -1045,6 +1191,60 @@
     <div class="ornament-line"></div>
     <div class="ornament-diamond"></div>
     <div class="ornament-line"></div>
+  </div>
+</div>
+
+<!-- ══ STREAK ══ -->
+<div class="streak-section">
+  <div class="section-wrap reveal">
+    <div class="section-heading" id="heading-streak">Your <em>Journey</em></div>
+    <div class="section-sub t"
+      data-en="Every day you visit, a tile lights up — Dec 9, 2025 → Dec 9, 2026"
+      data-ar="كل يوم تزورون فيه تضيء لوحة — ٩ ديسمبر ٢٠٢٥ ← ٩ ديسمبر ٢٠٢٦">Every day you visit, a tile lights up — Dec 9, 2025 → Dec 9, 2026</div>
+
+    <div class="streak-stats">
+      <div class="streak-stat">
+        <div class="streak-stat-num"><span class="streak-fire">✦</span><span id="streak-current">0</span></div>
+        <div class="streak-stat-label t" data-en="Day Streak" data-ar="أيام متتالية">Day Streak</div>
+      </div>
+      <div class="streak-stat">
+        <div class="streak-stat-num" id="streak-longest">0</div>
+        <div class="streak-stat-label t" data-en="Best Streak" data-ar="أطول سلسلة">Best Streak</div>
+      </div>
+      <div class="streak-stat">
+        <div class="streak-stat-num" id="streak-total">0</div>
+        <div class="streak-stat-label t" data-en="Days Visited" data-ar="أيام الزيارة">Days Visited</div>
+      </div>
+    </div>
+
+    <div class="streak-scroll" id="streak-scroll">
+      <div id="streak-month-row" class="streak-month-row"></div>
+      <div class="streak-body">
+        <div class="streak-day-labels" id="streak-day-labels"></div>
+        <div id="streak-grid" class="streak-body" style="gap:3px;"></div>
+      </div>
+    </div>
+
+    <div class="streak-legend">
+      <span class="legend-label t" data-en="Less" data-ar="أقل">Less</span>
+      <div class="legend-tiles">
+        <div class="legend-tile s-future"></div>
+        <div class="legend-tile s-missed"></div>
+        <div class="legend-tile" style="background:rgba(184,151,90,.5);border-radius:2px;"></div>
+        <div class="legend-tile s-visited"></div>
+        <div class="legend-tile s-today"></div>
+      </div>
+      <span class="legend-label t" data-en="More" data-ar="أكثر">More</span>
+    </div>
+
+    <div class="streak-progress">
+      <div class="streak-progress-labels">
+        <span>Dec 9 2025</span>
+        <span class="streak-progress-pct" id="streak-pct">0%</span>
+        <span>Dec 9 2026</span>
+      </div>
+      <div class="streak-track"><div class="streak-fill" id="streak-fill"></div></div>
+    </div>
   </div>
 </div>
 
@@ -1404,6 +1604,7 @@
 
     // Update complex headings with em tags
     document.getElementById('heading-story').innerHTML   = HEADINGS[currentLang].story;
+    document.getElementById('heading-streak').innerHTML  = HEADINGS[currentLang].streak;
     document.getElementById('heading-reasons').innerHTML = HEADINGS[currentLang].reasons;
     document.getElementById('heading-letter').innerHTML  = HEADINGS[currentLang].letter;
     document.getElementById('heading-wish').innerHTML    = HEADINGS[currentLang].wish;
@@ -1658,6 +1859,139 @@
     t.classList.add('show');
     setTimeout(() => t.classList.remove('show'), 2600);
   }
+
+  // ══ STREAK WIDGET ══
+  (function() {
+    const WEDDING  = new Date('2026-12-09T00:00:00');
+    const PROPOSAL = new Date('2025-12-09T00:00:00');
+    const TODAY    = new Date(); TODAY.setHours(0,0,0,0);
+
+    function ds(d) { return d.toISOString().slice(0,10); }
+    function addD(d,n) { const r=new Date(d); r.setDate(r.getDate()+n); return r; }
+
+    // Load visited days, mark today
+    let visited;
+    try { visited = new Set(JSON.parse(localStorage.getItem('streak_visits')||'[]')); }
+    catch(e) { visited = new Set(); }
+    visited.add(ds(TODAY));
+    localStorage.setItem('streak_visits', JSON.stringify([...visited]));
+
+    // Streak calculations
+    function currentStreak() {
+      let n=0, d=new Date(TODAY);
+      while(visited.has(ds(d))){ n++; d=addD(d,-1); }
+      return n;
+    }
+    function bestStreak() {
+      const sorted=[...visited].sort();
+      let best=0, cur=0, prev=null;
+      for(const s of sorted){
+        const d=new Date(s);
+        cur = prev && (d-prev)===86400000 ? cur+1 : 1;
+        best=Math.max(best,cur); prev=d;
+      }
+      return best;
+    }
+
+    // Grid bounds: align to Monday
+    const gridStart = new Date(PROPOSAL);
+    const dow = gridStart.getDay();
+    gridStart.setDate(gridStart.getDate() - (dow===0?6:dow-1));
+
+    const gridEnd = new Date(WEDDING);
+    const dowE = gridEnd.getDay();
+    if(dowE!==0) gridEnd.setDate(gridEnd.getDate()+(7-dowE));
+
+    // Build week columns
+    const cols=[], months=[];
+    let cur=new Date(gridStart), colIdx=0, todayCol=-1;
+    while(cur<=gridEnd){
+      const week=[];
+      for(let i=0;i<7;i++){
+        week.push(new Date(cur));
+        cur=addD(cur,1);
+      }
+      // Month label for this column (check Monday of week)
+      const mLabel = week[0].getMonth()!==months[months.length-1]?.month
+        ? {col:colIdx, month:week[0].getMonth(), label:week[0].toLocaleString('en',{month:'short'})}
+        : null;
+      if(mLabel) months.push(mLabel);
+      if(week.some(d=>ds(d)===ds(TODAY))) todayCol=colIdx;
+      cols.push(week);
+      colIdx++;
+    }
+
+    // Render month labels
+    const weddingStr=ds(WEDDING), todayStr=ds(TODAY);
+    const TILE=15; // 12px + 3px gap
+    const monthRow=document.getElementById('streak-month-row');
+    for(let c=0;c<cols.length;c++){
+      const cell=document.createElement('div');
+      cell.className='streak-month-cell';
+      cell.style.width='12px';
+      const m=months.find(x=>x.col===c);
+      cell.textContent = m ? m.label : '';
+      monthRow.appendChild(cell);
+      if(c<cols.length-1){const g=document.createElement('div');g.style.width='3px';g.style.flexShrink='0';monthRow.appendChild(g);}
+    }
+
+    // Day labels (Mon–Sun)
+    const dayLabels=document.getElementById('streak-day-labels');
+    ['M','','W','','F','','S'].forEach(l=>{
+      const el=document.createElement('div');
+      el.className='streak-day-label';
+      el.textContent=l;
+      dayLabels.appendChild(el);
+    });
+
+    // Render grid
+    const grid=document.getElementById('streak-grid');
+    cols.forEach(week=>{
+      const col=document.createElement('div');
+      col.className='streak-col';
+      week.forEach(day=>{
+        const tile=document.createElement('div');
+        tile.className='streak-tile';
+        const d=ds(day);
+        const inRange = day>=PROPOSAL && day<=WEDDING;
+        if(!inRange)              tile.classList.add('s-out');
+        else if(d===weddingStr)   { tile.classList.add('s-wedding'); tile.textContent='♡'; }
+        else if(d===todayStr)     tile.classList.add('s-today');
+        else if(day>TODAY)        tile.classList.add('s-future');
+        else if(visited.has(d))   tile.classList.add('s-visited');
+        else                      tile.classList.add('s-missed');
+
+        // Tooltip
+        tile.setAttribute('title', day.toLocaleDateString('en',{month:'short',day:'numeric',year:'numeric'}));
+        col.appendChild(tile);
+      });
+      grid.appendChild(col);
+    });
+
+    // Update stats
+    document.getElementById('streak-current').textContent = currentStreak();
+    document.getElementById('streak-longest').textContent = bestStreak();
+    document.getElementById('streak-total').textContent   = visited.size;
+
+    // Progress bar
+    const totalDays = Math.round((WEDDING-PROPOSAL)/86400000);
+    const elapsed   = Math.max(0, Math.min(totalDays, Math.round((TODAY-PROPOSAL)/86400000)));
+    const pct       = Math.round(elapsed/totalDays*100);
+    document.getElementById('streak-pct').textContent = pct+'%';
+    setTimeout(()=>{ document.getElementById('streak-fill').style.width=pct+'%'; }, 400);
+
+    // Scroll to show today
+    if(todayCol>0){
+      const scroll=document.getElementById('streak-scroll');
+      setTimeout(()=>{ scroll.scrollLeft = Math.max(0,(todayCol-8)*TILE); },300);
+    }
+
+    // Add to HEADINGS for lang toggle
+    if(typeof HEADINGS!=='undefined'){
+      HEADINGS.en.streak='Your <em>Journey</em>';
+      HEADINGS.ar.streak='رحلتكم <em>إلى اليوم</em>';
+    }
+  })();
 
   // ══ PETALS ══
   const canvas = document.getElementById('petals-canvas');
