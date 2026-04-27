@@ -778,9 +778,10 @@
       color: rgba(255,255,255,.5);
       line-height: 1.8;
     }
-    [lang="ar"] .reason-item { grid-template-columns: 1fr 56px; transform: translateX(24px); }
-    [lang="ar"] .reason-num { text-align: left; }
+    /* RTL: grid column order reverses automatically — only fix animation direction */
+    [lang="ar"] .reason-item { transform: translateX(24px); }
     [lang="ar"] .reason-item.revealed { transform: none; }
+    [lang="ar"] .reason-num { text-align: left; }
 
     /* ── LOVE LETTER ── */
     .letter-section {
@@ -888,6 +889,13 @@
     [lang="ar"] .letter-closing-line,
     [lang="ar"] .letter-signature { font-family: 'Amiri', serif; }
     [lang="ar"] .letter-seal { right: auto; left: 48px; }
+
+    /* Streak: always LTR — calendars/timelines don't flip */
+    .streak-scroll,
+    .streak-progress,
+    .streak-legend,
+    .streak-month-row,
+    .streak-body { direction: ltr; }
     @media (max-width: 600px) {
       .letter-paper { padding: 48px 28px; }
       .letter-paper::before { left: 28px; right: 28px; }
