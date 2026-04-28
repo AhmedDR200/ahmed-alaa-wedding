@@ -1115,29 +1115,29 @@
     }
     #song-fab .fab-glow {
       bottom: -6px;
-      width: 50px;
-      height: 26px;
+      width: 46px;
+      height: 24px;
       background: radial-gradient(ellipse, rgba(184,151,90,.45) 0%, transparent 70%);
     }
     .fab-note {
       position: relative;
-      width: 32px;
-      height: 44px;
+      width: 26px;
+      height: 56px;
       display: flex;
       align-items: center;
       justify-content: center;
-      animation: noteBob 3s ease-in-out infinite;
+      animation: noteBreathe 3.4s ease-in-out infinite;
       filter: drop-shadow(0 0 6px rgba(184,151,90,.45));
       transition: filter .35s ease, transform .35s ease;
     }
     .fab-note svg { width: 100%; height: 100%; display: block; overflow: visible; }
     #song-fab:hover .fab-note {
-      filter: drop-shadow(0 0 14px rgba(212,180,131,.85));
-      transform: translateY(-2px) rotate(-4deg);
+      filter: drop-shadow(0 0 16px rgba(212,180,131,.9));
+      transform: translateY(-3px);
     }
-    @keyframes noteBob {
-      0%, 100% { transform: translateY(0)    rotate(-3deg); }
-      50%      { transform: translateY(-3px) rotate(3deg);  }
+    @keyframes noteBreathe {
+      0%, 100% { transform: translateY(0)   scale(1); }
+      50%      { transform: translateY(-2px) scale(1.04); }
     }
     #song-fab .fab-label {
       bottom: calc(100% + 14px);
@@ -1639,30 +1639,53 @@
 <a href="our-song.html" id="song-fab" aria-label="Our Song">
   <div class="fab-glow"></div>
   <div class="fab-note">
-    <svg viewBox="0 0 32 44" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <svg viewBox="0 0 60 130" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       <defs>
-        <linearGradient id="fabNoteGrad" x1="0%" y1="100%" x2="100%" y2="0%">
-          <stop offset="0%"   stop-color="#7A5A28"/>
-          <stop offset="55%"  stop-color="#B8975A"/>
-          <stop offset="100%" stop-color="#EEE0C4"/>
+        <linearGradient id="trebleBody" x1="20%" y1="0%" x2="80%" y2="100%">
+          <stop offset="0%"   stop-color="#D4B483"/>
+          <stop offset="50%"  stop-color="#9A7838"/>
+          <stop offset="100%" stop-color="#6E4F1C"/>
+        </linearGradient>
+        <linearGradient id="trebleHL" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%"   stop-color="#FFF6DC"/>
+          <stop offset="100%" stop-color="#EEE0C4" stop-opacity="0"/>
         </linearGradient>
       </defs>
-      <!-- Eighth-note style: stem with single flag and a filled note head -->
-      <path d="M14 4
-               L14 32
-               Q14 38 9 38
-               Q4 38 4 33.5
-               Q4 29 9 29
-               Q11 29 13 30
-               L13 7
-               L26 4
-               L26 26
-               Q26 32 21 32
-               Q16 32 16 27.5
-               Q16 23 21 23
-               Q23 23 25 24
-               L25 7 Z"
-            fill="url(#fabNoteGrad)"/>
+
+      <!-- Bottom bulb of the clef -->
+      <circle cx="14" cy="118" r="6.5" fill="url(#trebleBody)"/>
+
+      <!-- Main body of the treble clef (stroke-based for clean curves) -->
+      <path d="M 32 6
+               C 44 12 48 24 42 36
+               C 38 44 28 52 22 60
+               C 14 70 14 84 24 90
+               C 36 96 46 84 40 74
+               C 36 68 26 70 26 78
+               C 26 82 32 84 32 80
+               M 32 6
+               L 32 100
+               C 32 112 22 120 14 116
+               C 8 113 8 104 16 104
+               C 22 104 24 110 20 114"
+            fill="none"
+            stroke="url(#trebleBody)"
+            stroke-width="6"
+            stroke-linecap="round"
+            stroke-linejoin="round"/>
+
+      <!-- Pale highlight on the top curve (duotone) -->
+      <path d="M 32 6
+               C 42 11 46 22 41 33
+               C 37 41 30 49 26 56"
+            fill="none"
+            stroke="url(#trebleHL)"
+            stroke-width="2"
+            stroke-linecap="round"
+            opacity="0.85"/>
+
+      <!-- Tiny highlight on the bulb -->
+      <ellipse cx="12" cy="115" rx="2" ry="1.4" fill="#FFF6DC" opacity=".7"/>
     </svg>
   </div>
   <span class="fab-label">Our Song</span>
