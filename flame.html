@@ -261,49 +261,33 @@
       transition: opacity .8s ease, transform .8s ease;
     }
 
-    .flame-layer {
+    .flame-svg {
       position: absolute;
-      bottom: 0;
+      bottom: 14px;
       left: 50%;
-      border-radius: 50% 50% 30% 30% / 60% 60% 40% 40%;
-      transform-origin: bottom center;
-      transition: opacity .8s ease, height .8s cubic-bezier(.22,1,.36,1), width .8s cubic-bezier(.22,1,.36,1);
+      width: 100px;
+      height: 180px;
+      transform: translateX(-50%) scale(1);
+      transform-origin: 50% 100%;
+      transition: transform .9s cubic-bezier(.22,1,.36,1),
+                  opacity .9s ease,
+                  filter .9s ease;
+      overflow: visible;
+      will-change: transform, filter;
     }
-
-    .flame-a {
-      width: 90px; height: 170px;
-      background: radial-gradient(ellipse 80% 100% at 50% 100%,
-        rgba(184,151,90,.9) 0%,
-        rgba(130,90,30,.7) 50%,
-        transparent 100%);
-      filter: blur(3px);
-      animation: sway 3s ease-in-out infinite alternate;
+    .flame-svg .flame-core {
+      transform-origin: 50% 88%;
+      animation: flameCorePulse 1.9s ease-in-out infinite;
     }
-    .flame-b {
-      width: 60px; height: 130px;
-      background: radial-gradient(ellipse 70% 100% at 50% 100%,
-        rgba(220,185,100,1) 0%,
-        rgba(184,151,90,.8) 45%,
-        transparent 100%);
-      filter: blur(1.5px);
-      animation: sway 2s ease-in-out infinite alternate-reverse;
+    @keyframes flameCorePulse {
+      0%, 100% { transform: scaleY(1);    opacity: .9; }
+      50%      { transform: scaleY(1.12); opacity: 1;  }
     }
-    .flame-c {
-      width: 34px; height: 80px;
-      background: radial-gradient(ellipse 60% 100% at 50% 100%,
-        rgba(255,245,200,1) 0%,
-        rgba(230,200,100,1) 40%,
-        rgba(184,151,90,.5) 70%,
-        transparent 100%);
-      animation: sway 1.4s ease-in-out infinite alternate;
-    }
-    .flame-d {
-      width: 14px; height: 36px;
-      background: radial-gradient(ellipse at 50% 100%,
-        rgba(255,255,255,1) 0%,
-        rgba(255,250,220,.9) 60%,
-        transparent 100%);
-      animation: sway 1s ease-in-out infinite alternate-reverse;
+    @keyframes flameLive {
+      0%, 100% { transform: translateX(-50%) scale(1, 1); }
+      25%      { transform: translateX(-50%) scale(1.03, .97); }
+      50%      { transform: translateX(-50%) scale(.97, 1.04); }
+      75%      { transform: translateX(-50%) scale(1.02, .99); }
     }
 
     .wick {
@@ -317,28 +301,37 @@
       border-radius: 2px;
     }
 
-    @keyframes sway {
-      0%   { transform: translateX(-50%) rotate(-4deg) scaleX(1); }
-      100% { transform: translateX(-50%) rotate(4deg) scaleX(.88); }
+    /* Flame states */
+    .flame-wrap.dim .flame-svg {
+      transform: translateX(-50%) scale(.38);
+      opacity: .55;
+      filter: drop-shadow(0 0 6px rgba(184,151,90,.3));
+    }
+    .flame-wrap.dim .flame-glow {
+      opacity: .2;
+      transform: translateX(-50%) scale(.5);
     }
 
-    /* Flame states */
-    .flame-wrap.dim .flame-a  { height: 70px;  width: 50px;  opacity: .4; }
-    .flame-wrap.dim .flame-b  { height: 50px;  width: 34px;  opacity: .4; }
-    .flame-wrap.dim .flame-c  { height: 30px;  width: 18px;  opacity: .5; }
-    .flame-wrap.dim .flame-d  { height: 14px;  width: 7px;   opacity: .5; }
-    .flame-wrap.dim .flame-glow { opacity: .2; transform: translateX(-50%) scale(.5); }
-
-    .flame-wrap.half .flame-a { height: 120px; width: 70px;  opacity: .7; }
-    .flame-wrap.half .flame-b { height: 90px;  width: 48px;  opacity: .8; }
-    .flame-wrap.half .flame-c { height: 56px;  width: 26px;  opacity: .9; }
-    .flame-wrap.half .flame-d { height: 24px;  width: 10px;  opacity: 1; }
+    .flame-wrap.half .flame-svg {
+      transform: translateX(-50%) scale(.72);
+      opacity: .92;
+      filter: drop-shadow(0 0 14px rgba(212,180,131,.55));
+    }
     .flame-wrap.half .flame-glow { opacity: .55; }
 
+    .flame-wrap.full .flame-svg {
+      opacity: 1;
+      filter: drop-shadow(0 0 26px rgba(238,224,196,.85));
+      animation: flameLive 2.8s ease-in-out infinite;
+    }
     .flame-wrap.full .flame-glow {
       opacity: 1;
       width: 180px; height: 120px;
       background: radial-gradient(ellipse, rgba(212,180,131,.7) 0%, rgba(184,151,90,.3) 50%, transparent 70%);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .flame-svg, .flame-svg .flame-core, .flame-glow { animation: none; }
     }
 
     /* ── STATUS ROW ── */
@@ -572,10 +565,46 @@
   <!-- FLAME -->
   <div class="flame-wrap dim" id="flame-wrap">
     <div class="flame-glow"></div>
-    <div class="flame-layer flame-a"></div>
-    <div class="flame-layer flame-b"></div>
-    <div class="flame-layer flame-c"></div>
-    <div class="flame-layer flame-d"></div>
+    <svg class="flame-svg" viewBox="0 0 100 180" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <defs>
+        <linearGradient id="bigFlameOuter" x1="50%" y1="100%" x2="50%" y2="0%">
+          <stop offset="0%"   stop-color="#7A5A28"/>
+          <stop offset="35%"  stop-color="#B8975A"/>
+          <stop offset="75%"  stop-color="#D4B483"/>
+          <stop offset="100%" stop-color="#EEE0C4"/>
+        </linearGradient>
+        <linearGradient id="bigFlameInner" x1="50%" y1="100%" x2="50%" y2="0%">
+          <stop offset="0%"   stop-color="#D4B483" stop-opacity="0"/>
+          <stop offset="55%"  stop-color="#EEE0C4" stop-opacity=".75"/>
+          <stop offset="100%" stop-color="#FFF6DC"/>
+        </linearGradient>
+        <radialGradient id="bigFlameCore" cx="50%" cy="70%" r="55%">
+          <stop offset="0%"   stop-color="#FFFBE8"/>
+          <stop offset="60%"  stop-color="#F4E0A8" stop-opacity=".9"/>
+          <stop offset="100%" stop-color="#D4B483" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+      <!-- Outer flame silhouette -->
+      <path d="M50 178
+               C 18 178, 5 150, 8 110
+               C 12 80, 30 70, 32 80
+               C 34 92, 42 88, 40 78
+               C 36 60, 30 40, 50 4
+               C 60 28, 80 50, 85 100
+               C 90 145, 78 178, 50 178 Z"
+            fill="url(#bigFlameOuter)"/>
+      <!-- Inner flame -->
+      <path d="M50 165
+               C 28 165, 22 138, 26 108
+               C 30 90, 42 84, 42 92
+               C 42 100, 50 96, 50 90
+               C 50 78, 46 64, 52 46
+               C 60 65, 76 88, 76 118
+               C 76 145, 65 165, 50 165 Z"
+            fill="url(#bigFlameInner)" opacity=".9"/>
+      <!-- Bright animated core -->
+      <ellipse class="flame-core" cx="50" cy="135" rx="18" ry="28" fill="url(#bigFlameCore)"/>
+    </svg>
     <div class="wick"></div>
   </div>
 
@@ -697,8 +726,38 @@
   }
 
   // ── UTILS ──
-  function todayStr() { return new Date().toISOString().slice(0,10); }
-  function addDays(d, n) { const r = new Date(d); r.setDate(r.getDate() + n); return r; }
+  // A "logical day" runs from 00:20 Cairo to 00:20 next day Cairo.
+  // We compute Cairo wall time, subtract 20 minutes, then take YYYY-MM-DD.
+  const DAY_OFFSET_MIN = 20;            // new day starts at 00:20 Cairo
+  const TZ = 'Africa/Cairo';
+
+  function cairoNow() {
+    // Build a Date whose UTC fields equal Cairo wall-clock fields
+    const parts = new Intl.DateTimeFormat('en-CA', {
+      timeZone: TZ,
+      year: 'numeric', month: '2-digit', day: '2-digit',
+      hour: '2-digit', minute: '2-digit', second: '2-digit',
+      hour12: false
+    }).formatToParts(new Date());
+    const o = {};
+    for (const p of parts) o[p.type] = p.value;
+    // 'en-CA' gives 24h with possible "24" for midnight in some envs — normalise
+    if (o.hour === '24') o.hour = '00';
+    return new Date(`${o.year}-${o.month}-${o.day}T${o.hour}:${o.minute}:${o.second}Z`);
+  }
+
+  function todayStr() {
+    const d = cairoNow();
+    d.setUTCMinutes(d.getUTCMinutes() - DAY_OFFSET_MIN);
+    return d.toISOString().slice(0, 10);
+  }
+
+  function addDays(d, n) {
+    const r = new Date(d);
+    r.setUTCDate(r.getUTCDate() + n);
+    return r;
+  }
+
   function ds(d) { return d instanceof Date ? d.toISOString().slice(0,10) : d; }
 
   // ── DATA ──
@@ -928,6 +987,39 @@
 
     render();
   }
+
+  // ── DAY ROLLOVER WATCHER ──
+  // Polls every 30s. When the logical day (Cairo, 00:20 boundary) flips,
+  // re-fetches from the cloud and re-renders so the open tab transitions
+  // automatically without a reload. Also re-syncs whenever the tab regains focus.
+  let _currentDayKey = todayStr();
+
+  async function refreshIfDayChanged() {
+    const k = todayStr();
+    if (k !== _currentDayKey) {
+      _currentDayKey = k;
+      if (data && data.ahmed) {
+        data = await jbLoad();
+        if (!data.ahmed) data.ahmed = {};
+        if (!data.alaa)  data.alaa  = {};
+        if (!data.best)  data.best  = 0;
+        render();
+      }
+    }
+  }
+
+  setInterval(refreshIfDayChanged, 30000);
+
+  document.addEventListener('visibilitychange', async () => {
+    if (document.hidden) return;
+    if (!data || !data.ahmed) return;
+    _currentDayKey = todayStr();
+    data = await jbLoad();
+    if (!data.ahmed) data.ahmed = {};
+    if (!data.alaa)  data.alaa  = {};
+    if (!data.best)  data.best  = 0;
+    render();
+  });
 
 </script>
 </body>
