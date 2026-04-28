@@ -154,33 +154,69 @@
       overflow-x: hidden;
     }
 
-    /* ── NAV ── */
-    .nav {
+    /* ── TOP NAV (shared) ── */
+    .topnav {
       position: fixed;
       top: 0; left: 0; right: 0;
-      z-index: 100;
+      z-index: 200;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 20px 28px;
-      background: linear-gradient(to bottom, rgba(17,17,16,.9), transparent);
+      padding: 18px 28px;
+      gap: 18px;
+      background: linear-gradient(to bottom, rgba(17,17,16,.92), rgba(17,17,16,0));
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
     }
-    .nav-back {
+    .topnav-mono {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 17px;
+      color: var(--gold);
+      text-decoration: none;
+      letter-spacing: .04em;
+    }
+    .topnav-links { display: flex; align-items: flex-end; gap: 28px; }
+    .topnav-link {
+      font-family: 'Jost', sans-serif;
       font-size: 10px;
-      letter-spacing: .2em;
+      letter-spacing: .24em;
       text-transform: uppercase;
       color: var(--muted);
       text-decoration: none;
-      transition: color .2s;
+      padding: 4px 0 8px;
+      position: relative;
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+      transition: color .25s ease;
     }
-    .nav-back:hover { color: var(--gold-lt); }
-    .nav-mono {
-      font-family: 'Cormorant Garamond', serif;
-      font-style: italic;
-      font-size: 16px;
-      color: var(--gold);
+    .topnav-icon {
+      width: 18px;
+      height: 18px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      opacity: .8;
+      transition: opacity .25s ease, transform .25s ease;
     }
-    .nav-lang {
+    .topnav-icon svg { width: 100%; height: 100%; display: block; }
+    .topnav-link:hover { color: var(--gold-lt); }
+    .topnav-link:hover .topnav-icon { opacity: 1; transform: translateY(-1px); }
+    .topnav-link.active { color: var(--gold-lt); }
+    .topnav-link.active .topnav-icon { opacity: 1; }
+    .topnav-link.active::after {
+      content: "";
+      position: absolute;
+      bottom: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 4px; height: 4px;
+      background: var(--gold);
+      border-radius: 50%;
+    }
+    [lang="ar"] .topnav-link { font-family: 'Cairo', sans-serif; letter-spacing: .04em; }
+    .topnav-lang {
       font-size: 10px;
       letter-spacing: .16em;
       text-transform: uppercase;
@@ -191,7 +227,21 @@
       color: var(--gold-lt);
       transition: border-color .2s;
     }
-    .nav-lang:hover { border-color: var(--gold); }
+    .topnav-lang:hover { border-color: var(--gold); }
+    @media (max-width: 760px) {
+      .topnav { padding: 12px 16px; gap: 10px; }
+      .topnav-links { gap: 18px; }
+      .topnav-link { font-size: 9px; letter-spacing: .14em; }
+      .topnav-icon { width: 17px; height: 17px; }
+      .topnav-mono { font-size: 14px; }
+    }
+    @media (max-width: 480px) {
+      .topnav-mono { display: none; }
+      .topnav-links { gap: 14px; }
+      .topnav-link { font-size: 8.5px; letter-spacing: .08em; gap: 3px; padding-bottom: 6px; }
+      .topnav-icon { width: 16px; height: 16px; }
+      .topnav-lang { padding: 5px 10px; font-size: 9px; }
+    }
 
     /* ── PAGE ── */
     .page {
@@ -553,11 +603,16 @@
   </div>
 </div>
 
-<!-- ══ NAV ══ -->
-<nav class="nav">
-  <a class="nav-back t" href="index.html" data-en="← Back" data-ar="→ رجوع">← Back</a>
-  <div class="nav-mono">A &amp; A</div>
-  <button class="nav-lang" onclick="toggleLang()">عربي</button>
+<!-- ══ TOP NAV ══ -->
+<nav class="topnav">
+  <a class="topnav-mono" href="index.html">A &amp; A</a>
+  <div class="topnav-links">
+    <a href="index.html"     class="topnav-link"        data-page="home"><span class="topnav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12H3l9-9 9 9h-2M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/><path d="M9 21v-6a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v6"/></svg></span><span class="t" data-en="Home" data-ar="الرئيسية">Home</span></a>
+    <a href="flame.html"     class="topnav-link"        data-page="flame"><span class="topnav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 10.94c2.33-3.31.17-7.82-1-8.94 0 3.4-2.24 5.3-3.67 6.7C5.9 10.11 5 12 5 14.29 5 18 8.13 21 12 21s7-3 7-6.71c0-1.71-1.23-4.4-2.33-5.59-2.09 3.36-3.26 3.36-4.67 2.24Z"/></svg></span><span class="t" data-en="Flame" data-ar="الشعلة">Flame</span></a>
+    <a href="our-song.html"  class="topnav-link active" data-page="song"><span class="topnav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13M9 9l12-2"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></span><span class="t" data-en="Song" data-ar="الأغنية">Song</span></a>
+    <a href="for-alaa.html"  class="topnav-link"        data-page="alaa"><span class="topnav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M17 10h-1a4 4 0 1 1 4-4v.534"/><path d="M17 6h1a4 4 0 0 1 1.42 7.74l-2.29.87a6 6 0 0 1-5.339-10.68l2.069-1.31"/><path d="M4.5 17c2.8-.5 4.4 0 5.5.8s1.8 2.2 2.3 3.7c-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2"/><path d="M9.77 12C4 15 2 22 2 22"/><circle cx="17" cy="8" r="2"/></svg></span><span class="t" data-en="For Alaa" data-ar="لـ آلاء">For Alaa</span></a>
+  </div>
+  <button class="topnav-lang" onclick="toggleLang()">عربي</button>
 </nav>
 
 <!-- ══ PAGE ══ -->
@@ -855,7 +910,7 @@
     const html = document.documentElement;
     html.lang = lang;
     html.dir  = lang === 'ar' ? 'rtl' : 'ltr';
-    document.querySelector('.nav-lang').textContent = lang === 'ar' ? 'English' : 'عربي';
+    document.querySelector('.topnav-lang').textContent = lang === 'ar' ? 'English' : 'عربي';
     document.querySelectorAll('.t[data-en]').forEach(el => {
       el.textContent = el.dataset[lang];
     });

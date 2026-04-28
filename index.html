@@ -105,25 +105,95 @@
     }
     @keyframes fadeIn { to { opacity: 1; } }
 
-    /* ── LANG TOGGLE ── */
-    #lang-btn {
+    /* ── TOP NAV (shared) ── */
+    .topnav {
       position: fixed;
-      top: 24px;
-      right: 24px;
+      top: 0; left: 0; right: 0;
       z-index: 9000;
-      background: rgba(28,28,30,.7);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border: 1px solid rgba(184,151,90,.4);
-      color: var(--gold-lt);
-      padding: 9px 20px;
-      font-family: 'Jost', sans-serif;
-      font-size: 12px;
-      letter-spacing: .12em;
-      cursor: pointer;
-      transition: background .3s, border-color .3s;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 28px;
+      gap: 18px;
+      background: linear-gradient(to bottom, rgba(17,17,16,.92), rgba(17,17,16,0));
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
     }
-    #lang-btn:hover { background: rgba(184,151,90,.2); border-color: var(--gold); }
+    .topnav-mono {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 17px;
+      color: var(--gold);
+      text-decoration: none;
+      letter-spacing: .04em;
+    }
+    .topnav-links { display: flex; align-items: flex-end; gap: 28px; }
+    .topnav-link {
+      font-family: 'Jost', sans-serif;
+      font-size: 10px;
+      letter-spacing: .24em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.5);
+      text-decoration: none;
+      padding: 4px 0 8px;
+      position: relative;
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+      transition: color .25s ease;
+    }
+    .topnav-icon {
+      width: 18px;
+      height: 18px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      opacity: .8;
+      transition: opacity .25s ease, transform .25s ease;
+    }
+    .topnav-icon svg { width: 100%; height: 100%; display: block; }
+    .topnav-link:hover { color: var(--gold-lt); }
+    .topnav-link:hover .topnav-icon { opacity: 1; transform: translateY(-1px); }
+    .topnav-link.active { color: var(--gold-lt); }
+    .topnav-link.active .topnav-icon { opacity: 1; }
+    .topnav-link.active::after {
+      content: "";
+      position: absolute;
+      bottom: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 4px; height: 4px;
+      background: var(--gold);
+      border-radius: 50%;
+    }
+    [lang="ar"] .topnav-link { font-family: 'Cairo', sans-serif; letter-spacing: .04em; }
+    .topnav-lang {
+      font-size: 10px;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      cursor: pointer;
+      background: none;
+      border: 1px solid rgba(184,151,90,.3);
+      padding: 6px 14px;
+      color: var(--gold-lt);
+      font-family: 'Jost', sans-serif;
+      transition: border-color .2s, background .2s;
+    }
+    .topnav-lang:hover { border-color: var(--gold); background: rgba(184,151,90,.08); }
+    @media (max-width: 760px) {
+      .topnav { padding: 12px 16px; gap: 10px; }
+      .topnav-links { gap: 18px; }
+      .topnav-link { font-size: 9px; letter-spacing: .14em; }
+      .topnav-icon { width: 17px; height: 17px; }
+      .topnav-mono { font-size: 14px; }
+    }
+    @media (max-width: 480px) {
+      .topnav-mono { display: none; }
+      .topnav-links { gap: 14px; }
+      .topnav-link { font-size: 8.5px; letter-spacing: .08em; gap: 3px; padding-bottom: 6px; }
+      .topnav-icon { width: 16px; height: 16px; }
+      .topnav-lang { padding: 5px 10px; font-size: 9px; }
+    }
 
     /* ── MILESTONE BANNER ── */
     .milestone-banner {
@@ -653,7 +723,6 @@
       font-family: 'Amiri', serif;
     }
     [lang="ar"] .tl-date-col { text-align: left; }
-    [lang="ar"] #lang-btn { left: 24px; right: auto; }
     [lang="ar"] .hero-date-line span { letter-spacing: .08em; }
     [lang="ar"] .milestone-close { right: auto; left: 20px; }
 
@@ -989,161 +1058,6 @@
       .streak-stat-num { font-size: 32px; }
     }
 
-    /* ── FLOATING FLAME BUTTON ── */
-    #flame-fab {
-      position: fixed;
-      bottom: 32px;
-      right: 32px;
-      left: auto;
-      top: auto;
-      z-index: 8500;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 8px;
-      text-decoration: none;
-      cursor: pointer;
-      transform: none;
-    }
-    .fab-glow {
-      position: absolute;
-      bottom: -8px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 60px;
-      height: 30px;
-      border-radius: 50%;
-      background: radial-gradient(ellipse, rgba(184,151,90,.55) 0%, transparent 70%);
-      filter: blur(8px);
-      animation: fabGlowPulse 2.5s ease-in-out infinite;
-    }
-    @keyframes fabGlowPulse {
-      0%,100% { opacity: .5; transform: translateX(-50%) scaleX(1); }
-      50%      { opacity: 1;  transform: translateX(-50%) scaleX(1.2); }
-    }
-    .fab-flame {
-      position: relative;
-      width: 36px;
-      height: 52px;
-      display: flex;
-      align-items: flex-end;
-      justify-content: center;
-      transform-origin: 50% 90%;
-      animation: fabFlicker 2.4s ease-in-out infinite;
-      filter: drop-shadow(0 0 6px rgba(184,151,90,.45));
-      transition: filter .35s ease, transform .35s ease;
-    }
-    .fab-flame svg {
-      width: 100%;
-      height: 100%;
-      display: block;
-      overflow: visible;
-    }
-    .fab-flame .flame-core {
-      transform-origin: 50% 90%;
-      animation: fabCore 1.7s ease-in-out infinite;
-    }
-    #flame-fab:hover .fab-flame {
-      filter: drop-shadow(0 0 14px rgba(212,180,131,.85));
-      transform: translateY(-2px);
-    }
-    @keyframes fabFlicker {
-      0%, 100% { transform: scale(1, 1); }
-      25%      { transform: scale(1.04, .97) translateY(-1px); }
-      50%      { transform: scale(.97, 1.03); }
-      75%      { transform: scale(1.02, .99) translateY(-.5px); }
-    }
-    @keyframes fabCore {
-      0%, 100% { transform: scaleY(1); opacity: .9; }
-      50%      { transform: scaleY(1.12); opacity: 1; }
-    }
-    .fab-label {
-      font-family: 'Jost', sans-serif;
-      font-size: 9px;
-      font-weight: 400;
-      letter-spacing: .22em;
-      text-transform: uppercase;
-      color: var(--gold-lt);
-      white-space: nowrap;
-      position: absolute;
-      bottom: calc(100% + 14px);
-      left: 50%;
-      transform: translate(-50%, 4px);
-      padding: 6px 12px;
-      background: rgba(20,14,8,.92);
-      border: 1px solid rgba(184,151,90,.4);
-      border-radius: 999px;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity .3s ease, transform .3s ease;
-    }
-    .fab-label::after {
-      content: "";
-      position: absolute;
-      top: 100%;
-      left: 50%;
-      transform: translateX(-50%);
-      border: 5px solid transparent;
-      border-top-color: rgba(184,151,90,.4);
-    }
-    #flame-fab:hover .fab-label,
-    #flame-fab:focus-visible .fab-label {
-      opacity: 1;
-      transform: translate(-50%, 0);
-    }
-    [lang="ar"] .fab-label { font-family: 'Cairo', sans-serif; letter-spacing: .04em; }
-    [lang="ar"] #flame-fab { right: auto; left: 32px; }
-    @media (prefers-reduced-motion: reduce) {
-      .fab-flame, .fab-flame .flame-core, .fab-glow { animation: none; }
-    }
-
-    /* ── FLOATING MUSIC NOTE BUTTON ── */
-    #song-fab {
-      position: fixed;
-      bottom: 32px;
-      left: 32px;
-      right: auto;
-      top: auto;
-      z-index: 8500;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 8px;
-      text-decoration: none;
-      cursor: pointer;
-      transform: none;
-    }
-    #song-fab .fab-glow {
-      bottom: -6px;
-      width: 46px;
-      height: 24px;
-      background: radial-gradient(ellipse, rgba(184,151,90,.45) 0%, transparent 70%);
-    }
-    .fab-note {
-      position: relative;
-      width: 26px;
-      height: 56px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      animation: noteBreathe 3.4s ease-in-out infinite;
-      filter: drop-shadow(0 0 6px rgba(184,151,90,.45));
-      transition: filter .35s ease, transform .35s ease;
-    }
-    .fab-note svg { width: 100%; height: 100%; display: block; overflow: visible; }
-    #song-fab:hover .fab-note {
-      filter: drop-shadow(0 0 16px rgba(212,180,131,.9));
-      transform: translateY(-3px);
-    }
-    @keyframes noteBreathe {
-      0%, 100% { transform: translateY(0)   scale(1); }
-      50%      { transform: translateY(-2px) scale(1.04); }
-    }
-    #song-fab .fab-label {
-      bottom: calc(100% + 14px);
-    }
-    [lang="ar"] #song-fab { left: auto; right: 32px; }
-
     /* ── RESPONSIVE ── */
     @media (max-width: 768px) {
       .section-wrap { padding: 64px 24px; }
@@ -1173,8 +1087,6 @@
       .btn-s { text-align: center; }
       .toast { width: calc(100% - 48px); text-align: center; }
       .ornament-line { max-width: 60px; }
-      #lang-btn { top: 16px; right: 16px; padding: 8px 14px; }
-      [lang="ar"] #lang-btn { left: 16px; right: auto; }
     }
   </style>
 </head>
@@ -1197,8 +1109,17 @@
 <div class="cursor-dot"  id="cur-dot"></div>
 <div class="cursor-ring" id="cur-ring"></div>
 
-<!-- ══ LANG TOGGLE ══ -->
-<button id="lang-btn" onclick="toggleLang()">عربي</button>
+<!-- ══ TOP NAV ══ -->
+<nav class="topnav">
+  <a class="topnav-mono" href="index.html">A &amp; A</a>
+  <div class="topnav-links">
+    <a href="index.html"     class="topnav-link active" data-page="home"><span class="topnav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12H3l9-9 9 9h-2M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/><path d="M9 21v-6a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v6"/></svg></span><span class="t" data-en="Home" data-ar="الرئيسية">Home</span></a>
+    <a href="flame.html"     class="topnav-link"        data-page="flame"><span class="topnav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 10.94c2.33-3.31.17-7.82-1-8.94 0 3.4-2.24 5.3-3.67 6.7C5.9 10.11 5 12 5 14.29 5 18 8.13 21 12 21s7-3 7-6.71c0-1.71-1.23-4.4-2.33-5.59-2.09 3.36-3.26 3.36-4.67 2.24Z"/></svg></span><span class="t" data-en="Flame" data-ar="الشعلة">Flame</span></a>
+    <a href="our-song.html"  class="topnav-link"        data-page="song"><span class="topnav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13M9 9l12-2"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></span><span class="t" data-en="Song" data-ar="الأغنية">Song</span></a>
+    <a href="for-alaa.html"  class="topnav-link"        data-page="alaa"><span class="topnav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M17 10h-1a4 4 0 1 1 4-4v.534"/><path d="M17 6h1a4 4 0 0 1 1.42 7.74l-2.29.87a6 6 0 0 1-5.339-10.68l2.069-1.31"/><path d="M4.5 17c2.8-.5 4.4 0 5.5.8s1.8 2.2 2.3 3.7c-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2"/><path d="M9.77 12C4 15 2 22 2 22"/><circle cx="17" cy="8" r="2"/></svg></span><span class="t" data-en="For Alaa" data-ar="لـ آلاء">For Alaa</span></a>
+  </div>
+  <button class="topnav-lang" id="lang-btn" onclick="toggleLang()">عربي</button>
+</nav>
 
 <!-- ══ MILESTONE BANNER ══ -->
 <div class="milestone-banner" id="milestone-banner">
@@ -1586,110 +1507,6 @@
 </footer>
 
 <div class="toast" id="toast"></div>
-
-<!-- ══ FLOATING FLAME BUTTON ══ -->
-<a href="flame.html" id="flame-fab" aria-label="Our Daily Flame">
-  <div class="fab-glow"></div>
-  <div class="fab-flame">
-    <svg viewBox="0 0 36 52" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <defs>
-        <linearGradient id="fabFlameOuter" x1="50%" y1="100%" x2="50%" y2="0%">
-          <stop offset="0%"   stop-color="#7A5A28"/>
-          <stop offset="35%"  stop-color="#B8975A"/>
-          <stop offset="75%"  stop-color="#D4B483"/>
-          <stop offset="100%" stop-color="#EEE0C4"/>
-        </linearGradient>
-        <linearGradient id="fabFlameInner" x1="50%" y1="100%" x2="50%" y2="0%">
-          <stop offset="0%"   stop-color="#D4B483" stop-opacity="0"/>
-          <stop offset="55%"  stop-color="#EEE0C4" stop-opacity=".75"/>
-          <stop offset="100%" stop-color="#FFF6DC"/>
-        </linearGradient>
-        <radialGradient id="fabFlameCore" cx="50%" cy="70%" r="55%">
-          <stop offset="0%"   stop-color="#FFFBE8"/>
-          <stop offset="60%"  stop-color="#F4E0A8" stop-opacity=".9"/>
-          <stop offset="100%" stop-color="#D4B483" stop-opacity="0"/>
-        </radialGradient>
-      </defs>
-      <!-- Outer flame silhouette -->
-      <path d="M18 51
-               C 7 51, 2 42, 4 31
-               C 6 22, 12 18, 13 23
-               C 14 28, 16 27, 16 22
-               C 16 14, 13 8, 18 1
-               C 22 9, 31 13, 32 26
-               C 33 39, 29 51, 18 51 Z"
-            fill="url(#fabFlameOuter)"/>
-      <!-- Inner flame -->
-      <path d="M18 47
-               C 11 47, 8 39, 10 31
-               C 12 25, 16 23, 16 27
-               C 16 30, 18 29, 18 26
-               C 18 21, 17 17, 19 13
-               C 22 18, 27 23, 27 31
-               C 27 40, 24 47, 18 47 Z"
-            fill="url(#fabFlameInner)" opacity=".9"/>
-      <!-- Bright core (animated) -->
-      <ellipse class="flame-core" cx="18" cy="38" rx="6" ry="9" fill="url(#fabFlameCore)"/>
-    </svg>
-  </div>
-  <span class="fab-label">Our Flame</span>
-</a>
-
-<!-- ══ FLOATING MUSIC NOTE BUTTON ══ -->
-<a href="our-song.html" id="song-fab" aria-label="Our Song">
-  <div class="fab-glow"></div>
-  <div class="fab-note">
-    <svg viewBox="0 0 60 130" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <defs>
-        <linearGradient id="trebleBody" x1="20%" y1="0%" x2="80%" y2="100%">
-          <stop offset="0%"   stop-color="#D4B483"/>
-          <stop offset="50%"  stop-color="#9A7838"/>
-          <stop offset="100%" stop-color="#6E4F1C"/>
-        </linearGradient>
-        <linearGradient id="trebleHL" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%"   stop-color="#FFF6DC"/>
-          <stop offset="100%" stop-color="#EEE0C4" stop-opacity="0"/>
-        </linearGradient>
-      </defs>
-
-      <!-- Bottom bulb of the clef -->
-      <circle cx="14" cy="118" r="6.5" fill="url(#trebleBody)"/>
-
-      <!-- Main body of the treble clef (stroke-based for clean curves) -->
-      <path d="M 32 6
-               C 44 12 48 24 42 36
-               C 38 44 28 52 22 60
-               C 14 70 14 84 24 90
-               C 36 96 46 84 40 74
-               C 36 68 26 70 26 78
-               C 26 82 32 84 32 80
-               M 32 6
-               L 32 100
-               C 32 112 22 120 14 116
-               C 8 113 8 104 16 104
-               C 22 104 24 110 20 114"
-            fill="none"
-            stroke="url(#trebleBody)"
-            stroke-width="6"
-            stroke-linecap="round"
-            stroke-linejoin="round"/>
-
-      <!-- Pale highlight on the top curve (duotone) -->
-      <path d="M 32 6
-               C 42 11 46 22 41 33
-               C 37 41 30 49 26 56"
-            fill="none"
-            stroke="url(#trebleHL)"
-            stroke-width="2"
-            stroke-linecap="round"
-            opacity="0.85"/>
-
-      <!-- Tiny highlight on the bulb -->
-      <ellipse cx="12" cy="115" rx="2" ry="1.4" fill="#FFF6DC" opacity=".7"/>
-    </svg>
-  </div>
-  <span class="fab-label">Our Song</span>
-</a>
 
 <script>
   // ══ LOADER ══
