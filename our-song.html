@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Our Song — Ahmed & Alaa</title>
+  <link rel="icon" href="favicon.svg" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@200;300;400;500&family=Amiri:ital,wght@0,400;1,400&family=Cairo:wght@300;400&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --gold:     #B8975A;
+      --gold-lt:  #D4B483;
+      --gold-pl:  #EEE0C4;
+      --gold-dim: rgba(184,151,90,.18);
+      --charcoal: #1C1C1E;
+      --dark:     #111110;
+      --muted:    rgba(255,255,255,.4);
+      --white:    #FFFFFF;
+    }
+
+    /* ── GATE ── */
+    #gate {
+      position: fixed;
+      inset: 0;
+      background: var(--dark);
+      z-index: 99999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity .8s ease, visibility .8s;
+    }
+    #gate.hide { opacity: 0; visibility: hidden; pointer-events: none; }
+
+    .gate-inner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 0 32px;
+      animation: gateIn .9s cubic-bezier(.22,1,.36,1) forwards;
+    }
+    @keyframes gateIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: none; }
+    }
+
+    .gate-mono {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 13px;
+      color: var(--gold);
+      letter-spacing: .16em;
+      margin-bottom: 24px;
+    }
+    .gate-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(32px, 8vw, 52px);
+      font-weight: 300;
+      color: var(--white);
+      margin-bottom: 8px;
+    }
+    .gate-sub {
+      font-size: 10px;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.3);
+      margin-bottom: 40px;
+    }
+
+    /* mini note (instead of mini flame) */
+    .gate-note {
+      width: 56px;
+      height: 56px;
+      margin: 0 auto 40px;
+      color: var(--gold-lt);
+      animation: noteFloat 3s ease-in-out infinite;
+      filter: drop-shadow(0 0 10px rgba(184,151,90,.35));
+    }
+    @keyframes noteFloat {
+      0%, 100% { transform: translateY(0) rotate(-3deg); }
+      50%      { transform: translateY(-6px) rotate(3deg); }
+    }
+    .gate-note svg { width: 100%; height: 100%; display: block; }
+
+    .gate-field {
+      display: flex;
+      border-bottom: 1px solid rgba(184,151,90,.4);
+      width: 100%;
+      max-width: 280px;
+      margin-bottom: 16px;
+    }
+    .gate-field.shake { animation: shake .4s ease; }
+    @keyframes shake {
+      0%,100% { transform: translateX(0); }
+      20%      { transform: translateX(-8px); }
+      40%      { transform: translateX(8px); }
+      60%      { transform: translateX(-6px); }
+      80%      { transform: translateX(6px); }
+    }
+    .gate-field input {
+      flex: 1;
+      background: none;
+      border: none;
+      outline: none;
+      color: var(--white);
+      font-family: 'Jost', sans-serif;
+      font-size: 15px;
+      font-weight: 300;
+      padding: 12px 0;
+      letter-spacing: .08em;
+    }
+    .gate-field input::placeholder { color: rgba(255,255,255,.25); font-style: italic; }
+    .gate-field button {
+      background: none;
+      border: none;
+      color: var(--gold);
+      font-size: 20px;
+      cursor: pointer;
+      padding: 0 4px;
+      transition: transform .2s;
+    }
+    .gate-field button:hover { transform: translateX(4px); }
+    .gate-error {
+      font-size: 11px;
+      letter-spacing: .1em;
+      color: rgba(255,100,100,.7);
+      min-height: 16px;
+    }
+    .gate-hint {
+      font-size: 10px;
+      letter-spacing: .14em;
+      color: rgba(255,255,255,.25);
+      margin-top: 12px;
+      font-style: italic;
+    }
+
+    html, body {
+      min-height: 100vh;
+      background:
+        radial-gradient(1200px 800px at 50% -10%, rgba(184,151,90,.08), transparent 60%),
+        radial-gradient(800px 600px at 50% 110%, rgba(184,151,90,.05), transparent 60%),
+        var(--dark);
+      color: var(--white);
+      font-family: 'Jost', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    .nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 28px;
+      background: linear-gradient(to bottom, rgba(17,17,16,.9), transparent);
+    }
+    .nav-back {
+      font-size: 10px;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color .2s;
+    }
+    .nav-back:hover { color: var(--gold-lt); }
+    .nav-mono {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 16px;
+      color: var(--gold);
+    }
+    .nav-lang {
+      font-size: 10px;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      cursor: pointer;
+      background: none;
+      border: 1px solid rgba(184,151,90,.3);
+      padding: 6px 14px;
+      color: var(--gold-lt);
+      transition: border-color .2s;
+    }
+    .nav-lang:hover { border-color: var(--gold); }
+
+    /* ── PAGE ── */
+    .page {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 110px 24px 80px;
+    }
+
+    .header-block { text-align: center; max-width: 640px; margin-bottom: 56px; }
+    .header-eyebrow {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 13px;
+      color: var(--gold);
+      letter-spacing: .18em;
+      margin-bottom: 14px;
+    }
+    .header-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(48px, 10vw, 88px);
+      font-weight: 300;
+      line-height: 1;
+      color: var(--white);
+      margin-bottom: 18px;
+    }
+    [lang="ar"] .header-title { font-family: 'Amiri', serif; font-weight: 400; }
+    .header-sub {
+      font-size: 11px;
+      letter-spacing: .28em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 28px;
+    }
+    .header-quote {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(16px, 2.4vw, 19px);
+      color: var(--gold-lt);
+      line-height: 1.6;
+      max-width: 520px;
+      margin: 0 auto;
+    }
+    [lang="ar"] .header-quote { font-family: 'Amiri', serif; font-style: normal; font-size: clamp(15px, 2.2vw, 17px); }
+
+    /* ── ORNAMENT ── */
+    .ornament {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      margin: 32px 0 40px;
+      width: 100%;
+      max-width: 360px;
+    }
+    .ornament-line {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(to right, transparent, rgba(184,151,90,.4), transparent);
+    }
+    .ornament-diamond {
+      width: 6px; height: 6px;
+      background: var(--gold);
+      transform: rotate(45deg);
+    }
+
+    /* ── HERO PLAYER ── */
+    .hero-player {
+      width: 100%;
+      max-width: 520px;
+      margin: 0 auto 56px;
+      position: relative;
+      isolation: isolate;
+    }
+    .hero-player::before {
+      content: "";
+      position: absolute;
+      inset: -28px;
+      border-radius: 28px;
+      background: radial-gradient(ellipse at 50% 40%,
+        rgba(212,180,131,.22) 0%,
+        rgba(184,151,90,.10) 35%,
+        transparent 70%);
+      filter: blur(20px);
+      z-index: -1;
+      pointer-events: none;
+      animation: heroGlow 4.5s ease-in-out infinite;
+    }
+    @keyframes heroGlow {
+      0%, 100% { opacity: .8;  transform: scale(1);    }
+      50%      { opacity: 1;   transform: scale(1.05); }
+    }
+    .hero-card {
+      position: relative;
+      padding: 4px;
+      border-radius: 20px;
+      background: linear-gradient(135deg,
+        rgba(238,224,196,.55) 0%,
+        rgba(184,151,90,.25) 35%,
+        rgba(184,151,90,.05) 65%,
+        rgba(238,224,196,.45) 100%);
+      box-shadow:
+        0 30px 80px rgba(0,0,0,.55),
+        0 0 0 1px rgba(184,151,90,.15);
+    }
+    .hero-card-inner {
+      background: rgba(14,10,6,.92);
+      border-radius: 17px;
+      padding: 28px 24px 22px;
+      backdrop-filter: blur(8px);
+    }
+    .player-platform {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 22px;
+      font-size: 10px;
+      letter-spacing: .34em;
+      text-transform: uppercase;
+      color: var(--gold-lt);
+    }
+    .player-platform svg {
+      width: 16px;
+      height: 16px;
+      opacity: .9;
+    }
+    .player-frame {
+      position: relative;
+      width: 100%;
+      border-radius: 12px;
+      overflow: hidden;
+      background: rgba(0,0,0,.4);
+      box-shadow: inset 0 0 0 1px rgba(184,151,90,.15);
+    }
+    .player-frame iframe {
+      display: block;
+      width: 100%;
+      border: 0;
+      height: 352px;
+    }
+    .player-note {
+      font-size: 10px;
+      color: var(--muted);
+      margin-top: 18px;
+      text-align: center;
+      letter-spacing: .14em;
+      font-style: italic;
+    }
+    @media (max-width: 540px) {
+      .hero-player { max-width: 100%; }
+      .hero-card-inner { padding: 22px 18px 18px; }
+      .player-frame iframe { height: 380px; }
+    }
+
+    /* ── LYRIC ── */
+    .lyric-block {
+      text-align: center;
+      max-width: 560px;
+      margin: 12px auto 0;
+      padding: 32px 24px;
+      border-top: 1px solid rgba(184,151,90,.18);
+      border-bottom: 1px solid rgba(184,151,90,.18);
+    }
+    .lyric-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(17px, 2.6vw, 22px);
+      color: var(--gold-pl);
+      line-height: 1.7;
+    }
+    .lyric-attr {
+      font-size: 10px;
+      letter-spacing: .26em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 18px;
+    }
+    [lang="ar"] .lyric-text { font-family: 'Amiri', serif; font-style: normal; }
+
+    /* ── FOOTER ── */
+    .page-foot {
+      margin-top: 56px;
+      font-size: 10px;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-align: center;
+    }
+    .page-foot strong { color: var(--gold-lt); font-weight: 400; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 540px) {
+      .nav { padding: 16px 18px; }
+      .page { padding: 96px 18px 60px; }
+      .player-card { padding: 18px; }
+      .players-row { gap: 22px; }
+    }
+
+    /* ── ARABIC ── */
+    [lang="ar"] body { font-family: 'Cairo', sans-serif; }
+    [lang="ar"] .header-eyebrow,
+    [lang="ar"] .gate-mono,
+    [lang="ar"] .nav-mono { font-family: 'Amiri', serif; font-style: normal; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .gate-note { animation: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══ PASSWORD GATE ══ -->
+<div id="gate">
+  <div class="gate-inner">
+    <div class="gate-mono">A &amp; A</div>
+    <div class="gate-title">Our Song</div>
+    <div class="gate-sub">A space just for the two of us</div>
+
+    <div class="gate-note" aria-hidden="true">
+      <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="noteGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+            <stop offset="0%"   stop-color="#7A5A28"/>
+            <stop offset="60%"  stop-color="#B8975A"/>
+            <stop offset="100%" stop-color="#EEE0C4"/>
+          </linearGradient>
+        </defs>
+        <!-- Stem -->
+        <path d="M28 10 L28 46 Q28 54 20 54 Q12 54 12 47 Q12 41 20 41 Q24 41 26 43 L26 14 L52 8 L52 38 Q52 46 44 46 Q36 46 36 39 Q36 33 44 33 Q48 33 50 35 L50 14 Z"
+              fill="url(#noteGrad)" />
+      </svg>
+    </div>
+
+    <div class="gate-field" id="gate-field">
+      <input type="password" id="gate-input" placeholder="Enter your secret" autocomplete="off" />
+      <button onclick="checkPass()" aria-label="Enter">→</button>
+    </div>
+    <div class="gate-error" id="gate-error"></div>
+    <div class="gate-hint t" data-en="A hint: the song name, in two words" data-ar="تلميح: اسم الأغنية، في كلمتين">A hint: the song name, in two words</div>
+  </div>
+</div>
+
+<!-- ══ NAV ══ -->
+<nav class="nav">
+  <a class="nav-back t" href="index.html" data-en="← Back" data-ar="→ رجوع">← Back</a>
+  <div class="nav-mono">A &amp; A</div>
+  <button class="nav-lang" onclick="toggleLang()">عربي</button>
+</nav>
+
+<!-- ══ PAGE ══ -->
+<div class="page">
+
+  <div class="header-block">
+    <div class="header-eyebrow t" data-en="The song that says it for us" data-ar="الأغنية التي تقول كل شيء عنّا">The song that says it for us</div>
+    <h1 class="header-title t" data-en="Our Song" data-ar="أغنيتنا">Our Song</h1>
+    <div class="header-sub t" data-en="Perfect · Ed Sheeran" data-ar="بيرفكت · إد شيران">Perfect · Ed Sheeran</div>
+    <p class="header-quote t"
+       data-en="“I found a love, for me — darling just dive right in and follow my lead.”"
+       data-ar="«وجدتُ حبّاً يُشبهني — يا حبيبتي، اغمري قلبكِ فيه واتبعيني.»">
+      “I found a love, for me — darling just dive right in and follow my lead.”
+    </p>
+  </div>
+
+  <div class="ornament">
+    <div class="ornament-line"></div>
+    <div class="ornament-diamond"></div>
+    <div class="ornament-line"></div>
+  </div>
+
+  <!-- ── HERO PLAYER ── -->
+  <div class="hero-player">
+    <div class="hero-card">
+      <div class="hero-card-inner">
+        <div class="player-platform">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.6 0 12 0zm5.5 17.3c-.2.4-.7.5-1.1.3-3-1.8-6.7-2.2-11.1-1.2-.4.1-.8-.2-.9-.6-.1-.4.2-.8.6-.9 4.7-1.1 8.8-.6 12.1 1.4.4.2.5.7.4 1zm1.5-3.3c-.3.4-.8.6-1.2.3-3.4-2.1-8.5-2.7-12.5-1.5-.5.2-1-.1-1.2-.6-.2-.5.1-1 .6-1.2 4.6-1.4 10.2-.8 14.1 1.6.5.3.6.9.2 1.4zm.1-3.4C15.3 8.3 8.7 8.1 5.1 9.2c-.6.2-1.2-.2-1.4-.7-.2-.6.2-1.2.7-1.4 4.2-1.3 11.4-1 15.7 1.4.5.3.7 1 .4 1.5-.3.6-1 .8-1.4.5z"/>
+          </svg>
+          <span class="t" data-en="Press play" data-ar="اضغط للتشغيل">Press play</span>
+        </div>
+        <div class="player-frame">
+          <iframe
+            src="https://open.spotify.com/embed/track/0tgVpDi06FyKpA1z0VMD4v?utm_source=generator&theme=0"
+            title="Listen on Spotify"
+            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+            allowfullscreen
+            loading="lazy"></iframe>
+        </div>
+        <div class="player-note t"
+             data-en="When this song is on, the world goes quiet"
+             data-ar="حين تبدأ هذه الأغنية، يصمت العالم">
+          When this song is on, the world goes quiet
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="lyric-block">
+    <div class="lyric-text t"
+         data-en="“Baby, I’m dancing in the dark, with you between my arms — barefoot on the grass, listening to our favourite song.”"
+         data-ar="«حبيبتي، أرقصُ في العتمة وأنتِ بين ذراعَيّ — حافيين على العشب، نُصغي إلى أغنيتنا المفضّلة.»">
+      “Baby, I’m dancing in the dark, with you between my arms — barefoot on the grass, listening to our favourite song.”
+    </div>
+    <div class="lyric-attr t" data-en="— Ed Sheeran, Perfect" data-ar="— إد شيران، بيرفكت">— Ed Sheeran, Perfect</div>
+  </div>
+
+  <div class="page-foot">
+    <strong>Ahmed &amp; Alaa</strong> &nbsp;·&nbsp;
+    <span class="t" data-en="Forever, on repeat" data-ar="إلى الأبد، على التكرار">Forever, on repeat</span>
+  </div>
+
+</div>
+
+<script>
+  // ══ PASSWORD GATE ══
+  const AUTH_KEY = 'song_auth_v1';
+  const PASS     = 'perfect-one';
+  const gate     = document.getElementById('gate');
+
+  function checkPass() {
+    const input = document.getElementById('gate-input');
+    const field = document.getElementById('gate-field');
+    const err   = document.getElementById('gate-error');
+    if (input.value.trim().toLowerCase() === PASS) {
+      localStorage.setItem(AUTH_KEY, 'yes');
+      gate.classList.add('hide');
+    } else {
+      input.value = '';
+      err.textContent = (document.documentElement.lang === 'ar')
+        ? 'هذه ليست الكلمة السحرية ♡'
+        : 'That\'s not the secret ♡';
+      field.classList.remove('shake');
+      void field.offsetWidth;
+      field.classList.add('shake');
+      setTimeout(() => { err.textContent = ''; }, 2400);
+    }
+  }
+  document.getElementById('gate-input').addEventListener('keydown', e => {
+    if (e.key === 'Enter') checkPass();
+  });
+  if (localStorage.getItem(AUTH_KEY) === 'yes') {
+    gate.classList.add('hide');
+  }
+
+  // ══ LANG TOGGLE ══
+  let lang = 'en';
+  function toggleLang() {
+    lang = lang === 'en' ? 'ar' : 'en';
+    const html = document.documentElement;
+    html.lang = lang;
+    html.dir  = lang === 'ar' ? 'rtl' : 'ltr';
+    document.querySelector('.nav-lang').textContent = lang === 'ar' ? 'English' : 'عربي';
+    document.querySelectorAll('.t[data-en]').forEach(el => {
+      el.textContent = el.dataset[lang];
+    });
+  }
+</script>
+</body>
+</html>
