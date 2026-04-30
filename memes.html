@@ -387,55 +387,65 @@
       .meme-banner-top, .meme-banner-bottom { padding: 10px 14px; }
     }
 
-    /* ── EXHIBIT B: NANAMI TIME OF DEATH ── */
-    .exhibit-b {
+    /* ── EXHIBIT EVIDENCE CARDS (Gojo, Nanami) ── */
+    .exhibit-card-section {
       max-width: 760px; margin: 0 auto;
       padding: 0 24px 90px;
     }
-    .nanami-card {
+    .evidence-card {
+      /* Each .evidence-card sets its own --accent (hex/rgb-color) inline. */
       position: relative;
       background:
         repeating-linear-gradient(
           0deg,
-          rgba(217,177,74,.04) 0px,
-          rgba(217,177,74,.04) 1px,
+          color-mix(in srgb, var(--accent) 4%, transparent) 0px,
+          color-mix(in srgb, var(--accent) 4%, transparent) 1px,
           transparent 1px,
           transparent 28px
         ),
-        linear-gradient(135deg, rgba(92,66,10,.35), rgba(14,14,16,.95));
-      border: 1px solid rgba(217,177,74,.4);
+        linear-gradient(135deg, color-mix(in srgb, var(--accent) 18%, transparent), rgba(14,14,16,.95));
+      border: 1px solid color-mix(in srgb, var(--accent) 40%, transparent);
       box-shadow:
         0 2px 4px rgba(0,0,0,.3),
         0 30px 80px rgba(0,0,0,.4),
-        inset 0 0 80px rgba(217,177,74,.05);
+        inset 0 0 80px color-mix(in srgb, var(--accent) 5%, transparent);
       overflow: hidden;
     }
-    .nanami-card-inner {
+    .evidence-card-inner {
       padding: 48px 44px 44px;
       position: relative;
     }
-    .nanami-card::before, .nanami-card::after {
+    .evidence-card::before, .evidence-card::after {
       content: ""; position: absolute; z-index: 3;
       width: 18px; height: 18px;
-      border: 1px solid var(--nanami-gold);
+      border: 1px solid var(--accent);
     }
-    .nanami-card::before { top: -1px; left: -1px; border-right: none; border-bottom: none; }
-    .nanami-card::after  { bottom: -1px; right: -1px; border-left: none; border-top: none; }
+    .evidence-card::before { top: -1px; left: -1px; border-right: none; border-bottom: none; }
+    .evidence-card::after  { bottom: -1px; right: -1px; border-left: none; border-top: none; }
 
-    .nanami-photo {
+    .evidence-photo {
       position: relative;
       aspect-ratio: 16 / 9;
       overflow: hidden;
       background: #000;
-      border-bottom: 1px solid rgba(217,177,74,.35);
+      border-bottom: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
     }
-    .nanami-photo img {
+    .evidence-photo.contain {
+      aspect-ratio: auto;
+      max-height: 580px;
+    }
+    .evidence-photo.contain img {
+      object-fit: contain;
+      background:
+        radial-gradient(ellipse at center, color-mix(in srgb, var(--accent) 6%, #000) 0%, #000 100%);
+    }
+    .evidence-photo img {
       width: 100%; height: 100%; object-fit: cover; display: block;
       filter: contrast(1.02) saturate(.95);
       transition: transform .8s cubic-bezier(.22,1,.36,1);
     }
-    .nanami-card:hover .nanami-photo img { transform: scale(1.025); }
-    .nanami-photo::after {
+    .evidence-card:hover .evidence-photo img { transform: scale(1.025); }
+    .evidence-photo::after {
       content: "";
       position: absolute; inset: 0;
       background:
@@ -443,127 +453,128 @@
         radial-gradient(ellipse at 50% 100%, transparent 40%, rgba(0,0,0,.35) 100%);
       pointer-events: none;
     }
-    .nanami-photo-caption {
+    .evidence-photo-caption {
       position: absolute; left: 0; right: 0; bottom: 0; z-index: 2;
       padding: 22px 32px 20px;
       display: flex; justify-content: space-between; align-items: flex-end;
       gap: 18px; flex-wrap: wrap;
     }
-    .nanami-photo-title {
+    .evidence-photo-title {
       font-family: 'Cormorant Garamond', serif; font-style: italic;
       font-size: clamp(20px, 2.8vw, 26px);
       color: var(--white);
       text-shadow: 0 2px 12px rgba(0,0,0,.85);
       letter-spacing: .01em;
     }
-    [lang="ar"] .nanami-photo-title { font-family: 'Amiri', serif; font-style: normal; }
-    .nanami-photo-meta {
+    [lang="ar"] .evidence-photo-title { font-family: 'Amiri', serif; font-style: normal; }
+    .evidence-photo-meta {
       font-family: 'Jost', sans-serif;
       font-size: 9px; letter-spacing: .26em; text-transform: uppercase;
-      color: var(--nanami-gold);
+      color: var(--accent);
       padding: 5px 11px;
-      border: 1px solid rgba(217,177,74,.55);
+      border: 1px solid color-mix(in srgb, var(--accent) 55%, transparent);
       background: rgba(0,0,0,.55);
       backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
       white-space: nowrap;
     }
 
-    .nanami-header {
+    .evidence-header {
       display: flex; justify-content: space-between; align-items: flex-start;
       gap: 18px; margin-bottom: 32px;
       padding-bottom: 18px;
-      border-bottom: 1px solid rgba(217,177,74,.2);
+      border-bottom: 1px solid color-mix(in srgb, var(--accent) 20%, transparent);
       flex-wrap: wrap;
     }
-    .nanami-stamp {
+    .evidence-stamp {
       font-family: 'Jost', sans-serif;
       font-size: 9px; letter-spacing: .32em; text-transform: uppercase;
-      color: var(--nanami-gold);
+      color: var(--accent);
       padding: 6px 12px;
-      border: 1px solid rgba(217,177,74,.5);
-      background: rgba(217,177,74,.06);
+      border: 1px solid color-mix(in srgb, var(--accent) 50%, transparent);
+      background: color-mix(in srgb, var(--accent) 6%, transparent);
     }
-    .nanami-tod {
+    .evidence-tod {
       font-family: 'Jost', sans-serif;
       font-variant-numeric: tabular-nums;
       font-size: 11px; letter-spacing: .22em; text-transform: uppercase;
       color: rgba(255,255,255,.45);
     }
-    .nanami-tod strong {
-      color: var(--nanami-gold);
+    .evidence-tod strong {
+      color: var(--accent);
       font-weight: 500;
       font-family: 'Cormorant Garamond', serif;
       font-size: 22px;
       letter-spacing: .06em;
     }
-    .nanami-name {
+    .evidence-name {
       font-family: 'Cormorant Garamond', serif;
       font-size: clamp(36px, 6vw, 56px);
       font-weight: 400; line-height: 1;
       color: var(--white);
       margin-bottom: 8px;
     }
-    [lang="ar"] .nanami-name { font-family: 'Amiri', serif; }
-    .nanami-role {
+    [lang="ar"] .evidence-name { font-family: 'Amiri', serif; }
+    .evidence-role {
       font-size: 10px; letter-spacing: .26em; text-transform: uppercase;
       color: rgba(255,255,255,.5);
       margin-bottom: 32px;
     }
-    .nanami-rows {
+    .evidence-rows {
       display: grid; grid-template-columns: 130px 1fr;
       gap: 14px 24px;
       font-size: 13px; line-height: 1.6;
       margin-bottom: 30px;
     }
-    .nanami-row-label {
+    .evidence-row-label {
       font-size: 9px; letter-spacing: .22em; text-transform: uppercase;
       color: rgba(255,255,255,.4);
       padding-top: 3px;
     }
-    .nanami-row-val {
+    .evidence-row-val {
       color: rgba(255,255,255,.85);
       font-family: 'Cormorant Garamond', serif;
       font-style: italic;
       font-size: 16px;
     }
-    [lang="ar"] .nanami-row-val { font-family: 'Amiri', serif; font-style: normal; }
-    .nanami-row-val.cause { color: var(--sukuna-red); font-style: normal; font-family: 'Jost', sans-serif; font-size: 13px; letter-spacing: .04em; }
-    [lang="ar"] .nanami-row-val.cause { font-family: 'Cairo', sans-serif; }
-    .nanami-quote-block {
+    [lang="ar"] .evidence-row-val { font-family: 'Amiri', serif; font-style: normal; }
+    .evidence-row-val.cause { color: var(--sukuna-red); font-style: normal; font-family: 'Jost', sans-serif; font-size: 13px; letter-spacing: .04em; }
+    [lang="ar"] .evidence-row-val.cause { font-family: 'Cairo', sans-serif; }
+    .evidence-quote-block {
       position: relative;
       padding: 28px 32px;
       background: rgba(0,0,0,.35);
-      border-left: 2px solid var(--nanami-gold);
+      border-left: 2px solid var(--accent);
       margin-bottom: 26px;
     }
-    [lang="ar"] .nanami-quote-block { border-left: none; border-right: 2px solid var(--nanami-gold); }
-    .nanami-quote {
+    [lang="ar"] .evidence-quote-block { border-left: none; border-right: 2px solid var(--accent); }
+    .evidence-quote {
       font-family: 'Cormorant Garamond', serif; font-style: italic;
       font-size: clamp(19px, 2.6vw, 24px);
       line-height: 1.6;
       color: var(--white);
     }
-    [lang="ar"] .nanami-quote { font-family: 'Amiri', serif; font-style: normal; }
-    .nanami-quote-attr {
+    [lang="ar"] .evidence-quote { font-family: 'Amiri', serif; font-style: normal; }
+    .evidence-quote-attr {
       margin-top: 10px;
       font-size: 10px; letter-spacing: .24em; text-transform: uppercase;
-      color: var(--nanami-gold);
+      color: var(--accent);
     }
-    .nanami-troll {
+    .evidence-troll {
       font-family: 'Cormorant Garamond', serif;
       font-size: 16px; line-height: 1.7;
       color: rgba(255,255,255,.62);
       font-style: italic;
     }
-    [lang="ar"] .nanami-troll { font-family: 'Amiri', serif; font-style: normal; }
+    [lang="ar"] .evidence-troll { font-family: 'Amiri', serif; font-style: normal; }
     @media (max-width: 600px) {
-      .nanami-card-inner { padding: 32px 24px 30px; }
-      .nanami-rows { grid-template-columns: 1fr; gap: 4px 0; }
-      .nanami-row-label { padding-top: 12px; }
-      .nanami-quote-block { padding: 22px 22px; }
-      .nanami-photo-caption { padding: 16px 20px 14px; }
-      .nanami-photo-title { font-size: 17px; }
-      .nanami-photo-meta { font-size: 8.5px; padding: 4px 9px; letter-spacing: .18em; }
+      .evidence-card-inner { padding: 32px 24px 30px; }
+      .evidence-rows { grid-template-columns: 1fr; gap: 4px 0; }
+      .evidence-row-label { padding-top: 12px; }
+      .evidence-quote-block { padding: 22px 22px; }
+      .evidence-photo-caption { padding: 16px 20px 14px; }
+      .evidence-photo-title { font-size: 17px; }
+      .evidence-photo-meta { font-size: 8.5px; padding: 4px 9px; letter-spacing: .18em; }
+      .evidence-photo.contain { max-height: 380px; }
     }
 
     /* ── MEMORIAL ── */
@@ -816,58 +827,120 @@
   </div>
 </section>
 
-<!-- ══ EXHIBIT B: NANAMI TIME OF DEATH ══ -->
-<section class="exhibit-b reveal">
-  <div class="nanami-card">
-    <div class="nanami-photo">
-      <img src="img/memes/nanami-death.webp" alt="Kento Nanami's final moments — Shibuya Incident" loading="lazy" />
-      <div class="nanami-photo-caption">
-        <div class="nanami-photo-title t"
-          data-en="“…You got it from here, right?”"
-          data-ar="«…الباقي عليك، صح؟»">"…You got it from here, right?"</div>
-        <div class="nanami-photo-meta t" data-en="Shibuya · Ch. 120" data-ar="شيبويا · تشابتر ١٢٠">Shibuya · Ch. 120</div>
+<!-- ══ EXHIBIT B: GOJO CAUSE OF DEATH ══ -->
+<section class="exhibit-card-section reveal">
+  <div class="evidence-card" style="--accent:#5DA9FF;">
+    <div class="evidence-photo contain">
+      <img src="img/memes/gojo-death.webp" alt="Satoru Gojo's death — Chapter 236" loading="lazy" />
+      <div class="evidence-photo-caption">
+        <div class="evidence-photo-title t"
+          data-en="“Nah, I’d lose.”"
+          data-ar="«لا، حخسر.»">"Nah, I'd lose."</div>
+        <div class="evidence-photo-meta t" data-en="Shinjuku · Ch. 236" data-ar="شينجوكو · تشابتر ٢٣٦">Shinjuku · Ch. 236</div>
       </div>
     </div>
-    <div class="nanami-card-inner">
-    <div class="nanami-header">
-      <div class="nanami-stamp t" data-en="Exhibit B · Time of Death" data-ar="الدليل ب · وقت الوفاة">Exhibit B · Time of Death</div>
-      <div class="nanami-tod">
+    <div class="evidence-card-inner">
+    <div class="evidence-header">
+      <div class="evidence-stamp t" data-en="Exhibit B · Cause of Death" data-ar="الدليل ب · سبب الوفاة">Exhibit B · Cause of Death</div>
+      <div class="evidence-tod">
+        <span class="t" data-en="Chapter" data-ar="تشابتر">Chapter</span>
+        &nbsp;<strong>236</strong>
+      </div>
+    </div>
+
+    <div class="evidence-name t" data-en="Satoru Gojo" data-ar="ساتورو غوجو">Satoru Gojo</div>
+    <div class="evidence-role t"
+      data-en="Special Grade · The Honored One · Alaa’s #1"
+      data-ar="درجة خاصة · الموقّر · رقم ١ عند آلاء">Special Grade · The Honored One · Alaa's #1</div>
+
+    <div class="evidence-rows">
+      <div class="evidence-row-label t" data-en="Date" data-ar="التاريخ">Date</div>
+      <div class="evidence-row-val t" data-en="December 24, 2018" data-ar="٢٤ ديسمبر ٢٠١٨">December 24, 2018</div>
+
+      <div class="evidence-row-label t" data-en="Location" data-ar="المكان">Location</div>
+      <div class="evidence-row-val t" data-en="Shinjuku · Final Showdown" data-ar="شينجوكو · المواجهة الأخيرة">Shinjuku · Final Showdown</div>
+
+      <div class="evidence-row-label t" data-en="Cause" data-ar="السبب">Cause</div>
+      <div class="evidence-row-val cause t"
+        data-en="Sukuna · Cleave · Chapter 236"
+        data-ar="ساكونا · القَطْع · تشابتر ٢٣٦">Sukuna · Cleave · Chapter 236</div>
+
+      <div class="evidence-row-label t" data-en="Status" data-ar="الحالة">Status</div>
+      <div class="evidence-row-val cause t"
+        data-en="Deceased · Confirmed by Gege Akutami"
+        data-ar="متوفّى · مؤكد من جيجي أكوتامي">Deceased · Confirmed by Gege Akutami</div>
+    </div>
+
+    <blockquote class="evidence-quote-block">
+      <div class="evidence-quote t"
+        data-en='"I had fun."'
+        data-ar='«قضيت وقتاً ممتعاً.»'>"I had fun."</div>
+      <div class="evidence-quote-attr t"
+        data-en="— Gojo, to Geto, in the afterlife"
+        data-ar="— غوجو، لجيتو، في الحياة الآخرة">— Gojo, to Geto, in the afterlife</div>
+    </blockquote>
+
+    <p class="evidence-troll t"
+      data-en="The Strongest Sorcerer. Six Eyes. Limitless. The Honored One. And he still picked the fight, said “nah, I’d win,” then promptly got bisected. Your taste is impeccable, habibti — your survival rate is not."
+      data-ar="أقوى ساحر. العيون الست. اللامحدود. الموقّر. ومع كل ده دخل المعركة، قال «لا، حكسب»، وبعدها بشوية اتقسم نصين. ذوقك عالي يا حبيبتي — بس نسبة نجاة شخصياتك المفضلة في الأرض.">
+      The Strongest Sorcerer. Six Eyes. Limitless. The Honored One. And he still picked the fight, said "nah, I'd win," then promptly got bisected. Your taste is impeccable, habibti — your survival rate is not.
+    </p>
+    </div>
+  </div>
+</section>
+
+<!-- ══ EXHIBIT C: NANAMI TIME OF DEATH ══ -->
+<section class="exhibit-card-section reveal">
+  <div class="evidence-card" style="--accent:#D9B14A;">
+    <div class="evidence-photo">
+      <img src="img/memes/nanami-death.webp" alt="Kento Nanami's final moments — Shibuya Incident" loading="lazy" />
+      <div class="evidence-photo-caption">
+        <div class="evidence-photo-title t"
+          data-en="“…You got it from here, right?”"
+          data-ar="«…الباقي عليك، صح؟»">"…You got it from here, right?"</div>
+        <div class="evidence-photo-meta t" data-en="Shibuya · Ch. 120" data-ar="شيبويا · تشابتر ١٢٠">Shibuya · Ch. 120</div>
+      </div>
+    </div>
+    <div class="evidence-card-inner">
+    <div class="evidence-header">
+      <div class="evidence-stamp t" data-en="Exhibit C · Time of Death" data-ar="الدليل ج · وقت الوفاة">Exhibit C · Time of Death</div>
+      <div class="evidence-tod">
         <span class="t" data-en="Recorded at" data-ar="سُجِّل في">Recorded at</span>
         &nbsp;<strong>18:23</strong>
       </div>
     </div>
 
-    <div class="nanami-name t" data-en="Kento Nanami" data-ar="كينتو نانامي">Kento Nanami</div>
-    <div class="nanami-role t"
+    <div class="evidence-name t" data-en="Kento Nanami" data-ar="كينتو نانامي">Kento Nanami</div>
+    <div class="evidence-role t"
       data-en="Grade 1 Sorcerer · Salaryman · Alaa’s Favorite"
       data-ar="ساحر من الدرجة الأولى · موظف · المفضل عند آلاء">Grade 1 Sorcerer · Salaryman · Alaa's Favorite</div>
 
-    <div class="nanami-rows">
-      <div class="nanami-row-label t" data-en="Date" data-ar="التاريخ">Date</div>
-      <div class="nanami-row-val t" data-en="October 31, 2018" data-ar="٣١ أكتوبر ٢٠١٨">October 31, 2018</div>
+    <div class="evidence-rows">
+      <div class="evidence-row-label t" data-en="Date" data-ar="التاريخ">Date</div>
+      <div class="evidence-row-val t" data-en="October 31, 2018" data-ar="٣١ أكتوبر ٢٠١٨">October 31, 2018</div>
 
-      <div class="nanami-row-label t" data-en="Location" data-ar="المكان">Location</div>
-      <div class="nanami-row-val t" data-en="Shibuya · Subway level B5" data-ar="شيبويا · مترو الطابق ب٥">Shibuya · Subway level B5</div>
+      <div class="evidence-row-label t" data-en="Location" data-ar="المكان">Location</div>
+      <div class="evidence-row-val t" data-en="Shibuya · Subway level B5" data-ar="شيبويا · مترو الطابق ب٥">Shibuya · Subway level B5</div>
 
-      <div class="nanami-row-label t" data-en="Cause" data-ar="السبب">Cause</div>
-      <div class="nanami-row-val cause t"
+      <div class="evidence-row-label t" data-en="Cause" data-ar="السبب">Cause</div>
+      <div class="evidence-row-val cause t"
         data-en="Mahito · Idle Transfiguration · Chapter 120"
         data-ar="ماهيتو · التحوّل الكسول · تشابتر ١٢٠">Mahito · Idle Transfiguration · Chapter 120</div>
 
-      <div class="nanami-row-label t" data-en="Status" data-ar="الحالة">Status</div>
-      <div class="nanami-row-val cause t" data-en="Deceased · Confirmed" data-ar="متوفّى · مؤكد">Deceased · Confirmed</div>
+      <div class="evidence-row-label t" data-en="Status" data-ar="الحالة">Status</div>
+      <div class="evidence-row-val cause t" data-en="Deceased · Confirmed" data-ar="متوفّى · مؤكد">Deceased · Confirmed</div>
     </div>
 
-    <blockquote class="nanami-quote-block">
-      <div class="nanami-quote t"
+    <blockquote class="evidence-quote-block">
+      <div class="evidence-quote t"
         data-en='"…You got it from here, right?"'
         data-ar='«…الباقي عليك، صح؟»'>"…You got it from here, right?"</div>
-      <div class="nanami-quote-attr t"
+      <div class="evidence-quote-attr t"
         data-en="— Nanami’s last words to Yuji"
         data-ar="— آخر كلمات نانامي ليوجي">— Nanami's last words to Yuji</div>
     </blockquote>
 
-    <p class="nanami-troll t"
+    <p class="evidence-troll t"
       data-en="Another one of yours, habibti. The pattern is no longer subtle: every character you grow attached to gets unsubscribed from the manga. Suit was crisp though — we’ll give you that."
       data-ar="واحد كمان من تبعك يا حبيبتي. النمط مش خافي خلاص: أي شخصية بتتعلقي بيها بيتم إلغاء اشتراكها من المانجا. بس البدلة كانت أنيقة — ده حقّك.">
       Another one of yours, habibti. The pattern is no longer subtle: every character you grow attached to gets unsubscribed from the manga. Suit was crisp though — we'll give you that.
