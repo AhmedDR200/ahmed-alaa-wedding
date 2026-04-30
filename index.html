@@ -825,6 +825,25 @@
       color: var(--charcoal);
       margin-top: 4px;
     }
+    .letter-ps {
+      margin-top: 28px;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 15px;
+      font-style: italic;
+      font-weight: 300;
+      color: var(--muted);
+      line-height: 1.75;
+    }
+    .letter-ar-only {
+      display: none;
+      margin-top: 22px;
+      font-family: 'Amiri', serif;
+      font-size: 17px;
+      color: var(--gold);
+      line-height: 1.85;
+      text-align: center;
+    }
+    [lang="ar"] .letter-ar-only { display: block; }
     .letter-seal {
       position: absolute;
       bottom: 40px;
@@ -845,8 +864,36 @@
     [lang="ar"] .letter-body,
     [lang="ar"] .letter-salutation,
     [lang="ar"] .letter-closing-line,
-    [lang="ar"] .letter-signature { font-family: 'Amiri', serif; }
+    [lang="ar"] .letter-signature,
+    [lang="ar"] .letter-ps { font-family: 'Amiri', serif; }
     [lang="ar"] .letter-seal { right: auto; left: 48px; }
+
+    /* ── DAILY WHISPER (for Alaa) ── */
+    .daily-whisper-wrap {
+      position: relative;
+      z-index: 1;
+      max-width: 560px;
+      margin: 0 auto;
+      padding: 56px 32px 72px;
+      text-align: center;
+      background: var(--ivory);
+    }
+    .daily-whisper-wrap .ornament { margin-bottom: 20px; }
+    .daily-whisper-eyebrow {
+      margin-bottom: 14px !important;
+      color: var(--gold) !important;
+    }
+    .daily-whisper-line {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(19px, 3vw, 24px);
+      font-weight: 300;
+      color: var(--charcoal);
+      line-height: 1.55;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+    [lang="ar"] .daily-whisper-line { font-family: 'Amiri', serif; font-style: normal; font-size: clamp(17px, 2.8vw, 21px); }
 
     /* Streak: always LTR — calendars/timelines don't flip */
     .streak-scroll,
@@ -1427,9 +1474,23 @@
           data-ar="لكِ، دائماً وكلياً —">Yours, always and completely —</span>
         <span class="letter-signature">Ahmed</span>
       </div>
+      <p class="letter-ps t" id="letter-ps-line" data-en="" data-ar=""></p>
+      <p class="letter-ar-only" lang="ar">هذه الصفحة لنا وحدنا — وكل تفصيل فيها صُنع لكِ.</p>
       <div class="letter-seal">A &amp; A</div>
     </div>
   </div>
+</div>
+
+<!-- ══ TODAY'S THOUGHT (for Alaa) ══ -->
+<div class="daily-whisper-wrap reveal">
+  <div class="ornament" style="margin:0 auto 8px;max-width:220px;">
+    <div class="ornament-line"></div>
+    <div class="ornament-diamond"></div>
+    <div class="ornament-line"></div>
+  </div>
+  <div class="section-eyebrow t daily-whisper-eyebrow" style="margin-bottom:14px;"
+    data-en="Today's thought" data-ar="كلمة اليوم">Today's thought</div>
+  <p class="daily-whisper-line t" id="daily-whisper-line" data-en="" data-ar=""></p>
 </div>
 
 <!-- ══ FOOTER ══ -->
@@ -1564,6 +1625,77 @@
     // Toggle button label
     document.getElementById('lang-btn').textContent = isAr ? 'English' : 'عربي';
   }
+
+  // ══ HOME DETAILS (letter date, daily thought, tab title) ══
+  (function initHomeDetailsForAlaa() {
+    const TZ = 'Africa/Cairo';
+
+    function cairoTodayKey() {
+      const parts = new Intl.DateTimeFormat('en-CA', {
+        timeZone: TZ,
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit'
+      }).formatToParts(new Date());
+      const o = {};
+      for (const p of parts) o[p.type] = p.value;
+      return `${o.year}-${o.month}-${o.day}`;
+    }
+
+    function cairoLongDates() {
+      const en = new Intl.DateTimeFormat('en-GB', {
+        timeZone: TZ,
+        weekday: 'long',
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+      }).format(new Date());
+      const ar = new Intl.DateTimeFormat('ar-EG', {
+        timeZone: TZ,
+        weekday: 'long',
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+      }).format(new Date());
+      return { en, ar };
+    }
+
+    const ps = document.getElementById('letter-ps-line');
+    if (ps) {
+      const { en, ar } = cairoLongDates();
+      ps.dataset.en = "P.S. — I'm thinking of you today · " + en;
+      ps.dataset.ar = 'ملاحظة — أفكر فيكِ اليوم · ' + ar;
+      ps.textContent = document.documentElement.lang === 'ar' ? ps.dataset.ar : ps.dataset.en;
+    }
+
+    const whisper = document.getElementById('daily-whisper-line');
+    const titles = document.querySelectorAll('#reasons-grid .reason-title.t[data-en]');
+    if (whisper && titles.length) {
+      const day = cairoTodayKey();
+      let idx = NaN;
+      try {
+        if (sessionStorage.getItem('home_whisper_day') === day) {
+          idx = parseInt(sessionStorage.getItem('home_whisper_idx'), 10);
+        }
+      } catch {}
+      if (isNaN(idx) || idx < 0 || idx >= titles.length) {
+        idx = Math.floor(Math.random() * titles.length);
+        try {
+          sessionStorage.setItem('home_whisper_day', day);
+          sessionStorage.setItem('home_whisper_idx', String(idx));
+        } catch {}
+      }
+      const pick = titles[idx];
+      whisper.dataset.en = pick.dataset.en || '';
+      whisper.dataset.ar = pick.dataset.ar || '';
+      whisper.textContent = document.documentElement.lang === 'ar' ? whisper.dataset.ar : whisper.dataset.en;
+    }
+
+    const baseTitle = document.title;
+    setTimeout(() => {
+      if (document.title === baseTitle) document.title = baseTitle + ' · for Alaa';
+    }, 10000);
+  })();
 
   // ══ COUNTDOWN ══
   const TARGET = new Date('2026-12-09T00:00:00');
