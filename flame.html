@@ -4,6 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Our Daily Flame — Ahmed & Alaa</title>
+  <link rel="preconnect" href="https://api.jsonbin.io" />
+  <link rel="dns-prefetch" href="https://api.jsonbin.io" />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@200;300;400;500&family=Amiri:ital,wght@0,400;1,400&family=Cairo:wght@300;400&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -720,6 +722,7 @@
     flameId: '69efe637aaba88219745476c',
   };
   const LOCAL_KEY = 'flame_v1';
+  let data = {};
 
   async function jbLoad() {
     try {
@@ -777,7 +780,8 @@
 
   if (sessionStorage.getItem(AUTH_KEY) === 'yes') {
     gate.classList.add('hide');
-    init();
+    // Defer until after MSGS/render exist (const order below).
+    queueMicrotask(() => { void init(); });
   }
 
   // ── UTILS ──
@@ -815,14 +819,32 @@
 
   function ds(d) { return d instanceof Date ? d.toISOString().slice(0,10) : d; }
 
+  /** Shift a YYYY-MM-DD string by n days (UTC noon anchor — matches baseline + todayStr). */
+  function addDaysToIso(isoStr, n) {
+    return addDays(new Date(isoStr + 'T12:00:00Z'), n).toISOString().slice(0, 10);
+  }
+
   // ── DATA ──
-  let data = {};
+  function normalizeFlameRecord(raw) {
+    const d = raw && typeof raw === 'object' ? raw : {};
+    if (!d.ahmed) d.ahmed = {};
+    if (!d.alaa) d.alaa = {};
+    if (d.best == null || d.best === '') d.best = 0;
+    return d;
+  }
+
+  function readFlameFromCache() {
+    try {
+      return normalizeFlameRecord(JSON.parse(localStorage.getItem(LOCAL_KEY) || '{}'));
+    } catch {
+      return normalizeFlameRecord({});
+    }
+  }
 
   async function init() {
-    data = await jbLoad();
-    if (!data.ahmed) data.ahmed = {};
-    if (!data.alaa)  data.alaa  = {};
-    if (!data.best)  data.best  = 0;
+    data = readFlameFromCache();
+    render();
+    data = normalizeFlameRecord(await jbLoad());
     render();
   }
 
@@ -851,14 +873,13 @@
 
   function calcStreak(days) {
     if (!days.length) return 0;
-    const today = todayStr();
+    const set = new Set(days);
     let streak = 0;
-    let d = new Date(today);
-    while (days.includes(ds(d))) {
+    let cur = todayStr();
+    while (set.has(cur)) {
       streak++;
-      d = addDays(d, -1);
+      cur = addDaysToIso(cur, -1);
     }
-    // Also count if today isn't complete yet but yesterday's streak was active
     return streak;
   }
 
@@ -866,7 +887,7 @@
     if (!days.length) return 0;
     let best = 0, cur = 0, prev = null;
     for (const s of days) {
-      const d = new Date(s);
+      const d = new Date(s + 'T12:00:00Z');
       cur = prev && (d - prev) === 86400000 ? cur + 1 : 1;
       best = Math.max(best, cur);
       prev = d;
@@ -1010,7 +1031,9 @@
 
     // Missed days: from first complete day to today, how many days with no entry
     const firstDay = days[0] || today;
-    const totalSince = Math.round((new Date(today) - new Date(firstDay)) / 86400000);
+    const totalSince = Math.round(
+      (new Date(today + 'T12:00:00Z') - new Date(firstDay + 'T12:00:00Z')) / 86400000
+    );
     document.getElementById('stat-missed').textContent = Math.max(0, totalSince - days.length);
 
     // History dots
@@ -1024,8 +1047,8 @@
     const set   = new Set(completeDays);
 
     for (let i = 29; i >= 0; i--) {
-      const d   = addDays(new Date(), -i);
-      const str = ds(d);
+      const str = addDaysToIso(today, -i);
+      const d   = new Date(str + 'T12:00:00Z');
       const dot = document.createElement('div');
       dot.className = 'h-dot';
       dot.title = d.toLocaleDateString('en', { month: 'short', day: 'numeric' });
