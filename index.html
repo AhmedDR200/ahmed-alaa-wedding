@@ -3,6 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="referrer" content="no-referrer" />
   <title>Ahmed & Alaa — December 9, 2026</title>
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
   <link rel="preconnect" href="https://api.jsonbin.io" />
@@ -1083,9 +1085,169 @@
       .tl-body { grid-column: 2; grid-row: 2; }
       .ornament-line { max-width: 60px; }
     }
+
+    /* ── HOME PASSWORD GATE ── */
+    html.gate-locked { height: 100%; }
+    html.gate-locked body {
+      overflow: hidden;
+      min-height: 100vh;
+    }
+    html.gate-locked #loader { display: none !important; }
+    html.gate-locked body > *:not(#gate) {
+      visibility: hidden !important;
+      pointer-events: none !important;
+    }
+    #gate {
+      position: fixed;
+      inset: 0;
+      background: var(--charcoal);
+      z-index: 99999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity .8s ease, visibility .8s;
+    }
+    #gate.hide { opacity: 0; visibility: hidden; pointer-events: none; }
+    .gate-inner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 0 32px;
+      max-width: 400px;
+      animation: homeGateIn .9s cubic-bezier(.22,1,.36,1) forwards;
+    }
+    @keyframes homeGateIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: none; }
+    }
+    .gate-mono {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 13px;
+      color: var(--gold);
+      letter-spacing: .16em;
+      margin-bottom: 24px;
+    }
+    .gate-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(30px, 7vw, 48px);
+      font-weight: 300;
+      color: var(--white);
+      margin-bottom: 10px;
+    }
+    [lang="ar"] .gate-title { font-family: 'Amiri', serif; font-weight: 400; }
+    .gate-sub {
+      font-size: 10px;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.32);
+      margin-bottom: 32px;
+    }
+    .gate-diamond {
+      width: 9px;
+      height: 9px;
+      background: var(--gold);
+      transform: rotate(45deg);
+      margin-bottom: 32px;
+      box-shadow: 0 0 16px rgba(184,151,90,.45);
+    }
+    .gate-field {
+      display: flex;
+      border-bottom: 1px solid rgba(184,151,90,.4);
+      width: 100%;
+      max-width: 280px;
+      margin-bottom: 14px;
+    }
+    .gate-field.shake { animation: homeGateShake .4s ease; }
+    @keyframes homeGateShake {
+      0%, 100% { transform: translateX(0); }
+      20%       { transform: translateX(-8px); }
+      40%       { transform: translateX(8px); }
+      60%       { transform: translateX(-6px); }
+      80%       { transform: translateX(6px); }
+    }
+    .gate-field input {
+      flex: 1;
+      background: none;
+      border: none;
+      outline: none;
+      color: var(--white);
+      font-family: 'Jost', sans-serif;
+      font-size: 15px;
+      font-weight: 300;
+      padding: 12px 0;
+      letter-spacing: .06em;
+    }
+    .gate-field input::placeholder { color: rgba(255,255,255,.25); font-style: italic; }
+    .gate-field button {
+      background: none;
+      border: none;
+      color: var(--gold);
+      font-size: 20px;
+      cursor: pointer;
+      padding: 0 4px;
+      transition: transform .2s;
+    }
+    .gate-field button:hover { transform: translateX(4px); }
+    .gate-error {
+      font-size: 11px;
+      letter-spacing: .1em;
+      color: rgba(255,120,120,.75);
+      min-height: 18px;
+    }
+    .gate-hint {
+      font-size: 10px;
+      letter-spacing: .14em;
+      color: rgba(255,255,255,.26);
+      margin-top: 10px;
+      font-style: italic;
+      max-width: 300px;
+      line-height: 1.5;
+    }
+    .gate-lang {
+      margin-top: 20px;
+      background: none;
+      border: 1px solid rgba(184,151,90,.35);
+      color: var(--gold);
+      font-family: 'Jost', sans-serif;
+      font-size: 10px;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      padding: 10px 18px;
+      cursor: pointer;
+      transition: background .2s, color .2s;
+    }
+    .gate-lang:hover {
+      background: rgba(184,151,90,.12);
+      color: var(--white);
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .gate-inner { animation: none; }
+      .gate-field.shake { animation: none; }
+    }
   </style>
 </head>
 <body>
+<script>(function(){if(sessionStorage.getItem('home_auth_v1')!=='yes')document.documentElement.classList.add('gate-locked');})();</script>
+
+<!-- ══ PASSWORD GATE (home) ══ -->
+<div id="gate">
+  <div class="gate-inner">
+    <div class="gate-mono">A &amp; A</div>
+    <div class="gate-title t" data-en="Ahmed &amp; Alaa" data-ar="أحمد وآلاء">Ahmed &amp; Alaa</div>
+    <div class="gate-sub t" data-en="For us only" data-ar="لنا وحدنا">For us only</div>
+    <div class="gate-diamond" aria-hidden="true"></div>
+    <div class="gate-field" id="gate-field">
+      <input type="password" id="gate-input" placeholder="Enter your secret" data-en-ph="Enter your secret" data-ar-ph="السرّ بيننا" autocomplete="off" />
+      <button type="button" onclick="checkHomePass()" aria-label="Enter">→</button>
+    </div>
+    <div class="gate-error" id="gate-error"></div>
+    <div class="gate-hint t" data-en="Same phrase as the “For Alaa” page (your name + what you are to me)." data-ar="نفس عبارة صفحة «لـ آلاء» (اسمكِ وما تكونينه لي).">Same phrase as the “For Alaa” page (your name + what you are to me).</div>
+    <button type="button" class="gate-lang" id="gate-lang-btn" onclick="toggleGateLang()">عربي</button>
+  </div>
+</div>
+<script>if(sessionStorage.getItem('home_auth_v1')==='yes')document.getElementById('gate').classList.add('hide');</script>
 
 <!-- ══ LOADER ══ -->
 <div id="loader">
@@ -1500,6 +1662,60 @@
 </footer>
 
 <script>
+  // ══ HOME PASSWORD GATE ══
+  localStorage.removeItem('home_auth_v1');
+  const HOME_AUTH_KEY = 'home_auth_v1';
+  /** Must match for-alaa.html — rotate both together. Not secret from anyone who views source. */
+  const HOME_PASS = 'alaa-core';
+  const homeGate = document.getElementById('gate');
+  let gateLang = 'en';
+
+  function toggleGateLang() {
+    gateLang = gateLang === 'en' ? 'ar' : 'en';
+    document.querySelectorAll('#gate .t[data-en]').forEach(el => {
+      el.textContent = el.dataset[gateLang === 'ar' ? 'ar' : 'en'];
+    });
+    const inp = document.getElementById('gate-input');
+    inp.placeholder = gateLang === 'ar' ? inp.dataset.arPh : inp.dataset.enPh;
+    document.getElementById('gate-lang-btn').textContent = gateLang === 'en' ? 'عربي' : 'English';
+    document.documentElement.lang = gateLang;
+    document.documentElement.dir = gateLang === 'ar' ? 'rtl' : 'ltr';
+  }
+
+  function checkHomePass() {
+    const input = document.getElementById('gate-input');
+    const field = document.getElementById('gate-field');
+    const err = document.getElementById('gate-error');
+    if (input.value.trim().toLowerCase() === HOME_PASS) {
+      sessionStorage.setItem(HOME_AUTH_KEY, 'yes');
+      const l = document.getElementById('loader');
+      if (l) {
+        l.dataset.hiding = '1';
+        l.style.display = 'none';
+      }
+      document.documentElement.classList.remove('gate-locked');
+      homeGate.classList.add('hide');
+      homeGate.style.display = 'none';
+      document.documentElement.lang = 'en';
+      document.documentElement.dir = 'ltr';
+      return;
+    }
+    input.value = '';
+    err.textContent = gateLang === 'ar' ? 'ليس هذا السرّ ♡' : 'That\'s not the secret ♡';
+    field.classList.remove('shake');
+    void field.offsetWidth;
+    field.classList.add('shake');
+    setTimeout(() => { err.textContent = ''; }, 2400);
+  }
+
+  document.getElementById('gate-input').addEventListener('keydown', e => {
+    if (e.key === 'Enter') checkHomePass();
+  });
+  if (sessionStorage.getItem(HOME_AUTH_KEY) === 'yes') {
+    document.documentElement.classList.remove('gate-locked');
+    homeGate.classList.add('hide');
+  }
+
   // ══ LOADER ══
   function hideLoader() {
     const l = document.getElementById('loader');
