@@ -404,19 +404,69 @@
         ),
         linear-gradient(135deg, rgba(92,66,10,.35), rgba(14,14,16,.95));
       border: 1px solid rgba(217,177,74,.4);
-      padding: 48px 44px 44px;
       box-shadow:
         0 2px 4px rgba(0,0,0,.3),
         0 30px 80px rgba(0,0,0,.4),
         inset 0 0 80px rgba(217,177,74,.05);
+      overflow: hidden;
+    }
+    .nanami-card-inner {
+      padding: 48px 44px 44px;
+      position: relative;
     }
     .nanami-card::before, .nanami-card::after {
-      content: ""; position: absolute;
+      content: ""; position: absolute; z-index: 3;
       width: 18px; height: 18px;
       border: 1px solid var(--nanami-gold);
     }
     .nanami-card::before { top: -1px; left: -1px; border-right: none; border-bottom: none; }
     .nanami-card::after  { bottom: -1px; right: -1px; border-left: none; border-top: none; }
+
+    .nanami-photo {
+      position: relative;
+      aspect-ratio: 16 / 9;
+      overflow: hidden;
+      background: #000;
+      border-bottom: 1px solid rgba(217,177,74,.35);
+    }
+    .nanami-photo img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+      filter: contrast(1.02) saturate(.95);
+      transition: transform .8s cubic-bezier(.22,1,.36,1);
+    }
+    .nanami-card:hover .nanami-photo img { transform: scale(1.025); }
+    .nanami-photo::after {
+      content: "";
+      position: absolute; inset: 0;
+      background:
+        linear-gradient(to bottom, transparent 60%, rgba(14,14,16,.55) 100%),
+        radial-gradient(ellipse at 50% 100%, transparent 40%, rgba(0,0,0,.35) 100%);
+      pointer-events: none;
+    }
+    .nanami-photo-caption {
+      position: absolute; left: 0; right: 0; bottom: 0; z-index: 2;
+      padding: 22px 32px 20px;
+      display: flex; justify-content: space-between; align-items: flex-end;
+      gap: 18px; flex-wrap: wrap;
+    }
+    .nanami-photo-title {
+      font-family: 'Cormorant Garamond', serif; font-style: italic;
+      font-size: clamp(20px, 2.8vw, 26px);
+      color: var(--white);
+      text-shadow: 0 2px 12px rgba(0,0,0,.85);
+      letter-spacing: .01em;
+    }
+    [lang="ar"] .nanami-photo-title { font-family: 'Amiri', serif; font-style: normal; }
+    .nanami-photo-meta {
+      font-family: 'Jost', sans-serif;
+      font-size: 9px; letter-spacing: .26em; text-transform: uppercase;
+      color: var(--nanami-gold);
+      padding: 5px 11px;
+      border: 1px solid rgba(217,177,74,.55);
+      background: rgba(0,0,0,.55);
+      backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+      white-space: nowrap;
+    }
 
     .nanami-header {
       display: flex; justify-content: space-between; align-items: flex-start;
@@ -507,10 +557,13 @@
     }
     [lang="ar"] .nanami-troll { font-family: 'Amiri', serif; font-style: normal; }
     @media (max-width: 600px) {
-      .nanami-card { padding: 36px 26px 32px; }
+      .nanami-card-inner { padding: 32px 24px 30px; }
       .nanami-rows { grid-template-columns: 1fr; gap: 4px 0; }
       .nanami-row-label { padding-top: 12px; }
       .nanami-quote-block { padding: 22px 22px; }
+      .nanami-photo-caption { padding: 16px 20px 14px; }
+      .nanami-photo-title { font-size: 17px; }
+      .nanami-photo-meta { font-size: 8.5px; padding: 4px 9px; letter-spacing: .18em; }
     }
 
     /* ── MEMORIAL ── */
@@ -766,6 +819,16 @@
 <!-- ══ EXHIBIT B: NANAMI TIME OF DEATH ══ -->
 <section class="exhibit-b reveal">
   <div class="nanami-card">
+    <div class="nanami-photo">
+      <img src="img/memes/nanami-death.webp" alt="Kento Nanami's final moments — Shibuya Incident" loading="lazy" />
+      <div class="nanami-photo-caption">
+        <div class="nanami-photo-title t"
+          data-en="“…You got it from here, right?”"
+          data-ar="«…الباقي عليك، صح؟»">"…You got it from here, right?"</div>
+        <div class="nanami-photo-meta t" data-en="Shibuya · Ch. 120" data-ar="شيبويا · تشابتر ١٢٠">Shibuya · Ch. 120</div>
+      </div>
+    </div>
+    <div class="nanami-card-inner">
     <div class="nanami-header">
       <div class="nanami-stamp t" data-en="Exhibit B · Time of Death" data-ar="الدليل ب · وقت الوفاة">Exhibit B · Time of Death</div>
       <div class="nanami-tod">
@@ -809,6 +872,7 @@
       data-ar="واحد كمان من تبعك يا حبيبتي. النمط مش خافي خلاص: أي شخصية بتتعلقي بيها بيتم إلغاء اشتراكها من المانجا. بس البدلة كانت أنيقة — ده حقّك.">
       Another one of yours, habibti. The pattern is no longer subtle: every character you grow attached to gets unsubscribed from the manga. Suit was crisp though — we'll give you that.
     </p>
+    </div>
   </div>
 </section>
 
