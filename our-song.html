@@ -562,6 +562,58 @@
       border-color: var(--gold-lt);
     }
 
+    /* ── HIDDEN FOR ALAA (triple-click reveal) ── */
+    .for-alaa-secret {
+      width: 100%;
+      max-width: 520px;
+      margin: 36px auto 0;
+      overflow: hidden;
+      border-radius: 16px;
+      border: 1px solid rgba(184,151,90,.28);
+      background: rgba(14,10,6,.72);
+      box-shadow: 0 16px 48px rgba(0,0,0,.35);
+    }
+    .for-alaa-secret[hidden] { display: none; }
+    .for-alaa-secret:not([hidden]) {
+      animation: secretIn .55s cubic-bezier(.22,1,.36,1) forwards;
+    }
+    @keyframes secretIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: none; }
+    }
+    .for-alaa-secret-inner {
+      padding: 28px 24px 22px;
+      text-align: center;
+    }
+    .for-alaa-secret-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(17px, 2.6vw, 21px);
+      font-weight: 300;
+      color: var(--gold-pl);
+      line-height: 1.75;
+      margin-bottom: 20px;
+    }
+    [lang="ar"] .for-alaa-secret-text { font-family: 'Amiri', serif; font-style: normal; }
+    .for-alaa-secret-close {
+      background: none;
+      border: 1px solid rgba(184,151,90,.4);
+      color: var(--gold-lt);
+      font-family: 'Jost', sans-serif;
+      font-size: 10px;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      padding: 10px 22px;
+      cursor: pointer;
+      border-radius: 999px;
+      transition: border-color .2s, background .2s;
+    }
+    .for-alaa-secret-close:hover {
+      border-color: var(--gold);
+      background: rgba(184,151,90,.1);
+    }
+    .secret-tap-hint { cursor: default; }
+
     /* ── FOOTER ── */
     .page-foot {
       margin-top: 64px;
@@ -617,6 +669,7 @@
     @media (prefers-reduced-motion: reduce) {
       .gate-note, #starfield { animation: none; }
       .lyric-line, .song-card { transition: none; }
+      .for-alaa-secret:not([hidden]) { animation: none; }
     }
   </style>
 </head>
@@ -671,8 +724,8 @@
 <div class="page">
 
   <div class="header-block">
-    <div class="header-eyebrow t" data-en="The song that says it for us" data-ar="الأغنية التي تقول كل شيء عنّا">The song that says it for us</div>
-    <h1 class="header-title t" data-en="Our Song" data-ar="أغنيتنا">Our Song</h1>
+    <div class="header-eyebrow t secret-tap-hint" id="for-alaa-secret-trigger-eyebrow" data-en="The song that says it for us" data-ar="الأغنية التي تقول كل شيء عنّا">The song that says it for us</div>
+    <h1 class="header-title t secret-tap-hint" id="for-alaa-secret-trigger-title" data-en="Our Song" data-ar="أغنيتنا">Our Song</h1>
     <div class="header-sub t" data-en="Perfect · Ed Sheeran" data-ar="بيرفكت · إد شيران">Perfect · Ed Sheeran</div>
     <p class="header-quote t"
        data-en=""I found a love, for me — darling just dive right in and follow my lead.""
@@ -681,9 +734,9 @@
     </p>
   </div>
 
-  <div class="ornament">
+  <div class="ornament" id="for-alaa-secret-trigger-ornament" aria-hidden="true">
     <div class="ornament-line"></div>
-    <div class="ornament-diamond"></div>
+    <div class="ornament-diamond secret-tap-hint" id="for-alaa-secret-trigger-diamond"></div>
     <div class="ornament-line"></div>
   </div>
 
@@ -705,7 +758,7 @@
             allowfullscreen
             loading="lazy"></iframe>
         </div>
-        <div class="player-note t"
+        <div class="player-note t secret-tap-hint" id="for-alaa-secret-trigger-note"
              data-en="When this song is on, the world goes quiet"
              data-ar="حين تبدأ هذه الأغنية، يصمت العالم">
           When this song is on, the world goes quiet
@@ -718,6 +771,17 @@
   <div class="play-counter">
     <span class="play-counter-num" id="play-counter-num">0</span>
     <span class="play-counter-label t" data-en="plays together" data-ar="مرة سمعناها معاً">plays together</span>
+  </div>
+
+  <div id="for-alaa-secret" class="for-alaa-secret" hidden>
+    <div class="for-alaa-secret-inner">
+      <p class="for-alaa-secret-text t"
+        data-en="If you found this: this whole page — every line — is for you, Alaa. Perfect was only where the playlist starts."
+        data-ar="إن وصلتِ إلى هنا: هذه الصفحة بكل ما فيها — من أجلكِ يا آلاء. «بيرفكت» كانت فقط بداية القائمة.">
+        If you found this: this whole page — every line — is for you, Alaa. Perfect was only where the playlist starts.
+      </p>
+      <button type="button" class="for-alaa-secret-close t" id="for-alaa-secret-close" data-en="Close" data-ar="إغلاق">Close</button>
+    </div>
   </div>
 
   <!-- ── LYRIC REVEAL ── -->
@@ -874,11 +938,48 @@
     });
   }
 
+  function initForAlaaSecret() {
+    const box = document.getElementById('for-alaa-secret');
+    const closeBtn = document.getElementById('for-alaa-secret-close');
+    if (!box || box.dataset.bound) return;
+    box.dataset.bound = '1';
+
+    function reveal() {
+      box.hidden = false;
+      try { box.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); } catch {}
+    }
+
+    function bindTripleTap(el) {
+      if (!el) return;
+      let count = 0;
+      let timer;
+      el.addEventListener('click', () => {
+        clearTimeout(timer);
+        count++;
+        timer = setTimeout(() => { count = 0; }, 550);
+        if (count >= 3) {
+          count = 0;
+          reveal();
+        }
+      });
+    }
+
+    bindTripleTap(document.getElementById('for-alaa-secret-trigger-title'));
+    bindTripleTap(document.getElementById('for-alaa-secret-trigger-eyebrow'));
+    bindTripleTap(document.getElementById('for-alaa-secret-trigger-diamond'));
+    bindTripleTap(document.getElementById('for-alaa-secret-trigger-note'));
+
+    if (closeBtn) {
+      closeBtn.addEventListener('click', () => { box.hidden = true; });
+    }
+  }
+
   function onAuthenticated(isNew) {
     updateCounter(parseInt(localStorage.getItem(PLAY_KEY) || '0', 10), false);
     startStarfield();
     initObservers();
     initSongFacades();
+    initForAlaaSecret();
 
     (async function syncPlays() {
       try {

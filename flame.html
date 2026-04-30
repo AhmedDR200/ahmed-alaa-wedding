@@ -899,15 +899,15 @@
   const MSGS = {
     en: {
       none:    'Keep the flame alive today',
-      ahmed:   'Ahmed connected — waiting for Alaa ♡',
-      alaa:    'Alaa connected — waiting for Ahmed ♡',
+      ahmed:   'Alaa — your tap completes us today ♡',
+      alaa:    'Ahmed — your tap completes us today ♡',
       both:    'The flame burns bright — {n} days strong ✦',
       already: 'Both connected today — come back tomorrow ♡',
     },
     ar: {
       none:    'أبقوا الشعلة حية اليوم',
-      ahmed:   'تواصل أحمد — في انتظار آلاء ♡',
-      alaa:    'تواصلت آلاء — في انتظار أحمد ♡',
+      ahmed:   'آلاء — تواصلكِ اليوم يُكمل الشعلة ♡',
+      alaa:    'أحمد — تواصلك اليوم يُكمل الشعلة ♡',
       both:    'الشعلة تتقد بقوة — {n} يوماً متتالياً ✦',
       already: 'كلاكما تواصل اليوم — عودوا غداً ♡',
     }
@@ -990,10 +990,11 @@
 
     const connected   = lang === 'ar' ? 'تواصل اليوم ✓' : 'Connected today ✓';
     const tapToday    = lang === 'ar' ? 'اضغط للتواصل' : 'Tap to connect';
-    const waitingText = lang === 'ar' ? 'في الانتظار...' : 'Waiting for you...';
+    const waitingAhmed = lang === 'ar' ? 'أحمد — دورك في التواصل ♡' : 'Ahmed — your turn to tap ♡';
+    const waitingAlaa  = lang === 'ar' ? 'آلاء — دوركِ في التواصل ♡' : 'Alaa — your turn to tap ♡';
 
-    sA.textContent = ahmed ? connected : (alaa ? waitingText : tapToday);
-    sL.textContent = alaa  ? connected : (ahmed ? waitingText : tapToday);
+    sA.textContent = ahmed ? connected : (alaa ? waitingAhmed : tapToday);
+    sL.textContent = alaa  ? connected : (ahmed ? waitingAlaa  : tapToday);
 
     // Message
     const msg = document.getElementById('flame-msg');
