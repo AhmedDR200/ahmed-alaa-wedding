@@ -25,6 +25,8 @@
       --sukuna-deep:  #5A0E0B;
       --gojo-blue:    #5DA9FF;
       --gojo-deep:    #0E2B66;
+      --nanami-gold:  #D9B14A;
+      --nanami-deep:  #5C420A;
     }
 
     html, body {
@@ -385,6 +387,132 @@
       .meme-banner-top, .meme-banner-bottom { padding: 10px 14px; }
     }
 
+    /* ── EXHIBIT B: NANAMI TIME OF DEATH ── */
+    .exhibit-b {
+      max-width: 760px; margin: 0 auto;
+      padding: 0 24px 90px;
+    }
+    .nanami-card {
+      position: relative;
+      background:
+        repeating-linear-gradient(
+          0deg,
+          rgba(217,177,74,.04) 0px,
+          rgba(217,177,74,.04) 1px,
+          transparent 1px,
+          transparent 28px
+        ),
+        linear-gradient(135deg, rgba(92,66,10,.35), rgba(14,14,16,.95));
+      border: 1px solid rgba(217,177,74,.4);
+      padding: 48px 44px 44px;
+      box-shadow:
+        0 2px 4px rgba(0,0,0,.3),
+        0 30px 80px rgba(0,0,0,.4),
+        inset 0 0 80px rgba(217,177,74,.05);
+    }
+    .nanami-card::before, .nanami-card::after {
+      content: ""; position: absolute;
+      width: 18px; height: 18px;
+      border: 1px solid var(--nanami-gold);
+    }
+    .nanami-card::before { top: -1px; left: -1px; border-right: none; border-bottom: none; }
+    .nanami-card::after  { bottom: -1px; right: -1px; border-left: none; border-top: none; }
+
+    .nanami-header {
+      display: flex; justify-content: space-between; align-items: flex-start;
+      gap: 18px; margin-bottom: 32px;
+      padding-bottom: 18px;
+      border-bottom: 1px solid rgba(217,177,74,.2);
+      flex-wrap: wrap;
+    }
+    .nanami-stamp {
+      font-family: 'Jost', sans-serif;
+      font-size: 9px; letter-spacing: .32em; text-transform: uppercase;
+      color: var(--nanami-gold);
+      padding: 6px 12px;
+      border: 1px solid rgba(217,177,74,.5);
+      background: rgba(217,177,74,.06);
+    }
+    .nanami-tod {
+      font-family: 'Jost', sans-serif;
+      font-variant-numeric: tabular-nums;
+      font-size: 11px; letter-spacing: .22em; text-transform: uppercase;
+      color: rgba(255,255,255,.45);
+    }
+    .nanami-tod strong {
+      color: var(--nanami-gold);
+      font-weight: 500;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      letter-spacing: .06em;
+    }
+    .nanami-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(36px, 6vw, 56px);
+      font-weight: 400; line-height: 1;
+      color: var(--white);
+      margin-bottom: 8px;
+    }
+    [lang="ar"] .nanami-name { font-family: 'Amiri', serif; }
+    .nanami-role {
+      font-size: 10px; letter-spacing: .26em; text-transform: uppercase;
+      color: rgba(255,255,255,.5);
+      margin-bottom: 32px;
+    }
+    .nanami-rows {
+      display: grid; grid-template-columns: 130px 1fr;
+      gap: 14px 24px;
+      font-size: 13px; line-height: 1.6;
+      margin-bottom: 30px;
+    }
+    .nanami-row-label {
+      font-size: 9px; letter-spacing: .22em; text-transform: uppercase;
+      color: rgba(255,255,255,.4);
+      padding-top: 3px;
+    }
+    .nanami-row-val {
+      color: rgba(255,255,255,.85);
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 16px;
+    }
+    [lang="ar"] .nanami-row-val { font-family: 'Amiri', serif; font-style: normal; }
+    .nanami-row-val.cause { color: var(--sukuna-red); font-style: normal; font-family: 'Jost', sans-serif; font-size: 13px; letter-spacing: .04em; }
+    [lang="ar"] .nanami-row-val.cause { font-family: 'Cairo', sans-serif; }
+    .nanami-quote-block {
+      position: relative;
+      padding: 28px 32px;
+      background: rgba(0,0,0,.35);
+      border-left: 2px solid var(--nanami-gold);
+      margin-bottom: 26px;
+    }
+    [lang="ar"] .nanami-quote-block { border-left: none; border-right: 2px solid var(--nanami-gold); }
+    .nanami-quote {
+      font-family: 'Cormorant Garamond', serif; font-style: italic;
+      font-size: clamp(19px, 2.6vw, 24px);
+      line-height: 1.6;
+      color: var(--white);
+    }
+    [lang="ar"] .nanami-quote { font-family: 'Amiri', serif; font-style: normal; }
+    .nanami-quote-attr {
+      margin-top: 10px;
+      font-size: 10px; letter-spacing: .24em; text-transform: uppercase;
+      color: var(--nanami-gold);
+    }
+    .nanami-troll {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 16px; line-height: 1.7;
+      color: rgba(255,255,255,.62);
+      font-style: italic;
+    }
+    [lang="ar"] .nanami-troll { font-family: 'Amiri', serif; font-style: normal; }
+    @media (max-width: 600px) {
+      .nanami-card { padding: 36px 26px 32px; }
+      .nanami-rows { grid-template-columns: 1fr; gap: 4px 0; }
+      .nanami-row-label { padding-top: 12px; }
+      .nanami-quote-block { padding: 22px 22px; }
+    }
+
     /* ── MEMORIAL ── */
     .memorial {
       max-width: 760px; margin: 0 auto;
@@ -580,19 +708,19 @@
     <div class="scoreboard" aria-label="Scoreboard">
       <div class="scoreboard-side ahmed">
         <div class="scoreboard-name t" data-en="Ahmed" data-ar="أحمد">Ahmed</div>
-        <div class="scoreboard-num">1</div>
+        <div class="scoreboard-num">2</div>
         <div class="scoreboard-name" style="color:var(--sukuna-red);">Sukuna</div>
       </div>
       <div class="scoreboard-mid"></div>
       <div class="scoreboard-side alaa">
         <div class="scoreboard-name t" data-en="Alaa" data-ar="آلاء">Alaa</div>
         <div class="scoreboard-num">0</div>
-        <div class="scoreboard-name" style="color:var(--gojo-blue);">Gojo</div>
+        <div class="scoreboard-name" style="color:var(--gojo-blue);">Gojo · Nanami</div>
       </div>
     </div>
     <div class="scoreboard-tag t"
-      data-en="Canon — undefeated"
-      data-ar="حسب المانجا — بدون هزائم">Canon — undefeated</div>
+      data-en="Canon — undefeated · Casualties: 2 and counting"
+      data-ar="حسب المانجا — بدون هزائم · القتلى: ٢ والعدّ مستمر">Canon — undefeated · Casualties: 2 and counting</div>
   </div>
 </section>
 
@@ -635,6 +763,55 @@
   </div>
 </section>
 
+<!-- ══ EXHIBIT B: NANAMI TIME OF DEATH ══ -->
+<section class="exhibit-b reveal">
+  <div class="nanami-card">
+    <div class="nanami-header">
+      <div class="nanami-stamp t" data-en="Exhibit B · Time of Death" data-ar="الدليل ب · وقت الوفاة">Exhibit B · Time of Death</div>
+      <div class="nanami-tod">
+        <span class="t" data-en="Recorded at" data-ar="سُجِّل في">Recorded at</span>
+        &nbsp;<strong>18:23</strong>
+      </div>
+    </div>
+
+    <div class="nanami-name t" data-en="Kento Nanami" data-ar="كينتو نانامي">Kento Nanami</div>
+    <div class="nanami-role t"
+      data-en="Grade 1 Sorcerer · Salaryman · Alaa’s Favorite"
+      data-ar="ساحر من الدرجة الأولى · موظف · المفضل عند آلاء">Grade 1 Sorcerer · Salaryman · Alaa's Favorite</div>
+
+    <div class="nanami-rows">
+      <div class="nanami-row-label t" data-en="Date" data-ar="التاريخ">Date</div>
+      <div class="nanami-row-val t" data-en="October 31, 2018" data-ar="٣١ أكتوبر ٢٠١٨">October 31, 2018</div>
+
+      <div class="nanami-row-label t" data-en="Location" data-ar="المكان">Location</div>
+      <div class="nanami-row-val t" data-en="Shibuya · Subway level B5" data-ar="شيبويا · مترو الطابق ب٥">Shibuya · Subway level B5</div>
+
+      <div class="nanami-row-label t" data-en="Cause" data-ar="السبب">Cause</div>
+      <div class="nanami-row-val cause t"
+        data-en="Mahito · Idle Transfiguration · Chapter 120"
+        data-ar="ماهيتو · التحوّل الكسول · تشابتر ١٢٠">Mahito · Idle Transfiguration · Chapter 120</div>
+
+      <div class="nanami-row-label t" data-en="Status" data-ar="الحالة">Status</div>
+      <div class="nanami-row-val cause t" data-en="Deceased · Confirmed" data-ar="متوفّى · مؤكد">Deceased · Confirmed</div>
+    </div>
+
+    <blockquote class="nanami-quote-block">
+      <div class="nanami-quote t"
+        data-en='"…You got it from here, right?"'
+        data-ar='«…الباقي عليك، صح؟»'>"…You got it from here, right?"</div>
+      <div class="nanami-quote-attr t"
+        data-en="— Nanami’s last words to Yuji"
+        data-ar="— آخر كلمات نانامي ليوجي">— Nanami's last words to Yuji</div>
+    </blockquote>
+
+    <p class="nanami-troll t"
+      data-en="Another one of yours, habibti. The pattern is no longer subtle: every character you grow attached to gets unsubscribed from the manga. Suit was crisp though — we’ll give you that."
+      data-ar="واحد كمان من تبعك يا حبيبتي. النمط مش خافي خلاص: أي شخصية بتتعلقي بيها بيتم إلغاء اشتراكها من المانجا. بس البدلة كانت أنيقة — ده حقّك.">
+      Another one of yours, habibti. The pattern is no longer subtle: every character you grow attached to gets unsubscribed from the manga. Suit was crisp though — we'll give you that.
+    </p>
+  </div>
+</section>
+
 <!-- ══ MEMORIAL ══ -->
 <section class="memorial reveal">
   <div class="memorial-frame">
@@ -650,14 +827,14 @@
       The Honored One · 1989 — 2018 (Shibuya hurts, Shinjuku finished it)
     </div>
     <p class="memorial-body t"
-      data-en="A small private funeral was held for Satoru Gojo. In attendance: Alaa, her broken heart, and a single hijabi sorcerer with extremely blue eyes. Sukuna sends his regards. Ahmed sends his."
-      data-ar="أُقيمت جنازة صغيرة لساتورو غوجو. الحضور: آلاء، وقلبها المكسور، وساحرة مُحجبة بعيون زرقاء جداً. ساكونا يبعث تحيّاته. وأحمد كذلك.">
-      A small private funeral was held for Satoru Gojo. In attendance: Alaa, her broken heart, and a single hijabi sorcerer with extremely blue eyes. Sukuna sends his regards. Ahmed sends his.
+      data-en="A small private funeral was held for Satoru Gojo, with Kento Nanami’s name added to the program. In attendance: Alaa, her broken heart, and a single hijabi sorcerer with extremely blue eyes. Sukuna sends his regards. Mahito sends nothing. Ahmed sends his."
+      data-ar="أُقيمت جنازة صغيرة لساتورو غوجو، وأُضيف اسم كينتو نانامي إلى البرنامج. الحضور: آلاء، وقلبها المكسور، وساحرة مُحجبة بعيون زرقاء جداً. ساكونا يبعث تحيّاته. ماهيتو لا يبعث شيئاً. وأحمد يبعث تحيّاته.">
+      A small private funeral was held for Satoru Gojo, with Kento Nanami's name added to the program. In attendance: Alaa, her broken heart, and a single hijabi sorcerer with extremely blue eyes. Sukuna sends his regards. Mahito sends nothing. Ahmed sends his.
     </p>
     <p class="memorial-quote t"
-      data-en='"Stand proud, Alaa. You are strong... but the man you’re marrying loves Sukuna."'
-      data-ar='«افخري بنفسك يا آلاء. أنتِ قوية… لكن اللي حتتجوزيه بيحب ساكونا.»'>
-      "Stand proud, Alaa. You are strong... but the man you're marrying loves Sukuna."
+      data-en='"Stand proud, Alaa. You are strong... but the man you’re marrying loves Sukuna — and the manga keeps killing yours."'
+      data-ar='«افخري بنفسك يا آلاء. أنتِ قوية… لكن اللي حتتجوزيه بيحب ساكونا — والمانجا بتقتل اللي بتحبيهم.»'>
+      "Stand proud, Alaa. You are strong... but the man you're marrying loves Sukuna — and the manga keeps killing yours."
     </p>
   </div>
 </section>
@@ -794,10 +971,13 @@
     "I love you. Sukuna still won.",
     "Click harder, the manga still says Sukuna.",
     "Inumaki couldn't save him. Neither can clicking.",
+    "Nanami clocked out at 18:23. Permanently.",
     "Cope, but make it fashion.",
     "Throughout heaven and earth, you alone are wrong.",
     "Stand proud — Gojo did not.",
+    "\"You got it from here, right?\" — Nanami, also losing.",
     "Six Eyes saw this loss coming. You didn't.",
+    "Mahito speedran your favorite in two pages.",
     "Even Yuta agrees with me on this one.",
     "Last reply: I love you anyway. December 9 — same answer."
   ];
@@ -806,10 +986,13 @@
     "بحبك. وساكونا لسه فاز.",
     "ادوسي أكتر، المانجا لسه بتقول ساكونا.",
     "إينوماكي ما قدرش ينقذه. ولا الدوسة هتنقذه.",
+    "نانامي سجّل خروج الساعة ٦:٢٣ مساءً. ومخرجش تاني.",
     "كوب، بس بستايل.",
     "في السماء وفي الأرض، إنتي وحدك الغلط.",
     "افخري بنفسك — غوجو لم يفعل.",
+    "«الباقي عليك، صح؟» — نانامي، وهو كمان بيخسر.",
     "العيون الست شافت الخسارة دي جاية. إنتي لأ.",
+    "ماهيتو خلّص على المفضل عندك في صفحتين.",
     "حتى يوتا متفق معايا في الموضوع ده.",
     "آخر رد: بحبك على أي حال. ٩ ديسمبر — نفس الإجابة."
   ];
