@@ -469,6 +469,7 @@
 
 <script>
   // ══ PASSWORD GATE ══
+  localStorage.removeItem('alaa_auth_v1');
   const AUTH_KEY = 'alaa_auth_v1';
   const PASS     = 'alaa-core';
   const gate     = document.getElementById('gate');
@@ -478,7 +479,7 @@
     const field = document.getElementById('gate-field');
     const err   = document.getElementById('gate-error');
     if (input.value.trim().toLowerCase() === PASS) {
-      localStorage.setItem(AUTH_KEY, 'yes');
+      sessionStorage.setItem(AUTH_KEY, 'yes');
       gate.classList.add('hide');
     } else {
       input.value = '';
@@ -494,7 +495,7 @@
   document.getElementById('gate-input').addEventListener('keydown', e => {
     if (e.key === 'Enter') checkPass();
   });
-  if (localStorage.getItem(AUTH_KEY) === 'yes') {
+  if (sessionStorage.getItem(AUTH_KEY) === 'yes') {
     gate.classList.add('hide');
   }
 

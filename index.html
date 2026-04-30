@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Ahmed & Alaa — December 9, 2026</title>
   <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="preconnect" href="https://api.jsonbin.io" />
+  <link rel="dns-prefetch" href="https://api.jsonbin.io" />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Jost:wght@200;300;400;500&family=Amiri:ital,wght@0,400;1,400&family=Cairo:wght@300;400;500&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -1590,12 +1592,14 @@
   const HEADINGS = {
     en: {
       story:   'Our <em>Story</em>',
+      streak:  'Your <em>Journey</em>',
       reasons: 'Reasons I <em>Love You</em>',
       letter:  'A <em>Letter</em> to You',
       share:   'Share <em>Our Day</em>',
     },
     ar: {
       story:   'قصّتنا <em>المشتركة</em>',
+      streak:  'رحلتكم <em>إلى اليوم</em>',
       reasons: 'أسباب <em>حبي لكِ</em>',
       letter:  'رسالة <em>إليكِ</em>',
       share:   'شاركوا <em>يومنا</em>',
@@ -1842,7 +1846,7 @@
   }
 
   // ══ STREAK WIDGET ══
-  (async function() {
+  (function() {
     const JB_KEY      = '$2a$10$KbNF/mCJtyHlUvHzwELTKOdQ0Sybn.GKVOW/1S8XJqeZQrYSwULwq';
     const JB_VISITS   = '69efe653856a6821897d39fd';
     const WEDDING  = new Date('2026-12-09T00:00:00');
@@ -1852,47 +1856,51 @@
     function ds(d) { return d.toISOString().slice(0,10); }
     function addD(d,n) { const r=new Date(d); r.setDate(r.getDate()+n); return r; }
 
-    // Load from JSONBin, merge with localStorage
-    let visited;
-    try {
-      const r = await fetch(`https://api.jsonbin.io/v3/b/${JB_VISITS}/latest`, {
-        headers: { 'X-Access-Key': JB_KEY }
-      });
-      const local = JSON.parse(localStorage.getItem('streak_visits') || '[]');
-      let remote = [];
-      if (r.ok) { const j = await r.json(); remote = j.record?.dates || []; }
-      visited = new Set([...remote, ...local]);
-    } catch {
-      try { visited = new Set(JSON.parse(localStorage.getItem('streak_visits') || '[]')); }
-      catch { visited = new Set(); }
+    /** Virtual “visited” from engagement day through today (display only; not written to JSONBin as backfill). */
+    function baselineVisitedSet() {
+      const s = new Set();
+      let d = new Date(PROPOSAL);
+      while (d <= TODAY) { s.add(ds(d)); d = addD(d, 1); }
+      return s;
     }
 
-    // Mark today, save everywhere
-    const isNew = !visited.has(ds(TODAY));
-    visited.add(ds(TODAY));
-    const arr = [...visited].sort();
-    localStorage.setItem('streak_visits', JSON.stringify(arr));
-    if (isNew) {
+    function mergeDisplayVisited(storageSet) {
+      return new Set([...storageSet, ...baselineVisitedSet()]);
+    }
+
+    let storageSet;
+    try {
+      storageSet = new Set(JSON.parse(localStorage.getItem('streak_visits') || '[]'));
+    } catch { storageSet = new Set(); }
+
+    const todayStr = ds(TODAY);
+    const isNewVisit = !storageSet.has(todayStr);
+    storageSet.add(todayStr);
+    const arrSorted = [...storageSet].sort();
+    localStorage.setItem('streak_visits', JSON.stringify(arrSorted));
+
+    if (isNewVisit) {
       fetch(`https://api.jsonbin.io/v3/b/${JB_VISITS}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json', 'X-Access-Key': JB_KEY },
-        body: JSON.stringify({ dates: arr })
+        body: JSON.stringify({ dates: arrSorted })
       }).catch(() => {});
     }
 
-    // Streak calculations
+    let visited = mergeDisplayVisited(storageSet);
+
     function currentStreak() {
-      let n=0, d=new Date(TODAY);
-      while(visited.has(ds(d))){ n++; d=addD(d,-1); }
+      let n = 0, d = new Date(TODAY);
+      while (visited.has(ds(d))) { n++; d = addD(d, -1); }
       return n;
     }
     function bestStreak() {
-      const sorted=[...visited].sort();
-      let best=0, cur=0, prev=null;
-      for(const s of sorted){
-        const d=new Date(s);
-        cur = prev && (d-prev)===86400000 ? cur+1 : 1;
-        best=Math.max(best,cur); prev=d;
+      const sorted = [...visited].sort();
+      let best = 0, cur = 0, prev = null;
+      for (const s of sorted) {
+        const d = new Date(s + 'T12:00:00');
+        cur = prev && (d - prev) === 86400000 ? cur + 1 : 1;
+        best = Math.max(best, cur); prev = d;
       }
       return best;
     }
@@ -1900,101 +1908,112 @@
     // Grid bounds: align to Monday
     const gridStart = new Date(PROPOSAL);
     const dow = gridStart.getDay();
-    gridStart.setDate(gridStart.getDate() - (dow===0?6:dow-1));
+    gridStart.setDate(gridStart.getDate() - (dow === 0 ? 6 : dow - 1));
 
     const gridEnd = new Date(WEDDING);
     const dowE = gridEnd.getDay();
-    if(dowE!==0) gridEnd.setDate(gridEnd.getDate()+(7-dowE));
+    if (dowE !== 0) gridEnd.setDate(gridEnd.getDate() + (7 - dowE));
 
-    // Build week columns
-    const cols=[], months=[];
-    let cur=new Date(gridStart), colIdx=0, todayCol=-1;
-    while(cur<=gridEnd){
-      const week=[];
-      for(let i=0;i<7;i++){
+    const cols = [], months = [];
+    let cur = new Date(gridStart), colIdx = 0, todayCol = -1;
+    while (cur <= gridEnd) {
+      const week = [];
+      for (let i = 0; i < 7; i++) {
         week.push(new Date(cur));
-        cur=addD(cur,1);
+        cur = addD(cur, 1);
       }
-      // Month label for this column (check Monday of week)
-      const mLabel = week[0].getMonth()!==months[months.length-1]?.month
-        ? {col:colIdx, month:week[0].getMonth(), label:week[0].toLocaleString('en',{month:'short'})}
+      const mLabel = week[0].getMonth() !== months[months.length - 1]?.month
+        ? { col: colIdx, month: week[0].getMonth(), label: week[0].toLocaleString('en', { month: 'short' }) }
         : null;
-      if(mLabel) months.push(mLabel);
-      if(week.some(d=>ds(d)===ds(TODAY))) todayCol=colIdx;
+      if (mLabel) months.push(mLabel);
+      if (week.some(d => ds(d) === todayStr)) todayCol = colIdx;
       cols.push(week);
       colIdx++;
     }
 
-    // Render month labels
-    const weddingStr=ds(WEDDING), todayStr=ds(TODAY);
-    const TILE=15; // 12px + 3px gap
-    const monthRow=document.getElementById('streak-month-row');
-    for(let c=0;c<cols.length;c++){
-      const cell=document.createElement('div');
-      cell.className='streak-month-cell';
-      cell.style.width='12px';
-      const m=months.find(x=>x.col===c);
+    const weddingStr = ds(WEDDING);
+    const TILE = 15;
+
+    const monthRow = document.getElementById('streak-month-row');
+    for (let c = 0; c < cols.length; c++) {
+      const cell = document.createElement('div');
+      cell.className = 'streak-month-cell';
+      cell.style.width = '12px';
+      const m = months.find(x => x.col === c);
       cell.textContent = m ? m.label : '';
       monthRow.appendChild(cell);
-      if(c<cols.length-1){const g=document.createElement('div');g.style.width='3px';g.style.flexShrink='0';monthRow.appendChild(g);}
+      if (c < cols.length - 1) {
+        const g = document.createElement('div');
+        g.style.width = '3px';
+        g.style.flexShrink = '0';
+        monthRow.appendChild(g);
+      }
     }
 
-    // Day labels (Mon–Sun)
-    const dayLabels=document.getElementById('streak-day-labels');
-    ['M','','W','','F','','S'].forEach(l=>{
-      const el=document.createElement('div');
-      el.className='streak-day-label';
-      el.textContent=l;
+    const dayLabels = document.getElementById('streak-day-labels');
+    ['M', '', 'W', '', 'F', '', 'S'].forEach(l => {
+      const el = document.createElement('div');
+      el.className = 'streak-day-label';
+      el.textContent = l;
       dayLabels.appendChild(el);
     });
 
-    // Render grid
-    const grid=document.getElementById('streak-grid');
-    cols.forEach(week=>{
-      const col=document.createElement('div');
-      col.className='streak-col';
-      week.forEach(day=>{
-        const tile=document.createElement('div');
-        tile.className='streak-tile';
-        const d=ds(day);
-        const inRange = day>=PROPOSAL && day<=WEDDING;
-        if(!inRange)              tile.classList.add('s-out');
-        else if(d===weddingStr)   { tile.classList.add('s-wedding'); tile.textContent='♡'; }
-        else if(d===todayStr)     tile.classList.add('s-today');
-        else if(day>TODAY)        tile.classList.add('s-future');
-        else if(visited.has(d))   tile.classList.add('s-visited');
-        else                      tile.classList.add('s-missed');
+    const grid = document.getElementById('streak-grid');
 
-        // Tooltip
-        tile.setAttribute('title', day.toLocaleDateString('en',{month:'short',day:'numeric',year:'numeric'}));
-        col.appendChild(tile);
+    function paintTiles() {
+      grid.innerHTML = '';
+      cols.forEach(week => {
+        const col = document.createElement('div');
+        col.className = 'streak-col';
+        week.forEach(day => {
+          const tile = document.createElement('div');
+          tile.className = 'streak-tile';
+          const d = ds(day);
+          const inRange = day >= PROPOSAL && day <= WEDDING;
+          if (!inRange) tile.classList.add('s-out');
+          else if (d === weddingStr) { tile.classList.add('s-wedding'); tile.textContent = '♡'; }
+          else if (d === todayStr) tile.classList.add('s-today');
+          else if (day > TODAY) tile.classList.add('s-future');
+          else if (visited.has(d)) tile.classList.add('s-visited');
+          else tile.classList.add('s-missed');
+          tile.setAttribute('title', day.toLocaleDateString('en', { month: 'short', day: 'numeric', year: 'numeric' }));
+          col.appendChild(tile);
+        });
+        grid.appendChild(col);
       });
-      grid.appendChild(col);
-    });
-
-    // Update stats
-    document.getElementById('streak-current').textContent = currentStreak();
-    document.getElementById('streak-longest').textContent = bestStreak();
-    document.getElementById('streak-total').textContent   = visited.size;
-
-    // Progress bar
-    const totalDays = Math.round((WEDDING-PROPOSAL)/86400000);
-    const elapsed   = Math.max(0, Math.min(totalDays, Math.round((TODAY-PROPOSAL)/86400000)));
-    const pct       = Math.round(elapsed/totalDays*100);
-    document.getElementById('streak-pct').textContent = pct+'%';
-    setTimeout(()=>{ document.getElementById('streak-fill').style.width=pct+'%'; }, 400);
-
-    // Scroll to show today
-    if(todayCol>0){
-      const scroll=document.getElementById('streak-scroll');
-      setTimeout(()=>{ scroll.scrollLeft = Math.max(0,(todayCol-8)*TILE); },300);
     }
 
-    // Add to HEADINGS for lang toggle
-    if(typeof HEADINGS!=='undefined'){
-      HEADINGS.en.streak='Your <em>Journey</em>';
-      HEADINGS.ar.streak='رحلتكم <em>إلى اليوم</em>';
+    function updateStats() {
+      document.getElementById('streak-current').textContent = currentStreak();
+      document.getElementById('streak-longest').textContent = bestStreak();
+      document.getElementById('streak-total').textContent = visited.size;
+      const totalDays = Math.round((WEDDING - PROPOSAL) / 86400000);
+      const elapsed = Math.max(0, Math.min(totalDays, Math.round((TODAY - PROPOSAL) / 86400000)));
+      const pct = Math.round(elapsed / totalDays * 100);
+      document.getElementById('streak-pct').textContent = pct + '%';
+      setTimeout(() => { document.getElementById('streak-fill').style.width = pct + '%'; }, 400);
     }
+
+    paintTiles();
+    updateStats();
+
+    if (todayCol > 0) {
+      const scroll = document.getElementById('streak-scroll');
+      setTimeout(() => { scroll.scrollLeft = Math.max(0, (todayCol - 8) * TILE); }, 300);
+    }
+
+    fetch(`https://api.jsonbin.io/v3/b/${JB_VISITS}/latest`, { headers: { 'X-Access-Key': JB_KEY } })
+      .then(r => (r.ok ? r.json() : Promise.reject()))
+      .then(j => {
+        const remote = j.record?.dates || [];
+        const merged = new Set([...remote, ...JSON.parse(localStorage.getItem('streak_visits') || '[]')]);
+        merged.add(todayStr);
+        localStorage.setItem('streak_visits', JSON.stringify([...merged].sort()));
+        visited = mergeDisplayVisited(merged);
+        paintTiles();
+        updateStats();
+      })
+      .catch(() => {});
   })();
 
   // ══ PETALS ══

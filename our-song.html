@@ -5,6 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Our Song — Ahmed & Alaa</title>
   <link rel="icon" href="favicon.svg" />
+  <link rel="preconnect" href="https://api.jsonbin.io" />
+  <link rel="dns-prefetch" href="https://api.jsonbin.io" />
+  <link rel="preconnect" href="https://open.spotify.com" />
+  <link rel="preconnect" href="https://i.scdn.co" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@200;300;400;500&family=Amiri:ital,wght@0,400;1,400&family=Cairo:wght@300;400&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -26,7 +30,6 @@
       z-index: 0;
       pointer-events: none;
       opacity: 0;
-      transition: opacity 2s ease;
     }
     #starfield.visible { opacity: 1; }
 
@@ -328,14 +331,13 @@
         rgba(212,180,131,.22) 0%,
         rgba(184,151,90,.10) 35%,
         transparent 70%);
-      filter: blur(20px);
       z-index: -1;
       pointer-events: none;
       animation: heroGlow 4.5s ease-in-out infinite;
     }
     @keyframes heroGlow {
-      0%, 100% { opacity: .8;  transform: scale(1);    }
-      50%       { opacity: 1;  transform: scale(1.05); }
+      0%, 100% { opacity: .75; }
+      50%       { opacity: 1; }
     }
     .hero-card {
       position: relative;
@@ -508,6 +510,56 @@
       width: 100%;
       border: 0;
       height: 80px;
+    }
+    .song-embed-facade {
+      min-height: 80px;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      cursor: pointer;
+      text-align: left;
+      border: none;
+      width: 100%;
+      background: transparent;
+      font-family: 'Jost', sans-serif;
+      color: var(--white);
+    }
+    .song-embed-facade:focus-visible {
+      outline: 1px solid var(--gold-lt);
+      outline-offset: 2px;
+    }
+    .song-embed-facade-text { flex: 1; min-width: 0; }
+    .song-embed-facade-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 17px;
+      font-weight: 400;
+      color: var(--gold-pl);
+      margin-bottom: 4px;
+    }
+    .song-embed-facade-artist {
+      font-size: 11px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .song-embed-facade-play {
+      flex-shrink: 0;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 1px solid rgba(184,151,90,.45);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      color: var(--gold-lt);
+      transition: background .2s, border-color .2s;
+    }
+    .song-embed-facade:hover .song-embed-facade-play {
+      background: rgba(184,151,90,.12);
+      border-color: var(--gold-lt);
     }
 
     /* ── FOOTER ── */
@@ -684,49 +736,59 @@
     <div class="more-songs-eyebrow t" data-en="on repeat" data-ar="على التكرار">on repeat</div>
     <div class="more-songs-title t" data-en="Songs that remind us of each other" data-ar="أغانٍ تُذكّرنا ببعض">Songs that remind us of each other</div>
     <div class="songs-list">
-      <div class="song-card" data-song="1">
+      <div class="song-card" data-song="1" data-embed-url="https://open.spotify.com/embed/track/34gCuhDGsG4bRPIf9bb02f?utm_source=generator&amp;theme=0">
         <div class="song-card-inner">
-          <iframe
-            src="https://open.spotify.com/embed/track/34gCuhDGsG4bRPIf9bb02f?utm_source=generator&theme=0"
-            title="Thinking Out Loud — Ed Sheeran"
-            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-            allowfullscreen loading="lazy"></iframe>
+          <button type="button" class="song-embed-facade" aria-label="Load and play Thinking Out Loud by Ed Sheeran">
+            <span class="song-embed-facade-text">
+              <span class="song-embed-facade-title">Thinking Out Loud</span>
+              <span class="song-embed-facade-artist">Ed Sheeran</span>
+            </span>
+            <span class="song-embed-facade-play" aria-hidden="true">▶</span>
+          </button>
         </div>
       </div>
-      <div class="song-card" data-song="2">
+      <div class="song-card" data-song="2" data-embed-url="https://open.spotify.com/embed/track/5XeFesFbtLpXzIVDNQP22n?utm_source=generator&amp;theme=0">
         <div class="song-card-inner">
-          <iframe
-            src="https://open.spotify.com/embed/track/5XeFesFbtLpXzIVDNQP22n?utm_source=generator&theme=0"
-            title="I Wanna Be Yours — Arctic Monkeys"
-            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-            allowfullscreen loading="lazy"></iframe>
+          <button type="button" class="song-embed-facade" aria-label="Load and play I Wanna Be Yours by Arctic Monkeys">
+            <span class="song-embed-facade-text">
+              <span class="song-embed-facade-title">I Wanna Be Yours</span>
+              <span class="song-embed-facade-artist">Arctic Monkeys</span>
+            </span>
+            <span class="song-embed-facade-play" aria-hidden="true">▶</span>
+          </button>
         </div>
       </div>
-      <div class="song-card" data-song="3">
+      <div class="song-card" data-song="3" data-embed-url="https://open.spotify.com/embed/track/2plbrEY59IikOBgBGLjaoe?utm_source=generator&amp;theme=0">
         <div class="song-card-inner">
-          <iframe
-            src="https://open.spotify.com/embed/track/2plbrEY59IikOBgBGLjaoe?utm_source=generator&theme=0"
-            title="Die With A Smile — Lady Gaga & Bruno Mars"
-            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-            allowfullscreen loading="lazy"></iframe>
+          <button type="button" class="song-embed-facade" aria-label="Load and play Die With A Smile by Lady Gaga and Bruno Mars">
+            <span class="song-embed-facade-text">
+              <span class="song-embed-facade-title">Die With A Smile</span>
+              <span class="song-embed-facade-artist">Lady Gaga &amp; Bruno Mars</span>
+            </span>
+            <span class="song-embed-facade-play" aria-hidden="true">▶</span>
+          </button>
         </div>
       </div>
-      <div class="song-card" data-song="4">
+      <div class="song-card" data-song="4" data-embed-url="https://open.spotify.com/embed/track/3U4isOIWM3VvDubwSI3y7a?utm_source=generator&amp;theme=0">
         <div class="song-card-inner">
-          <iframe
-            src="https://open.spotify.com/embed/track/3U4isOIWM3VvDubwSI3y7a?utm_source=generator&theme=0"
-            title="All of Me — John Legend"
-            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-            allowfullscreen loading="lazy"></iframe>
+          <button type="button" class="song-embed-facade" aria-label="Load and play All of Me by John Legend">
+            <span class="song-embed-facade-text">
+              <span class="song-embed-facade-title">All of Me</span>
+              <span class="song-embed-facade-artist">John Legend</span>
+            </span>
+            <span class="song-embed-facade-play" aria-hidden="true">▶</span>
+          </button>
         </div>
       </div>
-      <div class="song-card" data-song="5">
+      <div class="song-card" data-song="5" data-embed-url="https://open.spotify.com/embed/track/1dGr1c8CrMLDpV6mPbImSI?utm_source=generator&amp;theme=0">
         <div class="song-card-inner">
-          <iframe
-            src="https://open.spotify.com/embed/track/1dGr1c8CrMLDpV6mPbImSI?utm_source=generator&theme=0"
-            title="Lover — Taylor Swift"
-            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-            allowfullscreen loading="lazy"></iframe>
+          <button type="button" class="song-embed-facade" aria-label="Load and play Lover by Taylor Swift">
+            <span class="song-embed-facade-text">
+              <span class="song-embed-facade-title">Lover</span>
+              <span class="song-embed-facade-artist">Taylor Swift</span>
+            </span>
+            <span class="song-embed-facade-play" aria-hidden="true">▶</span>
+          </button>
         </div>
       </div>
     </div>
@@ -741,6 +803,7 @@
 
 <script>
   // ══ PASSWORD GATE ══
+  localStorage.removeItem('song_auth_v1');
   const AUTH_KEY    = 'song_auth_v1';
   const SESSION_KEY = 'song_session_v1';
   const PLAY_KEY    = 'song_plays_v1';
@@ -760,15 +823,15 @@
       if (r.ok) {
         const j = await r.json();
         const n = j.record?.plays || 0;
-        localStorage.setItem(PLAY_KEY, n);
+        localStorage.setItem(PLAY_KEY, String(n));
         return n;
       }
     } catch {}
-    return parseInt(localStorage.getItem(PLAY_KEY) || '0');
+    return parseInt(localStorage.getItem(PLAY_KEY) || '0', 10);
   }
 
   async function pushPlays(n) {
-    localStorage.setItem(PLAY_KEY, n);
+    localStorage.setItem(PLAY_KEY, String(n));
     try {
       await fetch(`https://api.jsonbin.io/v3/b/${JB_PLAYS}`, {
         method: 'PUT',
@@ -788,28 +851,58 @@
     }
   }
 
-  async function onAuthenticated(isNew) {
-    let plays = await fetchPlays();
-    if (isNew && !sessionStorage.getItem(SESSION_KEY)) {
-      sessionStorage.setItem(SESSION_KEY, '1');
-      plays += 1;
-      updateCounter(plays, true);
-      await pushPlays(plays);
-    } else {
-      updateCounter(plays, false);
-    }
-    startStarfield();
-    initObservers();
+  function initSongFacades() {
+    document.querySelectorAll('.song-card[data-embed-url]').forEach(card => {
+      const url = card.getAttribute('data-embed-url');
+      const btn = card.querySelector('.song-embed-facade');
+      if (!btn || btn.dataset.bound) return;
+      btn.dataset.bound = '1';
+      const title = card.querySelector('.song-embed-facade-title')?.textContent?.trim() || 'Track';
+      function loadEmbed() {
+        if (btn.dataset.loaded) return;
+        btn.dataset.loaded = '1';
+        const inner = card.querySelector('.song-card-inner');
+        if (!inner) return;
+        const sep = url.includes('?') ? '&' : '?';
+        inner.innerHTML =
+          '<iframe src="' + url + sep + 'autoplay=1" title="' + title.replace(/"/g, '&quot;') + '" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" allowfullscreen loading="lazy"></iframe>';
+      }
+      btn.addEventListener('click', loadEmbed);
+      btn.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); loadEmbed(); }
+      });
+    });
   }
 
-  async function checkPass() {
+  function onAuthenticated(isNew) {
+    updateCounter(parseInt(localStorage.getItem(PLAY_KEY) || '0', 10), false);
+    startStarfield();
+    initObservers();
+    initSongFacades();
+
+    (async function syncPlays() {
+      try {
+        let plays = await fetchPlays();
+        if (isNew && !sessionStorage.getItem(SESSION_KEY)) {
+          sessionStorage.setItem(SESSION_KEY, '1');
+          plays += 1;
+          updateCounter(plays, true);
+          await pushPlays(plays);
+        } else {
+          updateCounter(parseInt(localStorage.getItem(PLAY_KEY) || String(plays), 10), false);
+        }
+      } catch {}
+    })();
+  }
+
+  function checkPass() {
     const input = document.getElementById('gate-input');
     const field = document.getElementById('gate-field');
     const err   = document.getElementById('gate-error');
     if (input.value.trim().toLowerCase() === PASS) {
-      localStorage.setItem(AUTH_KEY, 'yes');
+      sessionStorage.setItem(AUTH_KEY, 'yes');
       gate.classList.add('hide');
-      await onAuthenticated(true);
+      onAuthenticated(true);
     } else {
       input.value = '';
       err.textContent = (document.documentElement.lang === 'ar')
@@ -824,7 +917,7 @@
   document.getElementById('gate-input').addEventListener('keydown', e => {
     if (e.key === 'Enter') checkPass();
   });
-  if (localStorage.getItem(AUTH_KEY) === 'yes') {
+  if (sessionStorage.getItem(AUTH_KEY) === 'yes') {
     gate.classList.add('hide');
     onAuthenticated(false);
   }
@@ -869,7 +962,7 @@
 
   function startStarfield() {
     resize();
-    particles = Array.from({ length: 90 }, mkParticle);
+    particles = Array.from({ length: 45 }, mkParticle);
     canvas.classList.add('visible');
     drawFrame();
   }

@@ -749,6 +749,7 @@
   }
 
   // ── PASSWORD GATE ──
+  localStorage.removeItem('flame_auth_v1');
   const AUTH_KEY = 'flame_auth_v1';
   const gate = document.getElementById('gate');
 
@@ -757,7 +758,7 @@
     const field = document.getElementById('gate-field');
     const err   = document.getElementById('gate-error');
     if (input.value === 'loving-husband') {
-      localStorage.setItem(AUTH_KEY, 'yes');
+      sessionStorage.setItem(AUTH_KEY, 'yes');
       gate.classList.add('hide');
       init();
     } else {
@@ -774,7 +775,7 @@
     if (e.key === 'Enter') checkPass();
   });
 
-  if (localStorage.getItem(AUTH_KEY) === 'yes') {
+  if (sessionStorage.getItem(AUTH_KEY) === 'yes') {
     gate.classList.add('hide');
     init();
   }
@@ -826,11 +827,26 @@
   }
 
   // ── STREAK LOGIC ──
+  const FLAME_BASELINE_START = '2025-12-09';
+
+  /** Virtual “both connected” for every day from engagement through today (no JSONBin writes). */
+  function baselineCompleteSet() {
+    const s = new Set();
+    let d = new Date(FLAME_BASELINE_START + 'T12:00:00Z');
+    const end = new Date(todayStr() + 'T12:00:00Z');
+    while (d <= end) {
+      s.add(ds(d));
+      d = addDays(d, 1);
+    }
+    return s;
+  }
+
   function completeDays() {
-    // days where BOTH tapped
     const ahmedDays = new Set(Object.keys(data.ahmed));
     const alaaDays  = new Set(Object.keys(data.alaa));
-    return [...ahmedDays].filter(d => alaaDays.has(d)).sort();
+    const actual = new Set([...ahmedDays].filter(d => alaaDays.has(d)));
+    const merged = new Set([...actual, ...baselineCompleteSet()]);
+    return [...merged].sort();
   }
 
   function calcStreak(days) {
