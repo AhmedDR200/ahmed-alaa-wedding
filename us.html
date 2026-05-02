@@ -286,83 +286,191 @@
     [lang="ar"] .header-title,
     [lang="ar"] .header-eyebrow { font-family: 'Amiri', serif; font-style: normal; }
 
-    /* ── 2×2 PHOTO GRID ── */
-    .us-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 20px;
-      width: 100%;
-      max-width: 940px;
-      margin: 24px auto 0;
-    }
-    .us-card {
+    /* ── TIMELINE ── */
+    .timeline {
       position: relative;
-      border-radius: 8px;
-      overflow: hidden;
-      aspect-ratio: 701 / 560;
-      background: #1a1614;
-      box-shadow:
-        0 20px 40px rgba(0,0,0,.55),
-        0 0 0 1px rgba(184,151,90,.18);
-      transition: transform .35s ease, box-shadow .35s ease;
-      isolation: isolate;
-    }
-    .us-card:hover {
-      transform: translateY(-4px);
-      box-shadow:
-        0 30px 60px rgba(0,0,0,.7),
-        0 0 0 1px rgba(212,180,131,.5),
-        0 0 0 6px rgba(184,151,90,.06),
-        0 0 36px rgba(184,151,90,.14);
-    }
-    .us-card img {
       width: 100%;
-      height: 100%;
+      max-width: 980px;
+      margin: 32px auto 0;
+      padding: 8px 0 32px;
+    }
+    /* the vertical spine */
+    .timeline::before {
+      content: "";
+      position: absolute;
+      top: 0; bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 2px;
+      background: linear-gradient(to bottom,
+        transparent 0,
+        rgba(184,151,90,.25) 8%,
+        rgba(184,151,90,.45) 50%,
+        rgba(184,151,90,.25) 92%,
+        transparent 100%);
+      pointer-events: none;
+    }
+    .tl-item {
+      position: relative;
+      width: 50%;
+      padding: 28px 56px 28px 0;   /* default = LEFT side */
+      box-sizing: border-box;
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity .7s ease, transform .7s ease;
+    }
+    .tl-item.in { opacity: 1; transform: none; }
+    .tl-item.right {
+      margin-left: 50%;
+      padding: 28px 0 28px 56px;
+    }
+    /* node on the spine */
+    .tl-node {
+      position: absolute;
+      top: 38px;
+      width: 14px; height: 14px;
+      border-radius: 50%;
+      background: var(--gold);
+      box-shadow:
+        0 0 0 3px var(--dark),
+        0 0 0 5px rgba(184,151,90,.35),
+        0 0 18px rgba(184,151,90,.6);
+      z-index: 2;
+    }
+    .tl-item:not(.right) .tl-node { right: -7px; }
+    .tl-item.right       .tl-node { left:  -7px; }
+    .tl-node::after {
+      content: "";
+      position: absolute;
+      inset: -6px;
+      border-radius: 50%;
+      border: 1px solid rgba(184,151,90,.3);
+      animation: tlNodePulse 3.2s ease-in-out infinite;
+    }
+    @keyframes tlNodePulse {
+      0%, 100% { transform: scale(1);   opacity: .7; }
+      50%      { transform: scale(1.4); opacity: 0;  }
+    }
+    /* connector tick from spine to card */
+    .tl-item::before {
+      content: "";
+      position: absolute;
+      top: 44px;
+      width: 32px; height: 1px;
+      background: linear-gradient(to right, transparent, rgba(184,151,90,.45));
+    }
+    .tl-item:not(.right)::before {
+      right: 0;
+      background: linear-gradient(to left, transparent, rgba(184,151,90,.45));
+    }
+    .tl-item.right::before { left: 0; }
+
+    .tl-card {
+      position: relative;
+      background: linear-gradient(180deg, rgba(28,21,17,.85), rgba(17,13,15,.92));
+      border: 1px solid rgba(184,151,90,.18);
+      border-radius: 10px;
+      padding: 16px 16px 18px;
+      box-shadow:
+        0 18px 40px rgba(0,0,0,.55),
+        inset 0 1px 0 rgba(212,180,131,.06);
+      transition: transform .35s ease, box-shadow .35s ease, border-color .35s ease;
+    }
+    .tl-card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(212,180,131,.45);
+      box-shadow:
+        0 28px 60px rgba(0,0,0,.7),
+        0 0 30px rgba(184,151,90,.14),
+        inset 0 1px 0 rgba(212,180,131,.1);
+    }
+    .tl-date {
+      display: inline-block;
+      font-family: 'Jost', sans-serif;
+      font-size: 9.5px;
+      letter-spacing: .26em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 8px;
+      padding: 3px 10px;
+      border: 1px solid rgba(184,151,90,.3);
+      border-radius: 999px;
+      background: rgba(184,151,90,.06);
+    }
+    [lang="ar"] .tl-date { font-family: 'Cairo', sans-serif; letter-spacing: .04em; }
+    .tl-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(20px, 2.6vw, 26px);
+      font-weight: 400;
+      color: var(--white);
+      line-height: 1.15;
+      margin-bottom: 4px;
+    }
+    [lang="ar"] .tl-title { font-family: 'Amiri', serif; font-style: normal; }
+    .tl-caption {
+      font-family: 'Jost', sans-serif;
+      font-size: 12.5px;
+      letter-spacing: .04em;
+      color: rgba(238,224,196,.7);
+      line-height: 1.5;
+      margin-bottom: 14px;
+    }
+    [lang="ar"] .tl-caption { font-family: 'Cairo', sans-serif; }
+
+    /* photos inside a card */
+    .tl-photos {
+      display: grid;
+      gap: 6px;
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .tl-photos[data-count="1"] { grid-template-columns: 1fr; }
+    .tl-photos[data-count="2"] { grid-template-columns: 1fr 1fr; }
+    .tl-photos[data-count="3"] { grid-template-columns: 1fr 1fr 1fr; }
+    .tl-photos[data-count="4"] { grid-template-columns: 1fr 1fr; }
+    .tl-photo {
+      position: relative;
+      overflow: hidden;
+      aspect-ratio: 4 / 3;
+      background: #1a1614;
+      box-shadow: inset 0 0 0 1px rgba(184,151,90,.12);
+    }
+    .tl-photo img {
+      width: 100%; height: 100%;
       object-fit: cover;
       display: block;
       transition: transform .6s cubic-bezier(.22,1,.36,1);
     }
-    .us-card:hover img { transform: scale(1.04); }
-    .us-caption {
-      position: absolute;
-      bottom: 0; left: 0; right: 0;
-      padding: 36px 16px 14px;
-      background: linear-gradient(to top, rgba(17,13,15,.92) 25%, rgba(17,13,15,0));
-      color: var(--white);
-      text-align: center;
-      pointer-events: none;
-    }
-    .us-caption-title {
-      font-family: 'Cormorant Garamond', serif;
-      font-style: italic;
-      font-size: 17px;
-      color: var(--gold-pl);
-      letter-spacing: .04em;
-      margin-bottom: 3px;
-      line-height: 1.2;
-    }
-    [lang="ar"] .us-caption-title { font-family: 'Amiri', serif; font-style: normal; }
-    .us-caption-sub {
-      font-family: 'Jost', sans-serif;
-      font-size: 10px;
-      letter-spacing: .2em;
-      text-transform: uppercase;
-      color: rgba(212,180,131,.55);
-      font-style: italic;
-    }
-    [lang="ar"] .us-caption-sub { font-family: 'Cairo', sans-serif; letter-spacing: .04em; }
+    .tl-photo:hover img { transform: scale(1.06); }
 
-    @media (max-width: 640px) {
-      .us-grid { gap: 12px; max-width: 520px; }
-      .us-caption { padding: 28px 12px 10px; }
-      .us-caption-title { font-size: 14px; }
-      .us-caption-sub { font-size: 8.5px; letter-spacing: .14em; }
+    /* mobile: spine flips to the LEFT edge, all cards stack on its right */
+    @media (max-width: 720px) {
+      .timeline { max-width: 560px; padding-bottom: 16px; }
+      .timeline::before { left: 18px; transform: none; }
+      .tl-item,
+      .tl-item.right {
+        width: 100%;
+        margin-left: 0;
+        padding: 22px 0 22px 48px;
+      }
+      .tl-item .tl-node,
+      .tl-item.right .tl-node { left: 11px; right: auto; }
+      .tl-item::before,
+      .tl-item.right::before { left: 25px; right: auto; width: 22px;
+        background: linear-gradient(to right, rgba(184,151,90,.45), transparent); }
+      .tl-title { font-size: 20px; }
+      .tl-caption { font-size: 12px; }
     }
-    @media (max-width: 380px) {
-      .us-grid { grid-template-columns: 1fr; max-width: 320px; }
-    }
+    /* RTL: mirror so cards open from the correct side */
+    [dir="rtl"] .tl-item:not(.right)::before { background: linear-gradient(to right, transparent, rgba(184,151,90,.45)); }
+    [dir="rtl"] .tl-item.right::before       { background: linear-gradient(to left,  transparent, rgba(184,151,90,.45)); }
+
     @media (prefers-reduced-motion: reduce) {
-      .us-card, .us-card img, .gate-mosaic, .gate-mosaic span { animation: none; transition: none; }
+      .tl-item { opacity: 1; transform: none; transition: none; }
+      .tl-node::after { animation: none; }
+      .tl-photo img, .tl-card { transition: none; }
+      .gate-mosaic, .gate-mosaic span { animation: none; }
     }
 
     /* ── DEDICATION LINE ── */
@@ -449,83 +557,22 @@
 <div class="page">
 
   <div class="header-block">
-    <div class="header-eyebrow t" data-en="Gifts she gave me, and a night we shared" data-ar="هدايا أهدتها لي، وليلةٌ تشاركناها">Gifts she gave me, and a night we shared</div>
+    <div class="header-eyebrow t" data-en="Our story, one moment at a time" data-ar="قصّتنا، لحظةً تلو لحظة">Our story, one moment at a time</div>
     <h1 class="header-title t" data-en="Us" data-ar="نحن">Us</h1>
   </div>
 
   <!--
-    ══ 4 PHOTOS — captions are placeholders.
-       Edit the text inside each `.us-caption-title` and `.us-caption-sub` span.
-       For Arabic, edit the `data-ar="..."` attribute on the same element.
+    ══ TIMELINE
+       Moments are defined as data in the script below (see MOMENTS = [...]).
+       To add a new moment in the future, just append a new object to that
+       array — the timeline auto-sorts oldest→newest and re-renders.
   ══ -->
-  <div class="us-grid">
-
-    <!-- 1 · Thousand Sunny figurine — birthday gift from Alaa, 04.04.2026 -->
-    <figure class="us-card">
-      <img src="img/us/figurine.jpg"
-           alt="Thousand Sunny One Piece ship figurine in a display case — a birthday gift from Alaa"
-           loading="eager" decoding="async" />
-      <figcaption class="us-caption">
-        <div class="us-caption-title t"
-             data-en="Thousand Sunny"
-             data-ar="ثاوزند ساني">Thousand Sunny</div>
-        <div class="us-caption-sub t"
-             data-en="Her gift &middot; 04.04.2026"
-             data-ar="هديتها &middot; ٤ أبريل ٢٠٢٦">Her gift · 04.04.2026</div>
-      </figcaption>
-    </figure>
-
-    <!-- 2 · Zoro chibi — birthday gift from Alaa, 04.04.2026 -->
-    <figure class="us-card">
-      <img src="img/us/zoro.jpg"
-           alt="Chibi Roronoa Zoro figurine on a keyboard — a birthday gift from Alaa"
-           loading="eager" decoding="async" />
-      <figcaption class="us-caption">
-        <div class="us-caption-title t"
-             data-en="Zoro"
-             data-ar="زورو">Zoro</div>
-        <div class="us-caption-sub t"
-             data-en="Her gift &middot; 04.04.2026"
-             data-ar="هديتها &middot; ٤ أبريل ٢٠٢٦">Her gift · 04.04.2026</div>
-      </figcaption>
-    </figure>
-
-    <!-- 3 · Galaxy Cinema · Zootopia 2 · our first cinema together, 26.12.2025 -->
-    <figure class="us-card">
-      <img src="img/us/ticket.jpg"
-           alt="Galaxy Cinema Almansoura ticket for Zootopia 2 on 26 December 2025 — our first cinema night together"
-           loading="lazy" decoding="async" />
-      <figcaption class="us-caption">
-        <div class="us-caption-title t"
-             data-en="Our First Cinema"
-             data-ar="أوّل سينما لنا">Our First Cinema</div>
-        <div class="us-caption-sub t"
-             data-en="Galaxy &middot; Zootopia 2 &middot; 26.12.2025"
-             data-ar="جالاكسي &middot; زوتوبيا ٢ &middot; ٢٦ ديسمبر ٢٠٢٥">Galaxy · Zootopia 2 · 26.12.2025</div>
-      </figcaption>
-    </figure>
-
-    <!-- 4 · Sony headphones — birthday gift from Alaa, 04.04.2026 -->
-    <figure class="us-card">
-      <img src="img/us/headphones.jpg"
-           alt="White Sony over-ear headphones with a microphone — a birthday gift from Alaa"
-           loading="lazy" decoding="async" />
-      <figcaption class="us-caption">
-        <div class="us-caption-title t"
-             data-en="Sony"
-             data-ar="سوني">Sony</div>
-        <div class="us-caption-sub t"
-             data-en="Her gift &middot; 04.04.2026"
-             data-ar="هديتها &middot; ٤ أبريل ٢٠٢٦">Her gift · 04.04.2026</div>
-      </figcaption>
-    </figure>
-
-  </div>
+  <div class="timeline" id="timeline" aria-label="A timeline of our moments"></div>
 
   <p class="dedication t"
-     data-en="Three gifts she chose for me, and the first night we sat side by side at the cinema &mdash; small things, but they&rsquo;re ours."
-     data-ar="ثلاثُ هدايا اختارتها لي، وأوّلُ ليلةٍ جلسنا فيها جنباً إلى جنب في السينما &mdash; أشياءٌ صغيرة، لكنها لنا.">
-    Three gifts she chose for me, and the first night we sat side by side at the cinema — small things, but they're ours.
+     data-en="This is how it begins. More to come, side by side."
+     data-ar="هكذا بدأت. والمزيد قادم، جنباً إلى جنب.">
+    This is how it begins. More to come, side by side.
   </p>
 
   <div class="ornament">
@@ -542,6 +589,93 @@
 </div>
 
 <script>
+  // ══ TIMELINE DATA ════════════════════════════════════════════════
+  // To add a new moment: append a new object to this array.
+  //   - date:      "YYYY-MM-DD" (used to sort; stays hidden)
+  //   - dateLabel: { en, ar }   (the pretty date you actually see)
+  //   - title:     { en, ar }
+  //   - caption:   { en, ar }   (one short line)
+  //   - photos:    array of image paths (1 or more — layout adapts)
+  // Order doesn't matter; the timeline sorts oldest → newest for you.
+  const MOMENTS = [
+    {
+      date: '2025-12-26',
+      dateLabel: { en: '26 December 2025', ar: '٢٦ ديسمبر ٢٠٢٥' },
+      title:     { en: 'Our First Cinema',  ar: 'أوّل سينما لنا' },
+      caption:   { en: 'Galaxy · Zootopia 2 — the first night we sat side by side.',
+                   ar: 'جالاكسي · زوتوبيا ٢ — أوّل ليلةٍ جلسنا فيها جنباً إلى جنب.' },
+      photos: ['img/us/ticket.jpg'],
+    },
+    {
+      date: '2026-04-04',
+      dateLabel: { en: '4 April 2026',     ar: '٤ أبريل ٢٠٢٦' },
+      title:     { en: 'My Birthday',       ar: 'عيد ميلادي' },
+      caption:   { en: 'Three gifts she chose for me — Thousand Sunny, Zoro, and the Sony.',
+                   ar: 'ثلاثُ هدايا اختارتها لي — ثاوزند ساني، زورو، وسوني.' },
+      photos: [
+        'img/us/figurine.jpg',
+        'img/us/zoro.jpg',
+        'img/us/headphones.jpg',
+      ],
+    },
+    // Add more moments here ↓
+  ];
+
+  // ── render ──
+  function escapeHTML(s) {
+    return String(s).replace(/[&<>"']/g, c => ({
+      '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+    }[c]));
+  }
+  function renderTimeline() {
+    const root = document.getElementById('timeline');
+    if (!root) return;
+    const items = [...MOMENTS].sort((a, b) => a.date.localeCompare(b.date));
+    root.innerHTML = items.map((m, i) => {
+      const side = i % 2 === 1 ? 'right' : '';
+      const photos = (m.photos || []).map(src => `
+        <div class="tl-photo">
+          <img src="${escapeHTML(src)}" alt="" loading="lazy" decoding="async" />
+        </div>`).join('');
+      return `
+        <article class="tl-item ${side}" data-index="${i}">
+          <span class="tl-node" aria-hidden="true"></span>
+          <div class="tl-card">
+            <span class="tl-date t"
+                  data-en="${escapeHTML(m.dateLabel.en)}"
+                  data-ar="${escapeHTML(m.dateLabel.ar)}">${escapeHTML(m.dateLabel.en)}</span>
+            <h3 class="tl-title t"
+                data-en="${escapeHTML(m.title.en)}"
+                data-ar="${escapeHTML(m.title.ar)}">${escapeHTML(m.title.en)}</h3>
+            <p class="tl-caption t"
+               data-en="${escapeHTML(m.caption.en)}"
+               data-ar="${escapeHTML(m.caption.ar)}">${escapeHTML(m.caption.en)}</p>
+            ${photos ? `<div class="tl-photos" data-count="${m.photos.length}">${photos}</div>` : ''}
+          </div>
+        </article>`;
+    }).join('');
+  }
+  let _tlObserved = false;
+  function observeTimeline() {
+    if (_tlObserved) return;
+    _tlObserved = true;
+    const els = document.querySelectorAll('#timeline .tl-item');
+    if (!('IntersectionObserver' in window)) {
+      els.forEach(el => el.classList.add('in'));
+      return;
+    }
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(en => {
+        if (en.isIntersecting) {
+          en.target.classList.add('in');
+          io.unobserve(en.target);
+        }
+      });
+    }, { rootMargin: '0px 0px -10% 0px', threshold: 0.15 });
+    els.forEach(el => io.observe(el));
+  }
+  renderTimeline();
+
   // ══ PASSWORD GATE ══
   const AUTH_KEY = 'us_auth_v1';
   const PASS     = 'you-and-me';
@@ -555,6 +689,7 @@
       sessionStorage.setItem(AUTH_KEY, 'yes');
       document.documentElement.classList.remove('gate-locked');
       gateEl.classList.add('hide');
+      requestAnimationFrame(observeTimeline);
     } else {
       input.value = '';
       err.textContent = (document.documentElement.lang === 'ar')
@@ -572,6 +707,7 @@
   if (sessionStorage.getItem(AUTH_KEY) === 'yes') {
     document.documentElement.classList.remove('gate-locked');
     gateEl.classList.add('hide');
+    requestAnimationFrame(observeTimeline);
   }
 
   // ══ LANG TOGGLE ══
