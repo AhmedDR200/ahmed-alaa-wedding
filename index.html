@@ -1082,7 +1082,11 @@
       .hero-date-line::before,
       .hero-date-line::after { display: none; }
       .hero-date-line span { font-size: 10px; letter-spacing: .1em; white-space: nowrap; }
-      .hero-bg { background-position: 45% 15%; }
+      /* mobile hero: shrink height + disable parallax zoom so BOTH faces stay in frame
+         (a 4:3 landscape photo can't show both faces inside a tall 9:19 viewport
+          when scaled to cover full height — shorter hero = wider visible slice) */
+      .hero { height: 75vh; min-height: 480px; }
+      .hero-bg { background-position: center 30%; transform: none; }
       .count-sep { display: none; }
       .countdown-row { gap: 20px 32px; }
       .count-num { font-size: clamp(44px, 14vw, 72px); }
@@ -2066,9 +2070,14 @@
 
   // ══ PARALLAX ══
   const heroBg = document.getElementById('hero-bg');
+  const mobileMQ = window.matchMedia('(max-width: 600px)');
   window.addEventListener('scroll', () => {
+    // skip parallax zoom on mobile — the extra scale(1.08) crops faces out of frame
+    if (mobileMQ.matches) { heroBg.style.transform = ''; return; }
     heroBg.style.transform = `scale(1.08) translateY(${window.scrollY * 0.3}px)`;
   }, { passive: true });
+  // also clear any leftover inline transform when crossing the breakpoint
+  mobileMQ.addEventListener('change', e => { if (e.matches) heroBg.style.transform = ''; });
 
   // ══ SCROLL REVEAL ══
   const revealObs = new IntersectionObserver(entries => {
