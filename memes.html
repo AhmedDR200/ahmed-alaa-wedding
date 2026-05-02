@@ -145,7 +145,7 @@
       color: rgba(255,255,255,.5); text-decoration: none;
       padding: 4px 0 8px; position: relative;
       display: inline-flex; flex-direction: column; align-items: center;
-      gap: 5px; transition: color .25s ease;
+      gap: 5px; white-space: nowrap; transition: color .25s ease;
     }
     .topnav-icon {
       width: 18px; height: 18px;
@@ -179,12 +179,21 @@
       .topnav-icon { width: 17px; height: 17px; }
       .topnav-mono { font-size: 14px; }
     }
-    @media (max-width: 480px) {
+    @media (max-width: 540px) {
+      /* phone: hide labels, show icons only — with horizontal-scroll fallback for tiny screens */
+      .topnav { padding: 10px 14px; gap: 8px; }
       .topnav-mono { display: none; }
-      .topnav-links { gap: 12px; }
-      .topnav-link { font-size: 8.5px; letter-spacing: .08em; gap: 3px; padding-bottom: 6px; }
-      .topnav-icon { width: 16px; height: 16px; }
-      .topnav-lang { padding: 5px 10px; font-size: 9px; }
+      .topnav-link { padding: 6px 3px; gap: 0; }
+      .topnav-link .t { display: none; }
+      .topnav-icon { width: 22px; height: 22px; opacity: .85; }
+      .topnav-link.active::after { width: 5px; height: 5px; bottom: 1px; }
+      .topnav-links {
+        flex: 1; min-width: 0;
+        gap: 4px; justify-content: flex-end;
+        overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch;
+      }
+      .topnav-links::-webkit-scrollbar { display: none; }
+      .topnav-lang { padding: 5px 9px; font-size: 9px; letter-spacing: .1em; }
     }
 
     /* ── HERO ── */
