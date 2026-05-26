@@ -6,7 +6,6 @@ const LEGACY_DIR = path.resolve(ROOT, "..", "legacy");
 
 // Pages hand-ported to real React are excluded from auto-import.
 const PAGES = [
-  { slug: "our-song", file: "our-song.original.html" },
   { slug: "memes", file: "memes.original.html" },
   { slug: "us", file: "us.original.html" },
   { slug: "invite", file: "invite.original.html" },
