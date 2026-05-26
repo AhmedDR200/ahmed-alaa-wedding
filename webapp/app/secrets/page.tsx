@@ -1,5 +1,11 @@
-import LegacySecretsPage from "@/components/legacy/secrets/LegacySecretsPage";
+import type { Metadata } from "next";
+import SecretsPage from "@/components/secrets/SecretsPage";
 
-export default function SecretsPage() {
-  return <LegacySecretsPage />;
+export const metadata: Metadata = {
+  title: "Secrets — Ahmed & Alaa",
+  robots: { index: false, follow: false },
+};
+
+export default function Page() {
+  return <SecretsPage />;
 }
