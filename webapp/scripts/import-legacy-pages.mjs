@@ -118,6 +118,10 @@ for (const page of PAGES) {
   fs.mkdirSync(compDir, { recursive: true });
 
   const patchedStyle = style
+    .replaceAll(
+      "html.gate-locked body > *:not(#gate)",
+      "html.gate-locked .legacy-page > *:not(#gate)",
+    )
     .replaceAll("url('img/", "url('/img/")
     .replaceAll('url("img/', 'url("/img/')
     .replaceAll(
@@ -146,7 +150,7 @@ for (const page of PAGES) {
     path.join(compDir, `${componentName}.tsx`),
     `"use client";
 
-import { useEffect, useRef } from "react";
+import { useLayoutEffect, useRef } from "react";
 import "@/styles/legacy/${page.slug}.css";
 import { ${runnerName} } from "@/lib/legacy/${page.slug}";
 
@@ -156,7 +160,7 @@ export default function ${componentName}() {
   const rootRef = useRef<HTMLDivElement>(null);
   const ranRef = useRef(false);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (ranRef.current || !rootRef.current) return;
     ranRef.current = true;
     ${runnerName}(rootRef.current);

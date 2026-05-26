@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useLayoutEffect, useRef } from "react";
 import "@/styles/legacy/for-alaa.css";
 import { runForAlaaScripts } from "@/lib/legacy/for-alaa";
 
@@ -106,7 +106,7 @@ export default function LegacyForAlaaPage() {
   const rootRef = useRef<HTMLDivElement>(null);
   const ranRef = useRef(false);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (ranRef.current || !rootRef.current) return;
     ranRef.current = true;
     runForAlaaScripts(rootRef.current);

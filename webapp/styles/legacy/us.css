@@ -27,7 +27,7 @@
     /* ── GATE ── */
     html.gate-locked { height: 100%; }
     html.gate-locked body { overflow: hidden; min-height: 100vh; }
-    html.gate-locked body > *:not(#gate) { visibility: hidden !important; pointer-events: none !important; }
+    html.gate-locked .legacy-page > *:not(#gate) { visibility: hidden !important; pointer-events: none !important; }
     #gate {
       position: fixed;
       inset: 0;

@@ -1163,7 +1163,7 @@
       min-height: 100vh;
     }
     html.gate-locked #loader { display: none !important; }
-    html.gate-locked body > *:not(#gate) {
+    html.gate-locked .legacy-page > *:not(#gate) {
       visibility: hidden !important;
       pointer-events: none !important;
     }

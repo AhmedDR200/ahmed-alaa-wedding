@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useLayoutEffect, useRef } from "react";
 import "@/styles/legacy/secrets.css";
 import { runSecretsScripts } from "@/lib/legacy/secrets";
 
@@ -158,7 +158,7 @@ export default function LegacySecretsPage() {
   const rootRef = useRef<HTMLDivElement>(null);
   const ranRef = useRef(false);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (ranRef.current || !rootRef.current) return;
     ranRef.current = true;
     runSecretsScripts(rootRef.current);

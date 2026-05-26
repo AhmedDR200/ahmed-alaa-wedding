@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useLayoutEffect, useRef } from "react";
 import "@/styles/legacy/invite.css";
 import { runInviteScripts } from "@/lib/legacy/invite";
 
@@ -168,7 +168,7 @@ export default function LegacyInvitePage() {
   const rootRef = useRef<HTMLDivElement>(null);
   const ranRef = useRef(false);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (ranRef.current || !rootRef.current) return;
     ranRef.current = true;
     runInviteScripts(rootRef.current);

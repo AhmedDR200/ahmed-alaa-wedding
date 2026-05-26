@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useLayoutEffect, useRef } from "react";
 import "@/styles/legacy/us.css";
 import { runUsScripts } from "@/lib/legacy/us";
 
@@ -83,7 +83,7 @@ export default function LegacyUsPage() {
   const rootRef = useRef<HTMLDivElement>(null);
   const ranRef = useRef(false);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (ranRef.current || !rootRef.current) return;
     ranRef.current = true;
     runUsScripts(rootRef.current);

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useLayoutEffect, useRef } from "react";
 import "@/styles/legacy/index.css";
 import { runIndexScripts } from "@/lib/legacy/index";
 
@@ -451,7 +451,7 @@ export default function LegacyIndexPage() {
   const rootRef = useRef<HTMLDivElement>(null);
   const ranRef = useRef(false);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (ranRef.current || !rootRef.current) return;
     ranRef.current = true;
     runIndexScripts(rootRef.current);

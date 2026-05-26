@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useLayoutEffect, useRef } from "react";
 import "@/styles/legacy/our-song.css";
 import { runOurSongScripts } from "@/lib/legacy/our-song";
 
@@ -206,7 +206,7 @@ export default function LegacyOurSongPage() {
   const rootRef = useRef<HTMLDivElement>(null);
   const ranRef = useRef(false);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (ranRef.current || !rootRef.current) return;
     ranRef.current = true;
     runOurSongScripts(rootRef.current);
