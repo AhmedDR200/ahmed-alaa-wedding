@@ -8,7 +8,6 @@ const LEGACY_DIR = path.resolve(ROOT, "..", "legacy");
 const PAGES = [
   { slug: "memes", file: "memes.original.html" },
   { slug: "us", file: "us.original.html" },
-  { slug: "invite", file: "invite.original.html" },
   { slug: "secrets", file: "secrets.original.html" },
   { slug: "index", file: "index.original.html" },
 ];
