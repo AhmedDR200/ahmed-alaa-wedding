@@ -1,5 +1,11 @@
-import LegacyUsPage from "@/components/legacy/us/LegacyUsPage";
+import type { Metadata } from "next";
+import UsPage from "@/components/us/UsPage";
 
-export default function UsPage() {
-  return <LegacyUsPage />;
+export const metadata: Metadata = {
+  title: "Us — Ahmed & Alaa",
+  robots: { index: false, follow: false },
+};
+
+export default function Page() {
+  return <UsPage />;
 }
