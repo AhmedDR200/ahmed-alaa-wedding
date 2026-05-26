@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Amiri, Cairo, Cormorant_Garamond, Jost } from "next/font/google";
-import Cursor from "@/components/Cursor";
-import Loader from "@/components/Loader";
+import AppChrome from "@/components/AppChrome";
 import "./globals.css";
 
 const cormorant = Cormorant_Garamond({
@@ -51,8 +50,7 @@ export default function RootLayout({
       className={`${cormorant.variable} ${jost.variable} ${amiri.variable} ${cairo.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <Loader />
-        <Cursor />
+        <AppChrome />
         {children}
       </body>
     </html>

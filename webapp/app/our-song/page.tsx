@@ -1,10 +1,5 @@
-import RouteStubPage from "@/components/RouteStubPage";
+import LegacyOurSongPage from "@/components/legacy/our-song/LegacyOurSongPage";
 
 export default function OurSongPage() {
-  return (
-    <RouteStubPage
-      title="Our Song"
-      note="This route is queued in Phase 2 migration with audio controls and visual parity."
-    />
-  );
+  return <LegacyOurSongPage />;
 }

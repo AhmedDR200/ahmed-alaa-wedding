@@ -1,10 +1,5 @@
-import RouteStubPage from "@/components/RouteStubPage";
+import LegacyMemesPage from "@/components/legacy/memes/LegacyMemesPage";
 
 export default function MemesPage() {
-  return (
-    <RouteStubPage
-      title="Memes"
-      note="Memes archive migration is queued in Phase 2 with full media porting."
-    />
-  );
+  return <LegacyMemesPage />;
 }

@@ -12,7 +12,7 @@ export async function GET(request: NextRequest) {
     }
 
     const data = await readBin(binId);
-    return NextResponse.json({ ok: true, data });
+    return NextResponse.json(data);
   } catch (error) {
     return NextResponse.json(
       { ok: false, error: error instanceof Error ? error.message : "Unknown error" },
@@ -43,7 +43,7 @@ export async function POST(request: NextRequest) {
     }
 
     const data = await writeBin(body.binId, body.payload);
-    return NextResponse.json({ ok: true, data });
+    return NextResponse.json(data);
   } catch (error) {
     return NextResponse.json(
       { ok: false, error: error instanceof Error ? error.message : "Unknown error" },
