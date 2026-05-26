@@ -4,8 +4,8 @@ import path from "node:path";
 const ROOT = path.resolve(import.meta.dirname, "..");
 const LEGACY_DIR = path.resolve(ROOT, "..", "legacy");
 
+// flame has been hand-ported to real React (see components/flame/) — do not auto-import it.
 const PAGES = [
-  { slug: "flame", file: "flame.original.html" },
   { slug: "our-song", file: "our-song.original.html" },
   { slug: "memes", file: "memes.original.html" },
   { slug: "us", file: "us.original.html" },

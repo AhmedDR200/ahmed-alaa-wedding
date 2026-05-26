@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { MAINTENANCE_MODE } from "@/lib/maintenance";
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   if (!MAINTENANCE_MODE) {
     return NextResponse.next();
   }
