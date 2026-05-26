@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Amiri, Cairo, Cormorant_Garamond, Jost } from "next/font/google";
-import AppChrome from "@/components/AppChrome";
 import { LanguageProvider } from "@/lib/i18n";
 import "./globals.css";
 
@@ -51,10 +50,7 @@ export default function RootLayout({
       className={`${cormorant.variable} ${jost.variable} ${amiri.variable} ${cairo.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <LanguageProvider>
-          <AppChrome />
-          {children}
-        </LanguageProvider>
+        <LanguageProvider>{children}</LanguageProvider>
       </body>
     </html>
   );

@@ -1,5 +1,12 @@
-import LegacyIndexPage from "@/components/legacy/index/LegacyIndexPage";
+import type { Metadata } from "next";
+import HomePage from "@/components/home/HomePage";
 
-export default function Home() {
-  return <LegacyIndexPage />;
+export const metadata: Metadata = {
+  title: "Ahmed & Alaa — August 25, 2026",
+  description: "A small corner of the internet — for us only.",
+  robots: { index: false, follow: false },
+};
+
+export default function Page() {
+  return <HomePage />;
 }

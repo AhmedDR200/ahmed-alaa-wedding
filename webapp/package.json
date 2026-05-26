@@ -7,8 +7,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint",
-    "import:legacy": "node scripts/import-legacy-pages.mjs"
+    "lint": "eslint"
   },
   "dependencies": {
     "next": "16.2.6",
