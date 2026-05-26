@@ -1,0 +1,1197 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="referrer" content="no-referrer" />
+  <title>The Meme Vault — Ahmed & Alaa</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=Jost:wght@200;300;400;500;600&family=Amiri:ital,wght@0,400;1,400&family=Cairo:wght@300;400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --gold:      #B8975A;
+      --gold-lt:   #D4B483;
+      --gold-pale: #EEE0C4;
+      --ivory:     #F7F4EF;
+      --charcoal:  #1C1C1E;
+      --dark:      #0E0E10;
+      --muted:     rgba(255,255,255,.42);
+      --white:     #FFFFFF;
+      /* JJK accents */
+      --sukuna-red:   #C2362F;
+      --sukuna-deep:  #5A0E0B;
+      --gojo-blue:    #5DA9FF;
+      --gojo-deep:    #0E2B66;
+      --nanami-gold:  #D9B14A;
+      --nanami-deep:  #5C420A;
+    }
+
+    html, body {
+      min-height: 100vh;
+      background:
+        radial-gradient(900px 700px at 12% 20%, rgba(194,54,47,.18), transparent 60%),
+        radial-gradient(900px 700px at 88% 80%, rgba(93,169,255,.18), transparent 60%),
+        var(--dark);
+      color: var(--white);
+      font-family: 'Jost', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+    }
+    [lang="ar"] body { font-family: 'Cairo', sans-serif; }
+    html { scroll-behavior: smooth; }
+
+    /* ── PASSWORD GATE ── */
+    html.gate-locked { height: 100%; }
+    html.gate-locked body { overflow: hidden; min-height: 100vh; }
+    html.gate-locked body > *:not(#gate) { visibility: hidden !important; pointer-events: none !important; }
+    #gate {
+      position: fixed; inset: 0;
+      background: var(--dark);
+      z-index: 99999;
+      display: flex; align-items: center; justify-content: center;
+      transition: opacity .8s ease, visibility .8s;
+    }
+    #gate.hide { opacity: 0; visibility: hidden; pointer-events: none; }
+    .gate-inner {
+      display: flex; flex-direction: column; align-items: center;
+      text-align: center; padding: 0 32px; max-width: 400px;
+      animation: gateIn .9s cubic-bezier(.22,1,.36,1) forwards;
+    }
+    @keyframes gateIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: none; }
+    }
+    .gate-mono {
+      font-family: 'Cormorant Garamond', serif; font-style: italic;
+      font-size: 13px; color: var(--gold); letter-spacing: .16em;
+      margin-bottom: 24px;
+    }
+    .gate-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(30px, 7vw, 48px); font-weight: 300;
+      color: var(--white); margin-bottom: 10px;
+    }
+    [lang="ar"] .gate-title { font-family: 'Amiri', serif; font-weight: 400; }
+    .gate-sub {
+      font-size: 10px; letter-spacing: .22em; text-transform: uppercase;
+      color: rgba(255,255,255,.32); margin-bottom: 32px;
+    }
+    .gate-diamond {
+      width: 9px; height: 9px; background: var(--gold);
+      transform: rotate(45deg); margin-bottom: 32px;
+      box-shadow: 0 0 16px rgba(184,151,90,.45);
+    }
+    .gate-field {
+      display: flex; border-bottom: 1px solid rgba(184,151,90,.4);
+      width: 100%; max-width: 280px; margin-bottom: 14px;
+    }
+    .gate-field.shake { animation: shake .4s ease; }
+    @keyframes shake {
+      0%,100% { transform: translateX(0); }
+      20% { transform: translateX(-8px); } 40% { transform: translateX(8px); }
+      60% { transform: translateX(-6px); } 80% { transform: translateX(6px); }
+    }
+    .gate-field input {
+      flex: 1; background: none; border: none; outline: none;
+      color: var(--white); font-family: 'Jost', sans-serif;
+      font-size: 15px; font-weight: 300; padding: 12px 0; letter-spacing: .06em;
+    }
+    .gate-field input::placeholder { color: rgba(255,255,255,.25); font-style: italic; }
+    .gate-field button {
+      background: none; border: none; color: var(--gold);
+      font-size: 20px; cursor: pointer; padding: 0 4px;
+      transition: transform .2s;
+    }
+    .gate-field button:hover { transform: translateX(4px); }
+    .gate-error {
+      font-size: 11px; letter-spacing: .1em;
+      color: rgba(255,120,120,.75); min-height: 18px;
+    }
+    .gate-hint {
+      font-size: 10px; letter-spacing: .14em;
+      color: rgba(255,255,255,.26); margin-top: 10px;
+      font-style: italic; max-width: 300px; line-height: 1.5;
+    }
+    .gate-lang {
+      margin-top: 20px; background: none;
+      border: 1px solid rgba(184,151,90,.35); color: var(--gold);
+      font-family: 'Jost', sans-serif; font-size: 10px;
+      letter-spacing: .2em; text-transform: uppercase;
+      padding: 10px 18px; cursor: pointer;
+      transition: background .2s, color .2s;
+    }
+    .gate-lang:hover { background: rgba(184,151,90,.12); color: var(--white); }
+
+    /* ── TOP NAV ── */
+    .topnav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 9000;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 28px; gap: 18px;
+      background: linear-gradient(to bottom, rgba(14,14,16,.92), rgba(14,14,16,0));
+      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+    }
+    .topnav-mono {
+      font-family: 'Cormorant Garamond', serif; font-style: italic;
+      font-size: 17px; color: var(--gold); text-decoration: none;
+      letter-spacing: .04em;
+    }
+    .topnav-links { display: flex; align-items: flex-end; gap: 28px; }
+    .topnav-link {
+      font-family: 'Jost', sans-serif; font-size: 10px;
+      letter-spacing: .24em; text-transform: uppercase;
+      color: rgba(255,255,255,.5); text-decoration: none;
+      padding: 4px 0 8px; position: relative;
+      display: inline-flex; flex-direction: column; align-items: center;
+      gap: 5px; white-space: nowrap; transition: color .25s ease;
+    }
+    .topnav-icon {
+      width: 18px; height: 18px;
+      display: inline-flex; align-items: center; justify-content: center;
+      opacity: .8; transition: opacity .25s ease, transform .25s ease;
+    }
+    .topnav-icon svg { width: 100%; height: 100%; display: block; }
+    .topnav-link:hover { color: var(--gold-lt); }
+    .topnav-link:hover .topnav-icon { opacity: 1; transform: translateY(-1px); }
+    .topnav-link.active { color: var(--gold-lt); }
+    .topnav-link.active .topnav-icon { opacity: 1; }
+    .topnav-link.active::after {
+      content: ""; position: absolute; bottom: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 4px; height: 4px; background: var(--gold); border-radius: 50%;
+    }
+    [lang="ar"] .topnav-link { font-family: 'Cairo', sans-serif; letter-spacing: .04em; }
+    .topnav-lang {
+      font-size: 10px; letter-spacing: .16em; text-transform: uppercase;
+      cursor: pointer; background: none;
+      border: 1px solid rgba(184,151,90,.3);
+      padding: 6px 14px; color: var(--gold-lt);
+      font-family: 'Jost', sans-serif;
+      transition: border-color .2s, background .2s;
+    }
+    .topnav-lang:hover { border-color: var(--gold); background: rgba(184,151,90,.08); }
+    @media (max-width: 760px) {
+      .topnav { padding: 12px 16px; gap: 10px; }
+      .topnav-links { gap: 18px; }
+      .topnav-link { font-size: 9px; letter-spacing: .14em; }
+      .topnav-icon { width: 17px; height: 17px; }
+      .topnav-mono { font-size: 14px; }
+    }
+    @media (max-width: 540px) {
+      /* phone: hide labels, show icons only — with horizontal-scroll fallback for tiny screens */
+      .topnav { padding: 10px 14px; gap: 8px; }
+      .topnav-mono { display: none; }
+      .topnav-link { padding: 6px 3px; gap: 0; }
+      .topnav-link .t { display: none; }
+      .topnav-icon { width: 22px; height: 22px; opacity: .85; }
+      .topnav-link.active::after { width: 5px; height: 5px; bottom: 1px; }
+      .topnav-links {
+        flex: 1; min-width: 0;
+        gap: 4px; justify-content: flex-end;
+        overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch;
+      }
+      .topnav-links::-webkit-scrollbar { display: none; }
+      .topnav-lang { padding: 5px 9px; font-size: 9px; letter-spacing: .1em; }
+    }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative; min-height: 86vh;
+      display: flex; align-items: center; justify-content: center;
+      padding: 120px 24px 80px; overflow: hidden;
+    }
+    .hero-split {
+      position: absolute; inset: 0;
+      display: grid; grid-template-columns: 1fr 1fr;
+      pointer-events: none;
+    }
+    .hero-split::before, .hero-split::after { content: ""; }
+    .hero-split::before {
+      background:
+        radial-gradient(circle at 30% 50%, rgba(194,54,47,.45), transparent 70%),
+        linear-gradient(135deg, rgba(90,14,11,.9), rgba(14,14,16,.6));
+    }
+    .hero-split::after {
+      background:
+        radial-gradient(circle at 70% 50%, rgba(93,169,255,.4), transparent 70%),
+        linear-gradient(225deg, rgba(14,43,102,.85), rgba(14,14,16,.6));
+    }
+    .hero-split-divider {
+      position: absolute; top: 0; bottom: 0; left: 50%;
+      width: 1px; background: linear-gradient(to bottom, transparent, rgba(184,151,90,.6), transparent);
+      transform: translateX(-50%);
+    }
+
+    .hero-content {
+      position: relative; z-index: 2;
+      text-align: center; max-width: 880px;
+      display: flex; flex-direction: column; align-items: center; gap: 26px;
+    }
+    .hero-eyebrow {
+      font-size: 10px; letter-spacing: .32em; text-transform: uppercase;
+      color: var(--gold); padding: 7px 16px;
+      border: 1px solid rgba(184,151,90,.35);
+      border-radius: 999px;
+      background: rgba(0,0,0,.25);
+    }
+    .hero-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(46px, 9vw, 92px);
+      font-weight: 300; line-height: 1; letter-spacing: .01em;
+      color: var(--white);
+    }
+    .hero-title em {
+      font-style: italic;
+      background: linear-gradient(90deg, var(--sukuna-red) 0%, var(--gold-lt) 50%, var(--gojo-blue) 100%);
+      -webkit-background-clip: text; background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    [lang="ar"] .hero-title { font-family: 'Amiri', serif; font-weight: 400; }
+    .hero-sub {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(17px, 2.4vw, 22px);
+      color: rgba(255,255,255,.7);
+      max-width: 620px; line-height: 1.55;
+    }
+    [lang="ar"] .hero-sub { font-family: 'Amiri', serif; font-style: normal; }
+
+    .scoreboard {
+      display: inline-flex; align-items: stretch;
+      border: 1px solid rgba(184,151,90,.35);
+      background: rgba(0,0,0,.4);
+      backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+      margin-top: 8px;
+    }
+    .scoreboard-side {
+      padding: 16px 28px;
+      display: flex; flex-direction: column; gap: 4px; align-items: center;
+      min-width: 120px;
+    }
+    .scoreboard-side.ahmed {
+      background: linear-gradient(135deg, rgba(194,54,47,.18), transparent 70%);
+    }
+    .scoreboard-side.alaa {
+      background: linear-gradient(225deg, rgba(93,169,255,.18), transparent 70%);
+    }
+    .scoreboard-name {
+      font-size: 9px; letter-spacing: .26em; text-transform: uppercase;
+      color: rgba(255,255,255,.55);
+    }
+    .scoreboard-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 38px; font-weight: 400; line-height: 1; color: var(--white);
+    }
+    .scoreboard-mid {
+      width: 1px; background: rgba(184,151,90,.3);
+    }
+    .scoreboard-tag {
+      margin-top: 14px;
+      font-size: 10px; letter-spacing: .18em; text-transform: uppercase;
+      color: rgba(255,255,255,.4);
+    }
+
+    /* ── MEME CARD ── */
+    .meme-section {
+      position: relative; padding: 80px 24px; max-width: 1080px; margin: 0 auto;
+    }
+    .meme-card {
+      background: rgba(255,255,255,.02);
+      border: 1px solid rgba(184,151,90,.18);
+      border-radius: 4px;
+      overflow: hidden;
+      box-shadow:
+        0 2px 4px rgba(0,0,0,.3),
+        0 30px 80px rgba(0,0,0,.4);
+    }
+    .meme-image-wrap {
+      position: relative;
+      aspect-ratio: 16 / 9;
+      overflow: hidden;
+      background: #000;
+    }
+    .meme-image-wrap img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+      transition: transform .6s cubic-bezier(.22,1,.36,1);
+    }
+    .meme-card:hover .meme-image-wrap img { transform: scale(1.02); }
+    .meme-stamp {
+      position: absolute; top: 18px; right: 18px; z-index: 2;
+      font-family: 'Cormorant Garamond', serif; font-style: italic;
+      font-size: 11px; letter-spacing: .14em; text-transform: uppercase;
+      color: var(--gold-lt);
+      border: 1px solid rgba(184,151,90,.55);
+      padding: 6px 12px;
+      background: rgba(0,0,0,.55);
+      backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+    }
+    [lang="ar"] .meme-stamp { right: auto; left: 18px; font-family: 'Amiri', serif; font-style: normal; }
+    .meme-banner-top, .meme-banner-bottom {
+      position: absolute; left: 0; right: 0; z-index: 2;
+      text-align: center; padding: 14px 24px;
+      font-family: 'Cormorant Garamond', serif; font-weight: 600;
+      font-size: clamp(20px, 3.5vw, 34px); line-height: 1.15;
+      color: var(--white);
+      text-shadow: 0 2px 8px rgba(0,0,0,.65), 0 0 18px rgba(0,0,0,.5);
+      letter-spacing: .01em;
+    }
+    .meme-banner-top { top: 0; }
+    .meme-banner-bottom { bottom: 0; }
+    .meme-banner-bottom em {
+      font-style: italic; color: var(--gold-lt);
+    }
+    [lang="ar"] .meme-banner-top, [lang="ar"] .meme-banner-bottom { font-family: 'Amiri', serif; font-weight: 400; }
+
+    .meme-body {
+      padding: 32px 36px 36px;
+      border-top: 1px solid rgba(184,151,90,.14);
+      background: linear-gradient(to bottom, rgba(0,0,0,.4), transparent);
+    }
+    .meme-tags {
+      display: flex; flex-wrap: wrap; gap: 8px;
+      margin-bottom: 18px;
+    }
+    .meme-tag {
+      font-size: 9px; letter-spacing: .2em; text-transform: uppercase;
+      color: rgba(255,255,255,.55);
+      padding: 5px 11px;
+      border: 1px solid rgba(184,151,90,.25);
+      border-radius: 999px;
+      background: rgba(255,255,255,.02);
+    }
+    .meme-tag.red {
+      color: #ff9b95; border-color: rgba(194,54,47,.45);
+      background: rgba(194,54,47,.08);
+    }
+    .meme-tag.blue {
+      color: #a8cfff; border-color: rgba(93,169,255,.45);
+      background: rgba(93,169,255,.08);
+    }
+    .meme-caption {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(20px, 2.6vw, 26px);
+      color: var(--white);
+      line-height: 1.55;
+      margin-bottom: 14px;
+    }
+    [lang="ar"] .meme-caption { font-family: 'Amiri', serif; font-style: normal; }
+    .meme-evidence {
+      font-size: 12px; letter-spacing: .14em; text-transform: uppercase;
+      color: var(--gold);
+    }
+    .meme-evidence-detail {
+      display: block; margin-top: 6px;
+      font-size: 13px; letter-spacing: .04em; text-transform: none;
+      color: rgba(255,255,255,.5); font-style: italic;
+      font-family: 'Cormorant Garamond', serif;
+    }
+    [lang="ar"] .meme-evidence-detail { font-family: 'Amiri', serif; }
+
+    @media (max-width: 600px) {
+      .meme-section { padding: 56px 16px; }
+      .meme-body { padding: 24px 22px 28px; }
+      .meme-banner-top, .meme-banner-bottom { padding: 10px 14px; }
+    }
+
+    /* ── EXHIBIT EVIDENCE CARDS (Gojo, Nanami) ── */
+    .exhibit-card-section {
+      max-width: 760px; margin: 0 auto;
+      padding: 0 24px 90px;
+    }
+    .evidence-card {
+      /* Each .evidence-card sets its own --accent (hex/rgb-color) inline. */
+      position: relative;
+      background:
+        repeating-linear-gradient(
+          0deg,
+          color-mix(in srgb, var(--accent) 4%, transparent) 0px,
+          color-mix(in srgb, var(--accent) 4%, transparent) 1px,
+          transparent 1px,
+          transparent 28px
+        ),
+        linear-gradient(135deg, color-mix(in srgb, var(--accent) 18%, transparent), rgba(14,14,16,.95));
+      border: 1px solid color-mix(in srgb, var(--accent) 40%, transparent);
+      box-shadow:
+        0 2px 4px rgba(0,0,0,.3),
+        0 30px 80px rgba(0,0,0,.4),
+        inset 0 0 80px color-mix(in srgb, var(--accent) 5%, transparent);
+      overflow: hidden;
+    }
+    .evidence-card-inner {
+      padding: 48px 44px 44px;
+      position: relative;
+    }
+    .evidence-card::before, .evidence-card::after {
+      content: ""; position: absolute; z-index: 3;
+      width: 18px; height: 18px;
+      border: 1px solid var(--accent);
+    }
+    .evidence-card::before { top: -1px; left: -1px; border-right: none; border-bottom: none; }
+    .evidence-card::after  { bottom: -1px; right: -1px; border-left: none; border-top: none; }
+
+    .evidence-photo {
+      position: relative;
+      aspect-ratio: 16 / 9;
+      overflow: hidden;
+      background: #000;
+      border-bottom: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+    }
+    .evidence-photo.contain {
+      aspect-ratio: auto;
+      max-height: 580px;
+    }
+    .evidence-photo.contain img {
+      object-fit: contain;
+      background:
+        radial-gradient(ellipse at center, color-mix(in srgb, var(--accent) 6%, #000) 0%, #000 100%);
+    }
+    .evidence-photo img {
+      width: 100%; height: 100%; object-fit: cover; display: block;
+      filter: contrast(1.02) saturate(.95);
+      transition: transform .8s cubic-bezier(.22,1,.36,1);
+    }
+    .evidence-card:hover .evidence-photo img { transform: scale(1.025); }
+    .evidence-photo::after {
+      content: "";
+      position: absolute; inset: 0;
+      background:
+        linear-gradient(to bottom, transparent 60%, rgba(14,14,16,.55) 100%),
+        radial-gradient(ellipse at 50% 100%, transparent 40%, rgba(0,0,0,.35) 100%);
+      pointer-events: none;
+    }
+    .evidence-photo-caption {
+      position: absolute; left: 0; right: 0; bottom: 0; z-index: 2;
+      padding: 22px 32px 20px;
+      display: flex; justify-content: space-between; align-items: flex-end;
+      gap: 18px; flex-wrap: wrap;
+    }
+    .evidence-photo-title {
+      font-family: 'Cormorant Garamond', serif; font-style: italic;
+      font-size: clamp(20px, 2.8vw, 26px);
+      color: var(--white);
+      text-shadow: 0 2px 12px rgba(0,0,0,.85);
+      letter-spacing: .01em;
+    }
+    [lang="ar"] .evidence-photo-title { font-family: 'Amiri', serif; font-style: normal; }
+    .evidence-photo-meta {
+      font-family: 'Jost', sans-serif;
+      font-size: 9px; letter-spacing: .26em; text-transform: uppercase;
+      color: var(--accent);
+      padding: 5px 11px;
+      border: 1px solid color-mix(in srgb, var(--accent) 55%, transparent);
+      background: rgba(0,0,0,.55);
+      backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+      white-space: nowrap;
+    }
+
+    .evidence-header {
+      display: flex; justify-content: space-between; align-items: flex-start;
+      gap: 18px; margin-bottom: 32px;
+      padding-bottom: 18px;
+      border-bottom: 1px solid color-mix(in srgb, var(--accent) 20%, transparent);
+      flex-wrap: wrap;
+    }
+    .evidence-stamp {
+      font-family: 'Jost', sans-serif;
+      font-size: 9px; letter-spacing: .32em; text-transform: uppercase;
+      color: var(--accent);
+      padding: 6px 12px;
+      border: 1px solid color-mix(in srgb, var(--accent) 50%, transparent);
+      background: color-mix(in srgb, var(--accent) 6%, transparent);
+    }
+    .evidence-tod {
+      font-family: 'Jost', sans-serif;
+      font-variant-numeric: tabular-nums;
+      font-size: 11px; letter-spacing: .22em; text-transform: uppercase;
+      color: rgba(255,255,255,.45);
+    }
+    .evidence-tod strong {
+      color: var(--accent);
+      font-weight: 500;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      letter-spacing: .06em;
+    }
+    .evidence-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(36px, 6vw, 56px);
+      font-weight: 400; line-height: 1;
+      color: var(--white);
+      margin-bottom: 8px;
+    }
+    [lang="ar"] .evidence-name { font-family: 'Amiri', serif; }
+    .evidence-role {
+      font-size: 10px; letter-spacing: .26em; text-transform: uppercase;
+      color: rgba(255,255,255,.5);
+      margin-bottom: 32px;
+    }
+    .evidence-rows {
+      display: grid; grid-template-columns: 130px 1fr;
+      gap: 14px 24px;
+      font-size: 13px; line-height: 1.6;
+      margin-bottom: 30px;
+    }
+    .evidence-row-label {
+      font-size: 9px; letter-spacing: .22em; text-transform: uppercase;
+      color: rgba(255,255,255,.4);
+      padding-top: 3px;
+    }
+    .evidence-row-val {
+      color: rgba(255,255,255,.85);
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 16px;
+    }
+    [lang="ar"] .evidence-row-val { font-family: 'Amiri', serif; font-style: normal; }
+    .evidence-row-val.cause { color: var(--sukuna-red); font-style: normal; font-family: 'Jost', sans-serif; font-size: 13px; letter-spacing: .04em; }
+    [lang="ar"] .evidence-row-val.cause { font-family: 'Cairo', sans-serif; }
+    .evidence-quote-block {
+      position: relative;
+      padding: 28px 32px;
+      background: rgba(0,0,0,.35);
+      border-left: 2px solid var(--accent);
+      margin-bottom: 26px;
+    }
+    [lang="ar"] .evidence-quote-block { border-left: none; border-right: 2px solid var(--accent); }
+    .evidence-quote {
+      font-family: 'Cormorant Garamond', serif; font-style: italic;
+      font-size: clamp(19px, 2.6vw, 24px);
+      line-height: 1.6;
+      color: var(--white);
+    }
+    [lang="ar"] .evidence-quote { font-family: 'Amiri', serif; font-style: normal; }
+    .evidence-quote-attr {
+      margin-top: 10px;
+      font-size: 10px; letter-spacing: .24em; text-transform: uppercase;
+      color: var(--accent);
+    }
+    .evidence-troll {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 16px; line-height: 1.7;
+      color: rgba(255,255,255,.62);
+      font-style: italic;
+    }
+    [lang="ar"] .evidence-troll { font-family: 'Amiri', serif; font-style: normal; }
+    @media (max-width: 600px) {
+      .evidence-card-inner { padding: 32px 24px 30px; }
+      .evidence-rows { grid-template-columns: 1fr; gap: 4px 0; }
+      .evidence-row-label { padding-top: 12px; }
+      .evidence-quote-block { padding: 22px 22px; }
+      .evidence-photo-caption { padding: 16px 20px 14px; }
+      .evidence-photo-title { font-size: 17px; }
+      .evidence-photo-meta { font-size: 8.5px; padding: 4px 9px; letter-spacing: .18em; }
+      .evidence-photo.contain { max-height: 380px; }
+    }
+
+    /* ── MEMORIAL ── */
+    .memorial {
+      max-width: 760px; margin: 0 auto;
+      padding: 0 32px 80px;
+      text-align: center;
+    }
+    .memorial-frame {
+      border: 1px solid rgba(184,151,90,.25);
+      padding: 56px 36px 48px;
+      position: relative;
+      background:
+        radial-gradient(800px 400px at 50% 0%, rgba(93,169,255,.07), transparent 60%),
+        rgba(255,255,255,.015);
+    }
+    .memorial-frame::before, .memorial-frame::after {
+      content: ""; position: absolute; width: 14px; height: 14px;
+      border: 1px solid var(--gold);
+    }
+    .memorial-frame::before { top: -1px; left: -1px; border-right: none; border-bottom: none; }
+    .memorial-frame::after { bottom: -1px; right: -1px; border-left: none; border-top: none; }
+    .memorial-eyebrow {
+      font-size: 10px; letter-spacing: .3em; text-transform: uppercase;
+      color: var(--gojo-blue); margin-bottom: 18px;
+    }
+    .memorial-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(28px, 4.5vw, 40px);
+      font-weight: 400; color: var(--white);
+      margin-bottom: 12px;
+    }
+    [lang="ar"] .memorial-title { font-family: 'Amiri', serif; }
+    .memorial-dates {
+      font-family: 'Cormorant Garamond', serif; font-style: italic;
+      font-size: 16px; color: rgba(255,255,255,.55);
+      margin-bottom: 28px;
+    }
+    [lang="ar"] .memorial-dates { font-family: 'Amiri', serif; font-style: normal; }
+    .memorial-body {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 17px; line-height: 1.85;
+      color: rgba(255,255,255,.72);
+      max-width: 540px; margin: 0 auto 22px;
+    }
+    [lang="ar"] .memorial-body { font-family: 'Amiri', serif; font-size: 16px; }
+    .memorial-quote {
+      font-family: 'Cormorant Garamond', serif; font-style: italic;
+      font-size: clamp(18px, 2.4vw, 22px);
+      color: var(--gold-lt);
+      padding: 18px 0; line-height: 1.6;
+      border-top: 1px solid rgba(184,151,90,.2);
+      border-bottom: 1px solid rgba(184,151,90,.2);
+      margin: 8px auto 0; max-width: 480px;
+    }
+    [lang="ar"] .memorial-quote { font-family: 'Amiri', serif; font-style: normal; }
+
+    /* ── NUH UH BUTTON (interactive) ── */
+    .reaction-section {
+      max-width: 640px; margin: 0 auto;
+      padding: 0 32px 80px;
+      text-align: center;
+    }
+    .reaction-prompt {
+      font-family: 'Cormorant Garamond', serif; font-style: italic;
+      font-size: 17px; color: rgba(255,255,255,.55);
+      margin-bottom: 18px;
+    }
+    [lang="ar"] .reaction-prompt { font-family: 'Amiri', serif; font-style: normal; }
+    .reaction-btn {
+      font-family: 'Jost', sans-serif;
+      font-size: 13px; letter-spacing: .26em; text-transform: uppercase;
+      color: var(--gojo-blue);
+      background: rgba(93,169,255,.06);
+      border: 1px solid rgba(93,169,255,.5);
+      padding: 14px 32px; cursor: pointer;
+      transition: background .2s, transform .15s, color .2s;
+    }
+    [lang="ar"] .reaction-btn { font-family: 'Cairo', sans-serif; letter-spacing: .04em; font-size: 14px; }
+    .reaction-btn:hover { background: rgba(93,169,255,.12); }
+    .reaction-btn:active { transform: scale(.97); }
+    .reaction-btn.shake { animation: shake .4s ease; }
+    .reaction-counter {
+      margin-top: 16px;
+      font-size: 10px; letter-spacing: .22em; text-transform: uppercase;
+      color: rgba(255,255,255,.35); min-height: 18px;
+    }
+    .reaction-reply {
+      margin-top: 20px;
+      font-family: 'Cormorant Garamond', serif; font-style: italic;
+      font-size: 18px; color: var(--sukuna-red);
+      min-height: 28px;
+      transition: opacity .35s ease;
+      opacity: 0;
+    }
+    [lang="ar"] .reaction-reply { font-family: 'Amiri', serif; font-style: normal; }
+    .reaction-reply.show { opacity: 1; }
+
+    /* ── LOVE NOTE ── */
+    .lovenote {
+      max-width: 580px; margin: 0 auto;
+      padding: 0 32px 100px;
+      text-align: center;
+    }
+    .lovenote-divider {
+      display: flex; align-items: center; justify-content: center;
+      gap: 16px; margin-bottom: 32px;
+    }
+    .lovenote-line { width: 70px; height: 1px; background: var(--gold-pale); opacity: .35; }
+    .lovenote-diamond { width: 7px; height: 7px; background: var(--gold); transform: rotate(45deg); }
+    .lovenote-eyebrow {
+      font-size: 10px; letter-spacing: .3em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 14px;
+    }
+    .lovenote-text {
+      font-family: 'Cormorant Garamond', serif; font-style: italic;
+      font-size: clamp(18px, 2.4vw, 22px);
+      color: rgba(255,255,255,.78); line-height: 1.7;
+    }
+    .lovenote-text em { color: var(--gold-lt); font-style: normal; font-weight: 600; }
+    [lang="ar"] .lovenote-text { font-family: 'Amiri', serif; font-style: normal; }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center; padding: 40px 24px 56px;
+      color: rgba(255,255,255,.3);
+      font-size: 11px; letter-spacing: .14em; text-transform: uppercase;
+      border-top: 1px solid rgba(184,151,90,.12);
+    }
+    footer strong { color: var(--gold); font-weight: 400; }
+
+    /* ── REVEAL ── */
+    .reveal {
+      opacity: 0; transform: translateY(28px);
+      transition: opacity .9s cubic-bezier(.22,1,.36,1), transform .9s cubic-bezier(.22,1,.36,1);
+    }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .gate-inner, .meme-card, .reaction-btn { animation: none; transition: none; }
+    }
+  </style>
+</head>
+<body>
+<script>(function(){if(sessionStorage.getItem('memes_auth_v1')!=='yes')document.documentElement.classList.add('gate-locked');})();</script>
+
+<!-- ══ PASSWORD GATE ══ -->
+<div id="gate">
+  <div class="gate-inner">
+    <div class="gate-mono">A &amp; A</div>
+    <div class="gate-title t" data-en="The Meme Vault" data-ar="خزانة الميمز">The Meme Vault</div>
+    <div class="gate-sub t" data-en="Type the truth to enter" data-ar="اكتبي الحقيقة عشان تدخلي">Type the truth to enter</div>
+    <div class="gate-diamond" aria-hidden="true"></div>
+    <div class="gate-field" id="gate-field">
+      <input type="password" id="gate-input" placeholder="The truth, habibti" data-en-ph="The truth, habibti" data-ar-ph="الحقيقة يا حبيبتي" autocomplete="off" />
+      <button type="button" onclick="checkPass()" aria-label="Enter">→</button>
+    </div>
+    <div class="gate-error" id="gate-error"></div>
+    <div class="gate-hint t"
+      data-en="Tell me the truth about chapter 236 — two words, hyphenated."
+      data-ar="قوليلي الحقيقة عن تشابتر ٢٣٦ — كلمتين بشرطة بينهم.">Tell me the truth about chapter 236 — two words, hyphenated.</div>
+    <button type="button" class="gate-lang" id="gate-lang-btn" onclick="toggleGateLang()">عربي</button>
+  </div>
+</div>
+<script>if(sessionStorage.getItem('memes_auth_v1')==='yes')document.getElementById('gate').classList.add('hide');</script>
+
+<!-- ══ TOP NAV ══ -->
+<nav class="topnav">
+  <a class="topnav-mono" href="index.html">A &amp; A</a>
+  <div class="topnav-links">
+    <a href="index.html"     class="topnav-link"        data-page="home"><span class="topnav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12H3l9-9 9 9h-2M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/><path d="M9 21v-6a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v6"/></svg></span><span class="t" data-en="Home" data-ar="الرئيسية">Home</span></a>
+    <a href="flame.html"     class="topnav-link"        data-page="flame"><span class="topnav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 10.94c2.33-3.31.17-7.82-1-8.94 0 3.4-2.24 5.3-3.67 6.7C5.9 10.11 5 12 5 14.29 5 18 8.13 21 12 21s7-3 7-6.71c0-1.71-1.23-4.4-2.33-5.59-2.09 3.36-3.26 3.36-4.67 2.24Z"/></svg></span><span class="t" data-en="Flame" data-ar="الشعلة">Flame</span></a>
+    <a href="our-song.html"  class="topnav-link"        data-page="song"><span class="topnav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13M9 9l12-2"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></span><span class="t" data-en="Song" data-ar="الأغنية">Song</span></a>
+    <a href="memes.html"     class="topnav-link active" data-page="memes"><span class="topnav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg></span><span class="t" data-en="Memes" data-ar="ميمز">Memes</span></a>
+    <a href="us.html"        class="topnav-link"        data-page="us"><span class="topnav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="16" height="16" rx="2"/><circle cx="12" cy="8" r="2"/><path d="m22 13-1.3-1.3a2.4 2.4 0 0 0-3.4 0L11 18"/><path d="M18 22H4a2 2 0 0 1-2-2V6"/></svg></span><span class="t" data-en="Us" data-ar="نحن">Us</span></a>
+    <a href="secrets.html"   class="topnav-link"        data-page="secrets"><span class="topnav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></span><span class="t" data-en="Secrets" data-ar="أسرار">Secrets</span></a>
+    <a href="for-alaa.html"  class="topnav-link"        data-page="alaa"><span class="topnav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M17 10h-1a4 4 0 1 1 4-4v.534"/><path d="M17 6h1a4 4 0 0 1 1.42 7.74l-2.29.87a6 6 0 0 1-5.339-10.68l2.069-1.31"/><path d="M4.5 17c2.8-.5 4.4 0 5.5.8s1.8 2.2 2.3 3.7c-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2"/><path d="M9.77 12C4 15 2 22 2 22"/><circle cx="17" cy="8" r="2"/></svg></span><span class="t" data-en="For Alaa" data-ar="لـ آلاء">For Alaa</span></a>
+  </div>
+  <button class="topnav-lang" id="lang-btn" onclick="toggleLang()">عربي</button>
+</nav>
+
+<!-- ══ HERO ══ -->
+<section class="hero">
+  <div class="hero-split" aria-hidden="true"></div>
+  <div class="hero-split-divider" aria-hidden="true"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow t" data-en="Vol. 01 · Curated by Ahmed" data-ar="المجلد ١ · من تنسيق أحمد">Vol. 01 · Curated by Ahmed</div>
+    <h1 class="hero-title">
+      <span class="t" data-en="The " data-ar="">The </span><em class="t" data-en="Meme" data-ar="خزانة الميمز">Meme</em><span class="t" data-en=" Vault" data-ar=""> Vault</span>
+    </h1>
+    <p class="hero-sub t"
+      data-en="A small museum of Ws against my fiancée — opened with love, signed in cursed energy."
+      data-ar="متحف صغير لانتصاراتي على خطيبتي — افتُتح بالحب، ووُقّع بالطاقة الملعونة.">
+      A small museum of W's against my fiancée — opened with love, signed in cursed energy.
+    </p>
+
+    <div class="scoreboard" aria-label="Scoreboard">
+      <div class="scoreboard-side ahmed">
+        <div class="scoreboard-name t" data-en="Ahmed" data-ar="أحمد">Ahmed</div>
+        <div class="scoreboard-num">2</div>
+        <div class="scoreboard-name" style="color:var(--sukuna-red);">Sukuna</div>
+      </div>
+      <div class="scoreboard-mid"></div>
+      <div class="scoreboard-side alaa">
+        <div class="scoreboard-name t" data-en="Alaa" data-ar="آلاء">Alaa</div>
+        <div class="scoreboard-num">0</div>
+        <div class="scoreboard-name" style="color:var(--gojo-blue);">Gojo · Nanami</div>
+      </div>
+    </div>
+    <div class="scoreboard-tag t"
+      data-en="Canon — undefeated · Casualties: 2 and counting"
+      data-ar="حسب المانجا — بدون هزائم · القتلى: ٢ والعدّ مستمر">Canon — undefeated · Casualties: 2 and counting</div>
+  </div>
+</section>
+
+<!-- ══ MEME #1: SUKUNA vs GOJO ══ -->
+<section class="meme-section">
+  <div class="meme-card reveal">
+    <div class="meme-image-wrap">
+      <div class="meme-stamp t" data-en="Exhibit A" data-ar="الدليل أ">Exhibit A</div>
+      <div class="meme-banner-top t"
+        data-en="HE LOVES SUKUNA"
+        data-ar="هو بيحب ساكونا">HE LOVES SUKUNA</div>
+      <img src="img/memes/sukuna-vs-gojo.png" alt="Ahmed as Sukuna vs Alaa as Gojo" />
+      <div class="meme-banner-bottom t"
+        data-en='SHE LOVES <em>GOJO</em> · SUKUNA WINS'
+        data-ar='هي بتحب <em>غوجو</em> · وساكونا فاز'>
+        SHE LOVES <em>GOJO</em> · SUKUNA WINS
+      </div>
+    </div>
+    <div class="meme-body">
+      <div class="meme-tags">
+        <span class="meme-tag red t" data-en="Sukuna" data-ar="ساكونا">Sukuna</span>
+        <span class="meme-tag blue t" data-en="Gojo" data-ar="غوجو">Gojo</span>
+        <span class="meme-tag t" data-en="Canon" data-ar="مانجا رسمية">Canon</span>
+        <span class="meme-tag t" data-en="100% verified" data-ar="موثّقة ١٠٠٪">100% verified</span>
+      </div>
+      <p class="meme-caption t"
+        data-en='You picked the strongest. I picked the King of Curses. Unfortunately for you, habibti — the manga doesn’t lie.'
+        data-ar='إنتي اخترتي الأقوى. أنا اخترت ملك اللعنات. ولسوء حظك يا حبيبتي — المانجا ما بتكدبش.'>
+        You picked the strongest. I picked the King of Curses. Unfortunately for you, habibti — the manga doesn't lie.
+      </p>
+      <div class="meme-evidence t"
+        data-en="Evidence · Chapter 236"
+        data-ar="الدليل · تشابتر ٢٣٦">Evidence · Chapter 236</div>
+      <span class="meme-evidence-detail t"
+        data-en='Sukuna wins. Gojo says "nah, I’d lose." Case closed.'
+        data-ar='ساكونا فاز. غوجو قال «لا، حخسر». القضية مقفولة.'>
+        Sukuna wins. Gojo says "nah, I'd lose." Case closed.
+      </span>
+    </div>
+  </div>
+</section>
+
+<!-- ══ EXHIBIT B: GOJO CAUSE OF DEATH ══ -->
+<section class="exhibit-card-section reveal">
+  <div class="evidence-card" style="--accent:#5DA9FF;">
+    <div class="evidence-photo contain">
+      <img src="img/memes/gojo-death.webp" alt="Satoru Gojo's death — Chapter 236" loading="lazy" />
+      <div class="evidence-photo-caption">
+        <div class="evidence-photo-title t"
+          data-en="“Nah, I’d lose.”"
+          data-ar="«لا، حخسر.»">"Nah, I'd lose."</div>
+        <div class="evidence-photo-meta t" data-en="Shinjuku · Ch. 236" data-ar="شينجوكو · تشابتر ٢٣٦">Shinjuku · Ch. 236</div>
+      </div>
+    </div>
+    <div class="evidence-card-inner">
+    <div class="evidence-header">
+      <div class="evidence-stamp t" data-en="Exhibit B · Cause of Death" data-ar="الدليل ب · سبب الوفاة">Exhibit B · Cause of Death</div>
+      <div class="evidence-tod">
+        <span class="t" data-en="Chapter" data-ar="تشابتر">Chapter</span>
+        &nbsp;<strong>236</strong>
+      </div>
+    </div>
+
+    <div class="evidence-name t" data-en="Satoru Gojo" data-ar="ساتورو غوجو">Satoru Gojo</div>
+    <div class="evidence-role t"
+      data-en="Special Grade · The Honored One · Alaa’s #1"
+      data-ar="درجة خاصة · الموقّر · رقم ١ عند آلاء">Special Grade · The Honored One · Alaa's #1</div>
+
+    <div class="evidence-rows">
+      <div class="evidence-row-label t" data-en="Date" data-ar="التاريخ">Date</div>
+      <div class="evidence-row-val t" data-en="December 24, 2018" data-ar="٢٤ ديسمبر ٢٠١٨">December 24, 2018</div>
+
+      <div class="evidence-row-label t" data-en="Location" data-ar="المكان">Location</div>
+      <div class="evidence-row-val t" data-en="Shinjuku · Final Showdown" data-ar="شينجوكو · المواجهة الأخيرة">Shinjuku · Final Showdown</div>
+
+      <div class="evidence-row-label t" data-en="Cause" data-ar="السبب">Cause</div>
+      <div class="evidence-row-val cause t"
+        data-en="Sukuna · Cleave · Chapter 236"
+        data-ar="ساكونا · القَطْع · تشابتر ٢٣٦">Sukuna · Cleave · Chapter 236</div>
+
+      <div class="evidence-row-label t" data-en="Status" data-ar="الحالة">Status</div>
+      <div class="evidence-row-val cause t"
+        data-en="Deceased · Confirmed by Gege Akutami"
+        data-ar="متوفّى · مؤكد من جيجي أكوتامي">Deceased · Confirmed by Gege Akutami</div>
+    </div>
+
+    <blockquote class="evidence-quote-block">
+      <div class="evidence-quote t"
+        data-en='"I had fun."'
+        data-ar='«قضيت وقتاً ممتعاً.»'>"I had fun."</div>
+      <div class="evidence-quote-attr t"
+        data-en="— Gojo, to Geto, in the afterlife"
+        data-ar="— غوجو، لجيتو، في الحياة الآخرة">— Gojo, to Geto, in the afterlife</div>
+    </blockquote>
+
+    <p class="evidence-troll t"
+      data-en="The Strongest Sorcerer. Six Eyes. Limitless. The Honored One. And he still picked the fight, said “nah, I’d win,” then promptly got bisected. Your taste is impeccable, habibti — your survival rate is not."
+      data-ar="أقوى ساحر. العيون الست. اللامحدود. الموقّر. ومع كل ده دخل المعركة، قال «لا، حكسب»، وبعدها بشوية اتقسم نصين. ذوقك عالي يا حبيبتي — بس نسبة نجاة شخصياتك المفضلة في الأرض.">
+      The Strongest Sorcerer. Six Eyes. Limitless. The Honored One. And he still picked the fight, said "nah, I'd win," then promptly got bisected. Your taste is impeccable, habibti — your survival rate is not.
+    </p>
+    </div>
+  </div>
+</section>
+
+<!-- ══ EXHIBIT C: NANAMI TIME OF DEATH ══ -->
+<section class="exhibit-card-section reveal">
+  <div class="evidence-card" style="--accent:#D9B14A;">
+    <div class="evidence-photo">
+      <img src="img/memes/nanami-death.webp" alt="Kento Nanami's final moments — Shibuya Incident" loading="lazy" />
+      <div class="evidence-photo-caption">
+        <div class="evidence-photo-title t"
+          data-en="“…You got it from here, right?”"
+          data-ar="«…الباقي عليك، صح؟»">"…You got it from here, right?"</div>
+        <div class="evidence-photo-meta t" data-en="Shibuya · Ch. 120" data-ar="شيبويا · تشابتر ١٢٠">Shibuya · Ch. 120</div>
+      </div>
+    </div>
+    <div class="evidence-card-inner">
+    <div class="evidence-header">
+      <div class="evidence-stamp t" data-en="Exhibit C · Time of Death" data-ar="الدليل ج · وقت الوفاة">Exhibit C · Time of Death</div>
+      <div class="evidence-tod">
+        <span class="t" data-en="Recorded at" data-ar="سُجِّل في">Recorded at</span>
+        &nbsp;<strong>18:23</strong>
+      </div>
+    </div>
+
+    <div class="evidence-name t" data-en="Kento Nanami" data-ar="كينتو نانامي">Kento Nanami</div>
+    <div class="evidence-role t"
+      data-en="Grade 1 Sorcerer · Salaryman · Alaa’s Favorite"
+      data-ar="ساحر من الدرجة الأولى · موظف · المفضل عند آلاء">Grade 1 Sorcerer · Salaryman · Alaa's Favorite</div>
+
+    <div class="evidence-rows">
+      <div class="evidence-row-label t" data-en="Date" data-ar="التاريخ">Date</div>
+      <div class="evidence-row-val t" data-en="October 31, 2018" data-ar="٣١ أكتوبر ٢٠١٨">October 31, 2018</div>
+
+      <div class="evidence-row-label t" data-en="Location" data-ar="المكان">Location</div>
+      <div class="evidence-row-val t" data-en="Shibuya · Subway level B5" data-ar="شيبويا · مترو الطابق ب٥">Shibuya · Subway level B5</div>
+
+      <div class="evidence-row-label t" data-en="Cause" data-ar="السبب">Cause</div>
+      <div class="evidence-row-val cause t"
+        data-en="Mahito · Idle Transfiguration · Chapter 120"
+        data-ar="ماهيتو · التحوّل الكسول · تشابتر ١٢٠">Mahito · Idle Transfiguration · Chapter 120</div>
+
+      <div class="evidence-row-label t" data-en="Status" data-ar="الحالة">Status</div>
+      <div class="evidence-row-val cause t" data-en="Deceased · Confirmed" data-ar="متوفّى · مؤكد">Deceased · Confirmed</div>
+    </div>
+
+    <blockquote class="evidence-quote-block">
+      <div class="evidence-quote t"
+        data-en='"…You got it from here, right?"'
+        data-ar='«…الباقي عليك، صح؟»'>"…You got it from here, right?"</div>
+      <div class="evidence-quote-attr t"
+        data-en="— Nanami’s last words to Yuji"
+        data-ar="— آخر كلمات نانامي ليوجي">— Nanami's last words to Yuji</div>
+    </blockquote>
+
+    <p class="evidence-troll t"
+      data-en="Another one of yours, habibti. The pattern is no longer subtle: every character you grow attached to gets unsubscribed from the manga. Suit was crisp though — we’ll give you that."
+      data-ar="واحد كمان من تبعك يا حبيبتي. النمط مش خافي خلاص: أي شخصية بتتعلقي بيها بيتم إلغاء اشتراكها من المانجا. بس البدلة كانت أنيقة — ده حقّك.">
+      Another one of yours, habibti. The pattern is no longer subtle: every character you grow attached to gets unsubscribed from the manga. Suit was crisp though — we'll give you that.
+    </p>
+    </div>
+  </div>
+</section>
+
+<!-- ══ MEMORIAL ══ -->
+<section class="memorial reveal">
+  <div class="memorial-frame">
+    <div class="memorial-eyebrow t"
+      data-en="In Loving Memory"
+      data-ar="ذكرى حبيبة">In Loving Memory</div>
+    <h2 class="memorial-title t"
+      data-en="Satoru Gojo"
+      data-ar="ساتورو غوجو">Satoru Gojo</h2>
+    <div class="memorial-dates t"
+      data-en="The Honored One · 1989 — 2018 (Shibuya hurts, Shinjuku finished it)"
+      data-ar="الموقّر · ١٩٨٩ — ٢٠١٨ (شيبويا أوجعته، وشينجوكو أنهته)">
+      The Honored One · 1989 — 2018 (Shibuya hurts, Shinjuku finished it)
+    </div>
+    <p class="memorial-body t"
+      data-en="A small private funeral was held for Satoru Gojo, with Kento Nanami’s name added to the program. In attendance: Alaa, her broken heart, and a single hijabi sorcerer with extremely blue eyes. Sukuna sends his regards. Mahito sends nothing. Ahmed sends his."
+      data-ar="أُقيمت جنازة صغيرة لساتورو غوجو، وأُضيف اسم كينتو نانامي إلى البرنامج. الحضور: آلاء، وقلبها المكسور، وساحرة مُحجبة بعيون زرقاء جداً. ساكونا يبعث تحيّاته. ماهيتو لا يبعث شيئاً. وأحمد يبعث تحيّاته.">
+      A small private funeral was held for Satoru Gojo, with Kento Nanami's name added to the program. In attendance: Alaa, her broken heart, and a single hijabi sorcerer with extremely blue eyes. Sukuna sends his regards. Mahito sends nothing. Ahmed sends his.
+    </p>
+    <p class="memorial-quote t"
+      data-en='"Stand proud, Alaa. You are strong... but the man you’re marrying loves Sukuna — and the manga keeps killing yours."'
+      data-ar='«افخري بنفسك يا آلاء. أنتِ قوية… لكن اللي حتتجوزيه بيحب ساكونا — والمانجا بتقتل اللي بتحبيهم.»'>
+      "Stand proud, Alaa. You are strong... but the man you're marrying loves Sukuna — and the manga keeps killing yours."
+    </p>
+  </div>
+</section>
+
+<!-- ══ NUH UH ══ -->
+<section class="reaction-section reveal">
+  <p class="reaction-prompt t"
+    data-en="Got something to say about it?"
+    data-ar="عندك ردّ؟">Got something to say about it?</p>
+  <button type="button" class="reaction-btn t" id="nuh-uh-btn"
+    data-en="Nuh uh — Gojo wins"
+    data-ar="لا لا — غوجو فاز"
+    onclick="nuhUh()">Nuh uh — Gojo wins</button>
+  <div class="reaction-counter t" id="nuh-uh-counter" data-en="" data-ar=""></div>
+  <div class="reaction-reply" id="nuh-uh-reply"></div>
+</section>
+
+<!-- ══ LOVE NOTE ══ -->
+<section class="lovenote reveal">
+  <div class="lovenote-divider">
+    <div class="lovenote-line"></div>
+    <div class="lovenote-diamond"></div>
+    <div class="lovenote-line"></div>
+  </div>
+  <div class="lovenote-eyebrow t" data-en="P.S." data-ar="ملاحظة">P.S.</div>
+  <p class="lovenote-text t"
+    data-en="Even when Gojo loses, you still <em>win</em> — because I love you. But also Sukuna won."
+    data-ar="حتى لما غوجو يخسر، إنتي بتظلي <em>الكسبانة</em> — لأني بحبك. بس ساكونا فاز.">
+    Even when Gojo loses, you still <em>win</em> — because I love you. But also Sukuna won.
+  </p>
+</section>
+
+<!-- ══ FOOTER ══ -->
+<footer>
+  <strong>Ahmed &amp; Alaa</strong> &nbsp;·&nbsp;
+  <span class="t" data-en="The Meme Vault" data-ar="خزانة الميمز">The Meme Vault</span>
+  &nbsp;·&nbsp;
+  <span class="t" data-en="Made with love (and trolling)" data-ar="صُنع بكل محبة (وشوية تنمر)">Made with love (and trolling)</span>
+</footer>
+
+<script>
+  // ══ PASSWORD GATE (memes-only — she has to surrender on this one) ══
+  const AUTH_KEY = 'memes_auth_v1';
+  const PASS = 'sukuna-wins';
+  const gateEl = document.getElementById('gate');
+  let gateLang = 'en';
+
+  function toggleGateLang() {
+    gateLang = gateLang === 'en' ? 'ar' : 'en';
+    document.querySelectorAll('#gate .t[data-en]').forEach(el => {
+      el.textContent = el.dataset[gateLang];
+    });
+    const inp = document.getElementById('gate-input');
+    inp.placeholder = gateLang === 'ar' ? inp.dataset.arPh : inp.dataset.enPh;
+    document.getElementById('gate-lang-btn').textContent = gateLang === 'en' ? 'عربي' : 'English';
+    document.documentElement.lang = gateLang;
+    document.documentElement.dir  = gateLang === 'ar' ? 'rtl' : 'ltr';
+  }
+
+  function checkPass() {
+    const input = document.getElementById('gate-input');
+    const field = document.getElementById('gate-field');
+    const err   = document.getElementById('gate-error');
+    if (input.value.trim().toLowerCase() === PASS) {
+      sessionStorage.setItem(AUTH_KEY, 'yes');
+      document.documentElement.classList.remove('gate-locked');
+      gateEl.classList.add('hide');
+      gateEl.style.display = 'none';
+      document.documentElement.lang = 'en';
+      document.documentElement.dir  = 'ltr';
+      return;
+    }
+    input.value = '';
+    const WRONG_EN = [
+      'Wrong. Read chapter 236 again, habibti.',
+      'Cope. Try again.',
+      'Nah, you\'d lose.',
+      'Six Eyes can\'t see this password either.',
+      'Stand proud — but try again.'
+    ];
+    const WRONG_AR = [
+      'غلط. اقري تشابتر ٢٣٦ تاني يا حبيبتي.',
+      'كوب. حاولي تاني.',
+      'لا، حتخسري.',
+      'حتى العيون الست مش شايفة الباسوورد ده.',
+      'افخري بنفسك — وحاولي تاني.'
+    ];
+    const wrongs = gateLang === 'ar' ? WRONG_AR : WRONG_EN;
+    err.textContent = wrongs[Math.floor(Math.random() * wrongs.length)];
+    field.classList.remove('shake');
+    void field.offsetWidth;
+    field.classList.add('shake');
+    setTimeout(() => { err.textContent = ''; }, 3200);
+  }
+
+  document.getElementById('gate-input').addEventListener('keydown', e => {
+    if (e.key === 'Enter') checkPass();
+  });
+  if (sessionStorage.getItem(AUTH_KEY) === 'yes') {
+    document.documentElement.classList.remove('gate-locked');
+    gateEl.classList.add('hide');
+  }
+
+  // ══ LANG TOGGLE ══
+  let currentLang = 'en';
+
+  function toggleLang() {
+    currentLang = currentLang === 'en' ? 'ar' : 'en';
+    const html = document.documentElement;
+    html.lang = currentLang;
+    html.dir  = currentLang === 'ar' ? 'rtl' : 'ltr';
+
+    document.querySelectorAll('.t[data-en]').forEach(el => {
+      const val = el.dataset[currentLang];
+      // Only innerHTML for elements that contain HTML in their data attrs
+      if (/<\/?[a-z]/i.test(val)) {
+        el.innerHTML = val;
+      } else {
+        el.textContent = val;
+      }
+    });
+
+    document.querySelectorAll('[data-en-ph]').forEach(el => {
+      el.placeholder = currentLang === 'ar' ? el.dataset.arPh : el.dataset.enPh;
+    });
+
+    document.getElementById('lang-btn').textContent = currentLang === 'ar' ? 'English' : 'عربي';
+    updateNuhUhCounter();
+  }
+
+  // ══ NUH UH (interactive trolling) ══
+  const REPLIES_EN = [
+    "Hmm. Reread chapter 236, habibti.",
+    "I love you. Sukuna still won.",
+    "Click harder, the manga still says Sukuna.",
+    "Inumaki couldn't save him. Neither can clicking.",
+    "Nanami clocked out at 18:23. Permanently.",
+    "Cope, but make it fashion.",
+    "Throughout heaven and earth, you alone are wrong.",
+    "Stand proud — Gojo did not.",
+    "\"You got it from here, right?\" — Nanami, also losing.",
+    "Six Eyes saw this loss coming. You didn't.",
+    "Mahito speedran your favorite in two pages.",
+    "Even Yuta agrees with me on this one.",
+    "Last reply: I love you anyway. August 25 — same answer."
+  ];
+  const REPLIES_AR = [
+    "اقري تشابتر ٢٣٦ تاني يا حبيبتي.",
+    "بحبك. وساكونا لسه فاز.",
+    "ادوسي أكتر، المانجا لسه بتقول ساكونا.",
+    "إينوماكي ما قدرش ينقذه. ولا الدوسة هتنقذه.",
+    "نانامي سجّل خروج الساعة ٦:٢٣ مساءً. ومخرجش تاني.",
+    "كوب، بس بستايل.",
+    "في السماء وفي الأرض، إنتي وحدك الغلط.",
+    "افخري بنفسك — غوجو لم يفعل.",
+    "«الباقي عليك، صح؟» — نانامي، وهو كمان بيخسر.",
+    "العيون الست شافت الخسارة دي جاية. إنتي لأ.",
+    "ماهيتو خلّص على المفضل عندك في صفحتين.",
+    "حتى يوتا متفق معايا في الموضوع ده.",
+    "آخر رد: بحبك على أي حال. ٢٥ أغسطس — نفس الإجابة."
+  ];
+
+  const NUH_KEY = 'memes_nuh_count_v1';
+  const counterEl = document.getElementById('nuh-uh-counter');
+  const replyEl   = document.getElementById('nuh-uh-reply');
+  const btnEl     = document.getElementById('nuh-uh-btn');
+
+  function getCount() {
+    return parseInt(localStorage.getItem(NUH_KEY) || '0', 10) || 0;
+  }
+  function setCount(n) {
+    localStorage.setItem(NUH_KEY, String(n));
+  }
+  function updateNuhUhCounter() {
+    const n = getCount();
+    if (n === 0) {
+      counterEl.textContent = '';
+      return;
+    }
+    counterEl.textContent = currentLang === 'ar'
+      ? `ضغطتي «لا لا» ${n} مرة. ساكونا لسه فاز.`
+      : `You said "nuh uh" ${n} time${n === 1 ? '' : 's'}. Sukuna still won.`;
+  }
+  function nuhUh() {
+    const n = getCount() + 1;
+    setCount(n);
+    const idx = Math.min(n - 1, REPLIES_EN.length - 1);
+    const reply = currentLang === 'ar' ? REPLIES_AR[idx] : REPLIES_EN[idx];
+    replyEl.classList.remove('show');
+    void replyEl.offsetWidth;
+    replyEl.textContent = reply;
+    replyEl.classList.add('show');
+    btnEl.classList.remove('shake');
+    void btnEl.offsetWidth;
+    btnEl.classList.add('shake');
+    updateNuhUhCounter();
+  }
+  updateNuhUhCounter();
+
+  // ══ SCROLL REVEAL ══
+  const revealObs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        revealObs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+</script>
+</body>
+</html>

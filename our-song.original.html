@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="referrer" content="no-referrer" />
+  <title>Our Song — Ahmed & Alaa</title>
+  <link rel="icon" href="favicon.svg" />
+  <link rel="preconnect" href="https://api.jsonbin.io" />
+  <link rel="dns-prefetch" href="https://api.jsonbin.io" />
+  <link rel="preconnect" href="https://open.spotify.com" />
+  <link rel="preconnect" href="https://i.scdn.co" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@200;300;400;500&family=Amiri:ital,wght@0,400;1,400&family=Cairo:wght@300;400&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --gold:     #B8975A;
+      --gold-lt:  #D4B483;
+      --gold-pl:  #EEE0C4;
+      --gold-dim: rgba(184,151,90,.18);
+      --charcoal: #1C1C1E;
+      --dark:     #111110;
+      --muted:    rgba(255,255,255,.4);
+      --white:    #FFFFFF;
+    }
+
+    /* ── STARFIELD ── */
+    #starfield {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0;
+    }
+    #starfield.visible { opacity: 1; }
+
+    /* ── GATE ── */
+    #gate {
+      position: fixed;
+      inset: 0;
+      background: var(--dark);
+      z-index: 99999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity .8s ease, visibility .8s;
+    }
+    #gate.hide { opacity: 0; visibility: hidden; pointer-events: none; }
+
+    .gate-inner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 0 32px;
+      animation: gateIn .9s cubic-bezier(.22,1,.36,1) forwards;
+    }
+    @keyframes gateIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: none; }
+    }
+
+    .gate-mono {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 13px;
+      color: var(--gold);
+      letter-spacing: .16em;
+      margin-bottom: 24px;
+    }
+    .gate-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(32px, 8vw, 52px);
+      font-weight: 300;
+      color: var(--white);
+      margin-bottom: 8px;
+    }
+    .gate-sub {
+      font-size: 10px;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.3);
+      margin-bottom: 40px;
+    }
+
+    .gate-note {
+      width: 56px;
+      height: 56px;
+      margin: 0 auto 40px;
+      color: var(--gold-lt);
+      animation: noteFloat 3s ease-in-out infinite;
+      filter: drop-shadow(0 0 10px rgba(184,151,90,.35));
+    }
+    @keyframes noteFloat {
+      0%, 100% { transform: translateY(0) rotate(-3deg); }
+      50%      { transform: translateY(-6px) rotate(3deg); }
+    }
+    .gate-note svg { width: 100%; height: 100%; display: block; }
+
+    .gate-field {
+      display: flex;
+      border-bottom: 1px solid rgba(184,151,90,.4);
+      width: 100%;
+      max-width: 280px;
+      margin-bottom: 16px;
+    }
+    .gate-field.shake { animation: shake .4s ease; }
+    @keyframes shake {
+      0%,100% { transform: translateX(0); }
+      20%      { transform: translateX(-8px); }
+      40%      { transform: translateX(8px); }
+      60%      { transform: translateX(-6px); }
+      80%      { transform: translateX(6px); }
+    }
+    .gate-field input {
+      flex: 1;
+      background: none;
+      border: none;
+      outline: none;
+      color: var(--white);
+      font-family: 'Jost', sans-serif;
+      font-size: 15px;
+      font-weight: 300;
+      padding: 12px 0;
+      letter-spacing: .08em;
+    }
+    .gate-field input::placeholder { color: rgba(255,255,255,.25); font-style: italic; }
+    .gate-field button {
+      background: none;
+      border: none;
+      color: var(--gold);
+      font-size: 20px;
+      cursor: pointer;
+      padding: 0 4px;
+      transition: transform .2s;
+    }
+    .gate-field button:hover { transform: translateX(4px); }
+    .gate-error {
+      font-size: 11px;
+      letter-spacing: .1em;
+      color: rgba(255,100,100,.7);
+      min-height: 16px;
+    }
+    .gate-hint {
+      font-size: 10px;
+      letter-spacing: .14em;
+      color: rgba(255,255,255,.25);
+      margin-top: 12px;
+      font-style: italic;
+    }
+
+    html, body {
+      min-height: 100vh;
+      background: var(--dark);
+      color: var(--white);
+      font-family: 'Jost', sans-serif;
+      font-weight: 300;
+      overflow-x: hidden;
+    }
+
+    /* ── TOP NAV (shared) ── */
+    .topnav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 28px;
+      gap: 18px;
+      background: linear-gradient(to bottom, rgba(17,17,16,.92), rgba(17,17,16,0));
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+    .topnav-mono {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 17px;
+      color: var(--gold);
+      text-decoration: none;
+      letter-spacing: .04em;
+    }
+    .topnav-links { display: flex; align-items: flex-end; gap: 28px; }
+    .topnav-link {
+      font-family: 'Jost', sans-serif;
+      font-size: 10px;
+      letter-spacing: .24em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-decoration: none;
+      padding: 4px 0 8px;
+      position: relative;
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+      white-space: nowrap;
+      transition: color .25s ease;
+    }
+    .topnav-icon {
+      width: 18px;
+      height: 18px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      opacity: .8;
+      transition: opacity .25s ease, transform .25s ease;
+    }
+    .topnav-icon svg { width: 100%; height: 100%; display: block; }
+    .topnav-link:hover { color: var(--gold-lt); }
+    .topnav-link:hover .topnav-icon { opacity: 1; transform: translateY(-1px); }
+    .topnav-link.active { color: var(--gold-lt); }
+    .topnav-link.active .topnav-icon { opacity: 1; }
+    .topnav-link.active::after {
+      content: "";
+      position: absolute;
+      bottom: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 4px; height: 4px;
+      background: var(--gold);
+      border-radius: 50%;
+    }
+    [lang="ar"] .topnav-link { font-family: 'Cairo', sans-serif; letter-spacing: .04em; }
+    .topnav-lang {
+      font-size: 10px;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      cursor: pointer;
+      background: none;
+      border: 1px solid rgba(184,151,90,.3);
+      padding: 6px 14px;
+      color: var(--gold-lt);
+      transition: border-color .2s;
+    }
+    .topnav-lang:hover { border-color: var(--gold); }
+    @media (max-width: 760px) {
+      .topnav { padding: 12px 16px; gap: 10px; }
+      .topnav-links { gap: 18px; }
+      .topnav-link { font-size: 9px; letter-spacing: .14em; }
+      .topnav-icon { width: 17px; height: 17px; }
+      .topnav-mono { font-size: 14px; }
+    }
+    @media (max-width: 540px) {
+      /* phone: hide labels, show icons only — with horizontal-scroll fallback for tiny screens */
+      .topnav { padding: 10px 14px; gap: 8px; }
+      .topnav-mono { display: none; }
+      .topnav-link { padding: 6px 3px; gap: 0; }
+      .topnav-link .t { display: none; }
+      .topnav-icon { width: 22px; height: 22px; opacity: .85; }
+      .topnav-link.active::after { width: 5px; height: 5px; bottom: 1px; }
+      .topnav-links {
+        flex: 1; min-width: 0;
+        gap: 4px; justify-content: flex-end;
+        overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch;
+      }
+      .topnav-links::-webkit-scrollbar { display: none; }
+      .topnav-lang { padding: 5px 9px; font-size: 9px; letter-spacing: .1em; }
+    }
+
+    /* ── PAGE ── */
+    .page {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 110px 24px 80px;
+    }
+
+    .header-block { text-align: center; max-width: 640px; margin-bottom: 56px; }
+    .header-eyebrow {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 13px;
+      color: var(--gold);
+      letter-spacing: .18em;
+      margin-bottom: 14px;
+    }
+    .header-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(48px, 10vw, 88px);
+      font-weight: 300;
+      line-height: 1;
+      color: var(--white);
+      margin-bottom: 18px;
+    }
+    [lang="ar"] .header-title { font-family: 'Amiri', serif; font-weight: 400; }
+    .header-sub {
+      font-size: 11px;
+      letter-spacing: .28em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 28px;
+    }
+    .header-quote {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(16px, 2.4vw, 19px);
+      color: var(--gold-lt);
+      line-height: 1.6;
+      max-width: 520px;
+      margin: 0 auto;
+    }
+    [lang="ar"] .header-quote { font-family: 'Amiri', serif; font-style: normal; font-size: clamp(15px, 2.2vw, 17px); }
+
+    /* ── ORNAMENT ── */
+    .ornament {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      margin: 32px 0 40px;
+      width: 100%;
+      max-width: 360px;
+    }
+    .ornament-line {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(to right, transparent, rgba(184,151,90,.4), transparent);
+    }
+    .ornament-diamond {
+      width: 6px; height: 6px;
+      background: var(--gold);
+      transform: rotate(45deg);
+    }
+
+    /* ── HERO PLAYER ── */
+    .hero-player {
+      width: 100%;
+      max-width: 520px;
+      margin: 0 auto 0;
+      position: relative;
+      isolation: isolate;
+    }
+    .hero-player::before {
+      content: "";
+      position: absolute;
+      inset: -28px;
+      border-radius: 28px;
+      background: radial-gradient(ellipse at 50% 40%,
+        rgba(212,180,131,.22) 0%,
+        rgba(184,151,90,.10) 35%,
+        transparent 70%);
+      z-index: -1;
+      pointer-events: none;
+      animation: heroGlow 4.5s ease-in-out infinite;
+    }
+    @keyframes heroGlow {
+      0%, 100% { opacity: .75; }
+      50%       { opacity: 1; }
+    }
+    .hero-card {
+      position: relative;
+      padding: 4px;
+      border-radius: 20px;
+      background: linear-gradient(135deg,
+        rgba(238,224,196,.55) 0%,
+        rgba(184,151,90,.25) 35%,
+        rgba(184,151,90,.05) 65%,
+        rgba(238,224,196,.45) 100%);
+      box-shadow:
+        0 30px 80px rgba(0,0,0,.55),
+        0 0 0 1px rgba(184,151,90,.15);
+    }
+    .hero-card-inner {
+      background: rgba(14,10,6,.92);
+      border-radius: 17px;
+      padding: 28px 24px 22px;
+      backdrop-filter: blur(8px);
+    }
+    .player-platform {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 22px;
+      font-size: 10px;
+      letter-spacing: .34em;
+      text-transform: uppercase;
+      color: var(--gold-lt);
+    }
+    .player-platform svg { width: 16px; height: 16px; opacity: .9; }
+    .player-frame {
+      position: relative;
+      width: 100%;
+      border-radius: 12px;
+      overflow: hidden;
+      background: rgba(0,0,0,.4);
+      box-shadow: inset 0 0 0 1px rgba(184,151,90,.15);
+    }
+    .player-frame iframe {
+      display: block;
+      width: 100%;
+      border: 0;
+      height: 352px;
+    }
+    .player-note {
+      font-size: 10px;
+      color: var(--muted);
+      margin-top: 18px;
+      text-align: center;
+      letter-spacing: .14em;
+      font-style: italic;
+    }
+
+    /* ── PLAY COUNTER ── */
+    .play-counter {
+      margin-top: 28px;
+      display: flex;
+      align-items: baseline;
+      justify-content: center;
+      gap: 10px;
+    }
+    .play-counter-num {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 38px;
+      font-weight: 300;
+      color: var(--gold-lt);
+      line-height: 1;
+      transition: transform .4s cubic-bezier(.22,1,.36,1);
+    }
+    .play-counter-num.bump {
+      animation: counterBump .5s cubic-bezier(.22,1,.36,1);
+    }
+    @keyframes counterBump {
+      0%   { transform: scale(1); }
+      40%  { transform: scale(1.25); }
+      100% { transform: scale(1); }
+    }
+    .play-counter-label {
+      font-size: 10px;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* ── LYRIC REVEAL ── */
+    .lyric-reveal {
+      text-align: center;
+      max-width: 560px;
+      width: 100%;
+      margin: 56px auto 0;
+      padding: 40px 24px;
+      border-top: 1px solid rgba(184,151,90,.18);
+      border-bottom: 1px solid rgba(184,151,90,.18);
+    }
+    .lyric-line {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(18px, 2.8vw, 24px);
+      color: var(--gold-pl);
+      line-height: 1.9;
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity .8s ease, transform .8s ease;
+    }
+    [lang="ar"] .lyric-line { font-family: 'Amiri', serif; font-style: normal; }
+    .lyric-line.visible { opacity: 1; transform: none; }
+    .lyric-attr {
+      font-size: 10px;
+      letter-spacing: .26em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 24px;
+      opacity: 0;
+      transition: opacity .8s ease .5s;
+    }
+    .lyric-attr.visible { opacity: 1; }
+
+    /* ── MORE SONGS ── */
+    .more-songs {
+      width: 100%;
+      max-width: 520px;
+      margin: 64px auto 0;
+    }
+    .more-songs-eyebrow {
+      text-align: center;
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: 13px;
+      color: var(--gold);
+      letter-spacing: .18em;
+      margin-bottom: 8px;
+    }
+    .more-songs-title {
+      text-align: center;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(26px, 5vw, 36px);
+      font-weight: 300;
+      color: var(--white);
+      margin-bottom: 36px;
+    }
+    [lang="ar"] .more-songs-title { font-family: 'Amiri', serif; }
+    .songs-list {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .song-card {
+      position: relative;
+      padding: 3px;
+      border-radius: 14px;
+      background: linear-gradient(135deg,
+        rgba(212,180,131,.3) 0%,
+        rgba(184,151,90,.1) 50%,
+        rgba(212,180,131,.2) 100%);
+      box-shadow: 0 8px 32px rgba(0,0,0,.4);
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity .7s ease, transform .7s ease;
+    }
+    .song-card.visible { opacity: 1; transform: none; }
+    .song-card-inner {
+      background: rgba(14,10,6,.9);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .song-card-inner iframe {
+      display: block;
+      width: 100%;
+      border: 0;
+      height: 80px;
+    }
+    .song-embed-facade {
+      min-height: 80px;
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      cursor: pointer;
+      text-align: left;
+      border: none;
+      width: 100%;
+      background: transparent;
+      font-family: 'Jost', sans-serif;
+      color: var(--white);
+    }
+    .song-embed-facade:focus-visible {
+      outline: 1px solid var(--gold-lt);
+      outline-offset: 2px;
+    }
+    .song-embed-facade-text { flex: 1; min-width: 0; }
+    .song-embed-facade-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 17px;
+      font-weight: 400;
+      color: var(--gold-pl);
+      margin-bottom: 4px;
+    }
+    .song-embed-facade-artist {
+      font-size: 11px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .song-embed-facade-play {
+      flex-shrink: 0;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 1px solid rgba(184,151,90,.45);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      color: var(--gold-lt);
+      transition: background .2s, border-color .2s;
+    }
+    .song-embed-facade:hover .song-embed-facade-play {
+      background: rgba(184,151,90,.12);
+      border-color: var(--gold-lt);
+    }
+
+    /* ── HIDDEN FOR ALAA (triple-click reveal) ── */
+    .for-alaa-secret {
+      width: 100%;
+      max-width: 520px;
+      margin: 36px auto 0;
+      overflow: hidden;
+      border-radius: 16px;
+      border: 1px solid rgba(184,151,90,.28);
+      background: rgba(14,10,6,.72);
+      box-shadow: 0 16px 48px rgba(0,0,0,.35);
+    }
+    .for-alaa-secret[hidden] { display: none; }
+    .for-alaa-secret:not([hidden]) {
+      animation: secretIn .55s cubic-bezier(.22,1,.36,1) forwards;
+    }
+    @keyframes secretIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: none; }
+    }
+    .for-alaa-secret-inner {
+      padding: 28px 24px 22px;
+      text-align: center;
+    }
+    .for-alaa-secret-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-style: italic;
+      font-size: clamp(17px, 2.6vw, 21px);
+      font-weight: 300;
+      color: var(--gold-pl);
+      line-height: 1.75;
+      margin-bottom: 20px;
+    }
+    [lang="ar"] .for-alaa-secret-text { font-family: 'Amiri', serif; font-style: normal; }
+    .for-alaa-secret-close {
+      background: none;
+      border: 1px solid rgba(184,151,90,.4);
+      color: var(--gold-lt);
+      font-family: 'Jost', sans-serif;
+      font-size: 10px;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      padding: 10px 22px;
+      cursor: pointer;
+      border-radius: 999px;
+      transition: border-color .2s, background .2s;
+    }
+    .for-alaa-secret-close:hover {
+      border-color: var(--gold);
+      background: rgba(184,151,90,.1);
+    }
+    .secret-tap-hint { cursor: default; }
+
+    /* ── FOOTER ── */
+    .page-foot {
+      margin-top: 64px;
+      font-size: 10px;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-align: center;
+    }
+    .page-foot strong { color: var(--gold-lt); font-weight: 400; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 540px) {
+      .nav { padding: 16px 18px; }
+      .nav-mono { font-size: 14px; }
+      .nav-lang { padding: 5px 10px; font-size: 9px; }
+
+      .page { padding: 88px 16px 60px; }
+
+      .header-block { margin-bottom: 36px; }
+
+      .hero-player { max-width: 100%; }
+      .hero-card-inner { padding: 18px 14px 16px; }
+      .player-frame iframe { height: 352px; }
+
+      .play-counter { margin-top: 20px; }
+      .play-counter-num { font-size: 30px; }
+
+      .lyric-reveal { padding: 28px 0; margin-top: 40px; }
+      .lyric-line { font-size: clamp(16px, 4.5vw, 20px); line-height: 1.8; }
+
+      .more-songs { max-width: 100%; margin-top: 44px; }
+      .more-songs-title { margin-bottom: 24px; }
+      .songs-list { gap: 10px; }
+
+      .page-foot { margin-top: 44px; }
+    }
+
+    @media (max-width: 360px) {
+      .nav-back { font-size: 9px; }
+      .nav-lang { display: none; }
+      .hero-card { padding: 3px; }
+      .hero-card-inner { padding: 14px 12px 14px; }
+      .player-platform { font-size: 9px; }
+    }
+
+    /* ── ARABIC ── */
+    [lang="ar"] body { font-family: 'Cairo', sans-serif; }
+    [lang="ar"] .header-eyebrow,
+    [lang="ar"] .gate-mono,
+    [lang="ar"] .nav-mono { font-family: 'Amiri', serif; font-style: normal; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .gate-note, #starfield { animation: none; }
+      .lyric-line, .song-card { transition: none; }
+      .for-alaa-secret:not([hidden]) { animation: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══ STARFIELD ══ -->
+<canvas id="starfield" aria-hidden="true"></canvas>
+
+<!-- ══ GATE ══ -->
+<div id="gate">
+  <div class="gate-inner">
+    <div class="gate-mono">A &amp; A</div>
+    <div class="gate-title">Our Song</div>
+    <div class="gate-sub">A space just for the two of us</div>
+
+    <div class="gate-note" aria-hidden="true">
+      <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="noteGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+            <stop offset="0%"   stop-color="#7A5A28"/>
+            <stop offset="60%"  stop-color="#B8975A"/>
+            <stop offset="100%" stop-color="#EEE0C4"/>
+          </linearGradient>
+        </defs>
+        <path d="M28 10 L28 46 Q28 54 20 54 Q12 54 12 47 Q12 41 20 41 Q24 41 26 43 L26 14 L52 8 L52 38 Q52 46 44 46 Q36 46 36 39 Q36 33 44 33 Q48 33 50 35 L50 14 Z"
+              fill="url(#noteGrad)" />
+      </svg>
+    </div>
+
+    <div class="gate-field" id="gate-field">
+      <input type="password" id="gate-input" placeholder="Enter your secret" autocomplete="off" />
+      <button onclick="checkPass()" aria-label="Enter">→</button>
+    </div>
+    <div class="gate-error" id="gate-error"></div>
+    <div class="gate-hint t" data-en="A hint: the song name, in two words" data-ar="تلميح: اسم الأغنية، في كلمتين">A hint: the song name, in two words</div>
+  </div>
+</div>
+
+<!-- ══ TOP NAV ══ -->
+<nav class="topnav">
+  <a class="topnav-mono" href="index.html">A &amp; A</a>
+  <div class="topnav-links">
+    <a href="index.html"     class="topnav-link"        data-page="home"><span class="topnav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12H3l9-9 9 9h-2M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/><path d="M9 21v-6a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v6"/></svg></span><span class="t" data-en="Home" data-ar="الرئيسية">Home</span></a>
+    <a href="flame.html"     class="topnav-link"        data-page="flame"><span class="topnav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 10.94c2.33-3.31.17-7.82-1-8.94 0 3.4-2.24 5.3-3.67 6.7C5.9 10.11 5 12 5 14.29 5 18 8.13 21 12 21s7-3 7-6.71c0-1.71-1.23-4.4-2.33-5.59-2.09 3.36-3.26 3.36-4.67 2.24Z"/></svg></span><span class="t" data-en="Flame" data-ar="الشعلة">Flame</span></a>
+    <a href="our-song.html"  class="topnav-link active" data-page="song"><span class="topnav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13M9 9l12-2"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></span><span class="t" data-en="Song" data-ar="الأغنية">Song</span></a>
+    <a href="memes.html"     class="topnav-link"        data-page="memes"><span class="topnav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg></span><span class="t" data-en="Memes" data-ar="ميمز">Memes</span></a>
+    <a href="us.html"        class="topnav-link"        data-page="us"><span class="topnav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="16" height="16" rx="2"/><circle cx="12" cy="8" r="2"/><path d="m22 13-1.3-1.3a2.4 2.4 0 0 0-3.4 0L11 18"/><path d="M18 22H4a2 2 0 0 1-2-2V6"/></svg></span><span class="t" data-en="Us" data-ar="نحن">Us</span></a>
+    <a href="secrets.html"   class="topnav-link"        data-page="secrets"><span class="topnav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></span><span class="t" data-en="Secrets" data-ar="أسرار">Secrets</span></a>
+    <a href="for-alaa.html"  class="topnav-link"        data-page="alaa"><span class="topnav-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M17 10h-1a4 4 0 1 1 4-4v.534"/><path d="M17 6h1a4 4 0 0 1 1.42 7.74l-2.29.87a6 6 0 0 1-5.339-10.68l2.069-1.31"/><path d="M4.5 17c2.8-.5 4.4 0 5.5.8s1.8 2.2 2.3 3.7c-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2"/><path d="M9.77 12C4 15 2 22 2 22"/><circle cx="17" cy="8" r="2"/></svg></span><span class="t" data-en="For Alaa" data-ar="لـ آلاء">For Alaa</span></a>
+  </div>
+  <button class="topnav-lang" onclick="toggleLang()">عربي</button>
+</nav>
+
+<!-- ══ PAGE ══ -->
+<div class="page">
+
+  <div class="header-block">
+    <div class="header-eyebrow t secret-tap-hint" id="for-alaa-secret-trigger-eyebrow" data-en="The song that says it for us" data-ar="الأغنية التي تقول كل شيء عنّا">The song that says it for us</div>
+    <h1 class="header-title t secret-tap-hint" id="for-alaa-secret-trigger-title" data-en="Our Song" data-ar="أغنيتنا">Our Song</h1>
+    <div class="header-sub t" data-en="Perfect · Ed Sheeran" data-ar="بيرفكت · إد شيران">Perfect · Ed Sheeran</div>
+    <p class="header-quote t"
+       data-en=""I found a love, for me — darling just dive right in and follow my lead.""
+       data-ar="«وجدتُ حبّاً يُشبهني — يا حبيبتي، اغمري قلبكِ فيه واتبعيني.»">
+      "I found a love, for me — darling just dive right in and follow my lead."
+    </p>
+  </div>
+
+  <div class="ornament" id="for-alaa-secret-trigger-ornament" aria-hidden="true">
+    <div class="ornament-line"></div>
+    <div class="ornament-diamond secret-tap-hint" id="for-alaa-secret-trigger-diamond"></div>
+    <div class="ornament-line"></div>
+  </div>
+
+  <!-- ── HERO PLAYER ── -->
+  <div class="hero-player">
+    <div class="hero-card">
+      <div class="hero-card-inner">
+        <div class="player-platform">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.6 0 12 0zm5.5 17.3c-.2.4-.7.5-1.1.3-3-1.8-6.7-2.2-11.1-1.2-.4.1-.8-.2-.9-.6-.1-.4.2-.8.6-.9 4.7-1.1 8.8-.6 12.1 1.4.4.2.5.7.4 1zm1.5-3.3c-.3.4-.8.6-1.2.3-3.4-2.1-8.5-2.7-12.5-1.5-.5.2-1-.1-1.2-.6-.2-.5.1-1 .6-1.2 4.6-1.4 10.2-.8 14.1 1.6.5.3.6.9.2 1.4zm.1-3.4C15.3 8.3 8.7 8.1 5.1 9.2c-.6.2-1.2-.2-1.4-.7-.2-.6.2-1.2.7-1.4 4.2-1.3 11.4-1 15.7 1.4.5.3.7 1 .4 1.5-.3.6-1 .8-1.4.5z"/>
+          </svg>
+          <span class="t" data-en="Press play" data-ar="اضغط للتشغيل">Press play</span>
+        </div>
+        <div class="player-frame">
+          <iframe
+            src="https://open.spotify.com/embed/track/0tgVpDi06FyKpA1z0VMD4v?utm_source=generator&theme=0"
+            title="Listen on Spotify"
+            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+            allowfullscreen
+            loading="lazy"></iframe>
+        </div>
+        <div class="player-note t secret-tap-hint" id="for-alaa-secret-trigger-note"
+             data-en="When this song is on, the world goes quiet"
+             data-ar="حين تبدأ هذه الأغنية، يصمت العالم">
+          When this song is on, the world goes quiet
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── PLAY COUNTER ── -->
+  <div class="play-counter">
+    <span class="play-counter-num" id="play-counter-num">0</span>
+    <span class="play-counter-label t" data-en="plays together" data-ar="مرة سمعناها معاً">plays together</span>
+  </div>
+
+  <div id="for-alaa-secret" class="for-alaa-secret" hidden>
+    <div class="for-alaa-secret-inner">
+      <p class="for-alaa-secret-text t"
+        data-en="If you found this: this whole page — every line — is for you, Alaa. Perfect was only where the playlist starts."
+        data-ar="إن وصلتِ إلى هنا: هذه الصفحة بكل ما فيها — من أجلكِ يا آلاء. «بيرفكت» كانت فقط بداية القائمة.">
+        If you found this: this whole page — every line — is for you, Alaa. Perfect was only where the playlist starts.
+      </p>
+      <button type="button" class="for-alaa-secret-close t" id="for-alaa-secret-close" data-en="Close" data-ar="إغلاق">Close</button>
+    </div>
+  </div>
+
+  <!-- ── LYRIC REVEAL ── -->
+  <div class="lyric-reveal" id="lyric-reveal">
+    <div class="lyric-line t" data-en=""I found a love, for me"" data-ar="«وجدتُ حبّاً يُشبهني»">"I found a love, for me"</div>
+    <div class="lyric-line t" data-en="darling, just dive right in and follow my lead" data-ar="يا حبيبتي، اغمري قلبكِ فيه واتبعيني">darling, just dive right in and follow my lead</div>
+    <div class="lyric-line t" data-en="Baby, I'm dancing in the dark," data-ar="حبيبتي، أرقصُ في العتمة">Baby, I'm dancing in the dark,</div>
+    <div class="lyric-line t" data-en="with you between my arms —" data-ar="وأنتِ بين ذراعَيّ —">with you between my arms —</div>
+    <div class="lyric-line t" data-en="barefoot on the grass," data-ar="حافيين على العشب،">barefoot on the grass,</div>
+    <div class="lyric-line t" data-en="listening to our favourite song." data-ar="نُصغي إلى أغنيتنا المفضّلة.">listening to our favourite song.</div>
+    <div class="lyric-attr t" data-en="— Ed Sheeran, Perfect" data-ar="— إد شيران، بيرفكت">— Ed Sheeran, Perfect</div>
+  </div>
+
+  <!-- ── MORE SONGS ── -->
+  <div class="more-songs">
+    <div class="more-songs-eyebrow t" data-en="on repeat" data-ar="على التكرار">on repeat</div>
+    <div class="more-songs-title t" data-en="Songs that remind us of each other" data-ar="أغانٍ تُذكّرنا ببعض">Songs that remind us of each other</div>
+    <div class="songs-list">
+      <div class="song-card" data-song="1" data-embed-url="https://open.spotify.com/embed/track/34gCuhDGsG4bRPIf9bb02f?utm_source=generator&amp;theme=0">
+        <div class="song-card-inner">
+          <button type="button" class="song-embed-facade" aria-label="Load and play Thinking Out Loud by Ed Sheeran">
+            <span class="song-embed-facade-text">
+              <span class="song-embed-facade-title">Thinking Out Loud</span>
+              <span class="song-embed-facade-artist">Ed Sheeran</span>
+            </span>
+            <span class="song-embed-facade-play" aria-hidden="true">▶</span>
+          </button>
+        </div>
+      </div>
+      <div class="song-card" data-song="2" data-embed-url="https://open.spotify.com/embed/track/5XeFesFbtLpXzIVDNQP22n?utm_source=generator&amp;theme=0">
+        <div class="song-card-inner">
+          <button type="button" class="song-embed-facade" aria-label="Load and play I Wanna Be Yours by Arctic Monkeys">
+            <span class="song-embed-facade-text">
+              <span class="song-embed-facade-title">I Wanna Be Yours</span>
+              <span class="song-embed-facade-artist">Arctic Monkeys</span>
+            </span>
+            <span class="song-embed-facade-play" aria-hidden="true">▶</span>
+          </button>
+        </div>
+      </div>
+      <div class="song-card" data-song="3" data-embed-url="https://open.spotify.com/embed/track/2plbrEY59IikOBgBGLjaoe?utm_source=generator&amp;theme=0">
+        <div class="song-card-inner">
+          <button type="button" class="song-embed-facade" aria-label="Load and play Die With A Smile by Lady Gaga and Bruno Mars">
+            <span class="song-embed-facade-text">
+              <span class="song-embed-facade-title">Die With A Smile</span>
+              <span class="song-embed-facade-artist">Lady Gaga &amp; Bruno Mars</span>
+            </span>
+            <span class="song-embed-facade-play" aria-hidden="true">▶</span>
+          </button>
+        </div>
+      </div>
+      <div class="song-card" data-song="4" data-embed-url="https://open.spotify.com/embed/track/3U4isOIWM3VvDubwSI3y7a?utm_source=generator&amp;theme=0">
+        <div class="song-card-inner">
+          <button type="button" class="song-embed-facade" aria-label="Load and play All of Me by John Legend">
+            <span class="song-embed-facade-text">
+              <span class="song-embed-facade-title">All of Me</span>
+              <span class="song-embed-facade-artist">John Legend</span>
+            </span>
+            <span class="song-embed-facade-play" aria-hidden="true">▶</span>
+          </button>
+        </div>
+      </div>
+      <div class="song-card" data-song="5" data-embed-url="https://open.spotify.com/embed/track/1dGr1c8CrMLDpV6mPbImSI?utm_source=generator&amp;theme=0">
+        <div class="song-card-inner">
+          <button type="button" class="song-embed-facade" aria-label="Load and play Lover by Taylor Swift">
+            <span class="song-embed-facade-text">
+              <span class="song-embed-facade-title">Lover</span>
+              <span class="song-embed-facade-artist">Taylor Swift</span>
+            </span>
+            <span class="song-embed-facade-play" aria-hidden="true">▶</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-foot">
+    <strong>Ahmed &amp; Alaa</strong> &nbsp;·&nbsp;
+    <span class="t" data-en="Forever, on repeat" data-ar="إلى الأبد، على التكرار">Forever, on repeat</span>
+  </div>
+
+</div>
+
+<script>
+  // ══ PASSWORD GATE ══
+  localStorage.removeItem('song_auth_v1');
+  const AUTH_KEY    = 'song_auth_v1';
+  const SESSION_KEY = 'song_session_v1';
+  const PLAY_KEY    = 'song_plays_v1';
+  const PASS        = 'perfect-one';
+  const gate        = document.getElementById('gate');
+
+  // ══ JSONBIN ══
+  const JB_MASTER = '$2a$10$fAtftfUVMaih3WL6PQnyu.wI6gxhfILTMSxINDXRzmnpMvHjVNRZW';
+  const JB_ACCESS = '$2a$10$KbNF/mCJtyHlUvHzwELTKOdQ0Sybn.GKVOW/1S8XJqeZQrYSwULwq';
+  const JB_PLAYS  = '69f06a6eaaba88219747d5a9';
+
+  async function fetchPlays() {
+    try {
+      const r = await fetch(`https://api.jsonbin.io/v3/b/${JB_PLAYS}/latest`, {
+        headers: { 'X-Access-Key': JB_ACCESS }
+      });
+      if (r.ok) {
+        const j = await r.json();
+        const n = j.record?.plays || 0;
+        localStorage.setItem(PLAY_KEY, String(n));
+        return n;
+      }
+    } catch {}
+    return parseInt(localStorage.getItem(PLAY_KEY) || '0', 10);
+  }
+
+  async function pushPlays(n) {
+    localStorage.setItem(PLAY_KEY, String(n));
+    try {
+      await fetch(`https://api.jsonbin.io/v3/b/${JB_PLAYS}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', 'X-Master-Key': JB_MASTER },
+        body: JSON.stringify({ plays: n })
+      });
+    } catch {}
+  }
+
+  function updateCounter(n, bump) {
+    const el = document.getElementById('play-counter-num');
+    el.textContent = n;
+    if (bump) {
+      el.classList.remove('bump');
+      void el.offsetWidth;
+      el.classList.add('bump');
+    }
+  }
+
+  function initSongFacades() {
+    document.querySelectorAll('.song-card[data-embed-url]').forEach(card => {
+      const url = card.getAttribute('data-embed-url');
+      const btn = card.querySelector('.song-embed-facade');
+      if (!btn || btn.dataset.bound) return;
+      btn.dataset.bound = '1';
+      const title = card.querySelector('.song-embed-facade-title')?.textContent?.trim() || 'Track';
+      function loadEmbed() {
+        if (btn.dataset.loaded) return;
+        btn.dataset.loaded = '1';
+        const inner = card.querySelector('.song-card-inner');
+        if (!inner) return;
+        const sep = url.includes('?') ? '&' : '?';
+        inner.innerHTML =
+          '<iframe src="' + url + sep + 'autoplay=1" title="' + title.replace(/"/g, '&quot;') + '" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" allowfullscreen loading="lazy"></iframe>';
+      }
+      btn.addEventListener('click', loadEmbed);
+      btn.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); loadEmbed(); }
+      });
+    });
+  }
+
+  function initForAlaaSecret() {
+    const box = document.getElementById('for-alaa-secret');
+    const closeBtn = document.getElementById('for-alaa-secret-close');
+    if (!box || box.dataset.bound) return;
+    box.dataset.bound = '1';
+
+    function reveal() {
+      box.hidden = false;
+      try { box.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); } catch {}
+    }
+
+    function bindTripleTap(el) {
+      if (!el) return;
+      let count = 0;
+      let timer;
+      el.addEventListener('click', () => {
+        clearTimeout(timer);
+        count++;
+        timer = setTimeout(() => { count = 0; }, 550);
+        if (count >= 3) {
+          count = 0;
+          reveal();
+        }
+      });
+    }
+
+    bindTripleTap(document.getElementById('for-alaa-secret-trigger-title'));
+    bindTripleTap(document.getElementById('for-alaa-secret-trigger-eyebrow'));
+    bindTripleTap(document.getElementById('for-alaa-secret-trigger-diamond'));
+    bindTripleTap(document.getElementById('for-alaa-secret-trigger-note'));
+
+    if (closeBtn) {
+      closeBtn.addEventListener('click', () => { box.hidden = true; });
+    }
+  }
+
+  function onAuthenticated(isNew) {
+    updateCounter(parseInt(localStorage.getItem(PLAY_KEY) || '0', 10), false);
+    startStarfield();
+    initObservers();
+    initSongFacades();
+    initForAlaaSecret();
+
+    (async function syncPlays() {
+      try {
+        let plays = await fetchPlays();
+        if (isNew && !sessionStorage.getItem(SESSION_KEY)) {
+          sessionStorage.setItem(SESSION_KEY, '1');
+          plays += 1;
+          updateCounter(plays, true);
+          await pushPlays(plays);
+        } else {
+          updateCounter(parseInt(localStorage.getItem(PLAY_KEY) || String(plays), 10), false);
+        }
+      } catch {}
+    })();
+  }
+
+  function checkPass() {
+    const input = document.getElementById('gate-input');
+    const field = document.getElementById('gate-field');
+    const err   = document.getElementById('gate-error');
+    if (input.value.trim().toLowerCase() === PASS) {
+      sessionStorage.setItem(AUTH_KEY, 'yes');
+      gate.classList.add('hide');
+      onAuthenticated(true);
+    } else {
+      input.value = '';
+      err.textContent = (document.documentElement.lang === 'ar')
+        ? 'هذه ليست الكلمة السحرية ♡'
+        : 'That\'s not the secret ♡';
+      field.classList.remove('shake');
+      void field.offsetWidth;
+      field.classList.add('shake');
+      setTimeout(() => { err.textContent = ''; }, 2400);
+    }
+  }
+  document.getElementById('gate-input').addEventListener('keydown', e => {
+    if (e.key === 'Enter') checkPass();
+  });
+  if (sessionStorage.getItem(AUTH_KEY) === 'yes') {
+    gate.classList.add('hide');
+    onAuthenticated(false);
+  }
+
+  // ══ STARFIELD ══
+  const canvas = document.getElementById('starfield');
+  const ctx    = canvas.getContext('2d');
+  let particles = [], rafId = null;
+
+  function resize() {
+    canvas.width  = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+
+  function mkParticle() {
+    return {
+      x:      Math.random() * canvas.width,
+      y:      Math.random() * canvas.height,
+      r:      Math.random() * 1.6 + 0.3,
+      speed:  Math.random() * 0.35 + 0.08,
+      drift:  (Math.random() - 0.5) * 0.15,
+      base:   Math.random() * 0.45 + 0.08,
+      phase:  Math.random() * Math.PI * 2,
+    };
+  }
+
+  function drawFrame() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    const now = performance.now() / 1000;
+    particles.forEach(p => {
+      const alpha = p.base * (0.65 + 0.35 * Math.sin(p.phase + now * 1.1));
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(212,180,131,${alpha})`;
+      ctx.fill();
+      p.y -= p.speed;
+      p.x += p.drift;
+      if (p.y < -4) { p.y = canvas.height + 4; p.x = Math.random() * canvas.width; }
+    });
+    rafId = requestAnimationFrame(drawFrame);
+  }
+
+  function startStarfield() {
+    resize();
+    particles = Array.from({ length: 45 }, mkParticle);
+    canvas.classList.add('visible');
+    drawFrame();
+  }
+  window.addEventListener('resize', () => {
+    if (particles.length) resize();
+  });
+
+  // ══ INTERSECTION OBSERVERS ══
+  function initObservers() {
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach((e, i) => {
+        if (e.isIntersecting) {
+          const el = e.target;
+          const delay = el.dataset.delay ? parseInt(el.dataset.delay) : 0;
+          setTimeout(() => el.classList.add('visible'), delay);
+          obs.unobserve(el);
+        }
+      });
+    }, { threshold: 0.15 });
+
+    // lyric lines — stagger
+    document.querySelectorAll('.lyric-line, .lyric-attr').forEach((el, i) => {
+      el.style.transitionDelay = `${i * 140}ms`;
+      obs.observe(el);
+    });
+
+    // song cards — stagger
+    document.querySelectorAll('.song-card').forEach((el, i) => {
+      el.style.transitionDelay = `${i * 100}ms`;
+      obs.observe(el);
+    });
+  }
+
+  // ══ LANG TOGGLE ══
+  let lang = 'en';
+  function toggleLang() {
+    lang = lang === 'en' ? 'ar' : 'en';
+    const html = document.documentElement;
+    html.lang = lang;
+    html.dir  = lang === 'ar' ? 'rtl' : 'ltr';
+    document.querySelector('.topnav-lang').textContent = lang === 'ar' ? 'English' : 'عربي';
+    document.querySelectorAll('.t[data-en]').forEach(el => {
+      el.textContent = el.dataset[lang];
+    });
+  }
+</script>
+</body>
+</html>
