@@ -1,5 +1,11 @@
-import LegacyMemesPage from "@/components/legacy/memes/LegacyMemesPage";
+import type { Metadata } from "next";
+import MemesPage from "@/components/memes/MemesPage";
 
-export default function MemesPage() {
-  return <LegacyMemesPage />;
+export const metadata: Metadata = {
+  title: "The Meme Vault — Ahmed & Alaa",
+  robots: { index: false, follow: false },
+};
+
+export default function Page() {
+  return <MemesPage />;
 }
