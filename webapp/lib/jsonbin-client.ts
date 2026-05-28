@@ -29,3 +29,24 @@ export async function writeBin(binId: string, payload: unknown): Promise<void> {
     throw new Error(`Failed to write bin: ${res.status}`);
   }
 }
+
+/**
+ * Read the bin, shallow-merge `patch` over the top-level object, then write it
+ * back. Lets several features share one bin (e.g. streak `dates` + `presence`)
+ * without one write clobbering another's keys.
+ */
+export async function patchBin(
+  binId: string,
+  patch: Record<string, unknown>,
+): Promise<void> {
+  let current: Record<string, unknown> = {};
+  try {
+    const existing = await readBin(binId);
+    if (existing && typeof existing === "object" && !Array.isArray(existing)) {
+      current = existing as Record<string, unknown>;
+    }
+  } catch {
+    // bin empty or unreachable — fall through and write just the patch
+  }
+  await writeBin(binId, { ...current, ...patch });
+}

@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 
-import { readBin, writeBin } from "@/lib/jsonbin-client";
+import { patchBin, readBin } from "@/lib/jsonbin-client";
 
 const BIN_ID = "69efe653856a6821897d39fd";
 const STORAGE_KEY = "streak_visits";
@@ -68,7 +68,8 @@ export default function StreakWidget({ labels }: Props) {
     setVisits(mergeWithBaseline(storedSet, today));
 
     if (isNewVisit) {
-      writeBin(BIN_ID, { dates: [...storedSet].sort() }).catch(() => {});
+      // patchBin keeps the shared `presence` key intact while updating dates.
+      patchBin(BIN_ID, { dates: [...storedSet].sort() }).catch(() => {});
     }
 
     (async () => {

@@ -167,6 +167,102 @@ a {
   gap: 1rem;
 }
 
+/* ── PRESENCE BADGE (shared, all pages) ── */
+.topnav-right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.presence {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-family: var(--font-jost), "Jost", sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  white-space: nowrap;
+  max-width: 240px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+[lang="ar"] .presence {
+  font-family: var(--font-cairo), "Cairo", sans-serif;
+  letter-spacing: 0;
+}
+
+.presence-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--muted);
+  flex-shrink: 0;
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+
+.presence.is-online {
+  color: var(--gold-lt);
+}
+
+.presence.is-online .presence-dot {
+  background: #5fbf7d;
+  box-shadow: 0 0 0 0 rgb(95 191 125 / 0.55);
+  animation: presencePulse 2.4s ease-in-out infinite;
+}
+
+@keyframes presencePulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgb(95 191 125 / 0.5);
+  }
+  50% {
+    box-shadow: 0 0 0 5px rgb(95 191 125 / 0);
+  }
+}
+
+.presence-pick-label {
+  opacity: 0.7;
+}
+
+.presence-pick button {
+  background: none;
+  border: none;
+  padding: 0 2px;
+  cursor: pointer;
+  font: inherit;
+  letter-spacing: inherit;
+  color: var(--gold-lt);
+}
+
+.presence-pick button:hover {
+  text-decoration: underline;
+}
+
+.presence-pick-sep {
+  opacity: 0.4;
+}
+
+@media (max-width: 760px) {
+  .presence-text,
+  .presence-pick-label {
+    display: none;
+  }
+  .presence:not(.is-online):not(.presence-pick) {
+    display: none;
+  }
+  .topnav-right {
+    gap: 10px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .presence.is-online .presence-dot {
+    animation: none;
+  }
+}
+
 .no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;

@@ -382,6 +382,56 @@
       border: 0;
       height: 352px;
     }
+    .player-facade {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      width: 100%;
+      height: 152px;
+      padding: 0 22px;
+      border: 0;
+      cursor: pointer;
+      text-align: left;
+      background:
+        radial-gradient(120% 120% at 18% 20%, rgba(184,151,90,.18), transparent 60%),
+        rgba(20,14,8,.6);
+      transition: background .3s ease;
+    }
+    .player-facade:hover { background:
+        radial-gradient(120% 120% at 18% 20%, rgba(184,151,90,.28), transparent 60%),
+        rgba(20,14,8,.5); }
+    .player-facade:focus-visible { outline: 1px solid var(--gold-lt); outline-offset: -3px; }
+    .player-facade-art {
+      flex-shrink: 0;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--gold-pl);
+      border: 1px solid rgba(184,151,90,.5);
+      background: rgba(184,151,90,.1);
+    }
+    .player-facade-art svg { width: 22px; height: 22px; margin-left: 3px; }
+    .player-facade:hover .player-facade-art {
+      background: rgba(184,151,90,.2);
+      border-color: var(--gold-lt);
+    }
+    .player-facade-meta { display: flex; flex-direction: column; gap: 4px; }
+    .player-facade-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      color: var(--gold-pl);
+    }
+    .player-facade-artist {
+      font-size: 10px;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    [lang="ar"] .player-facade { text-align: right; }
+    [lang="ar"] .player-facade-art svg { margin-left: 0; margin-right: 3px; }
     .player-note {
       font-size: 10px;
       color: var(--muted);

@@ -4,6 +4,7 @@ import type { ReactNode } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useLanguage } from "@/lib/i18n";
+import PresenceBadge from "@/components/shared/PresenceBadge";
 
 type NavItem = {
   href: string;
@@ -68,6 +69,25 @@ const ITEMS: NavItem[] = [
         <path d="M9 18V5l12-2v13M9 9l12-2" />
         <circle cx="6" cy="18" r="3" />
         <circle cx="18" cy="16" r="3" />
+      </svg>
+    ),
+  },
+  {
+    href: "/notes",
+    page: "notes",
+    en: "Notes",
+    ar: "رسائل",
+    icon: (
+      <svg
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.7"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <path d="M4 4h16v12H7l-3 3V4z" />
+        <path d="M8 9h8M8 12h5" />
       </svg>
     ),
   },
@@ -185,9 +205,12 @@ export default function LegacyTopnav() {
           );
         })}
       </div>
-      <button type="button" className="topnav-lang" onClick={toggle}>
-        {lang === "ar" ? "English" : "عربي"}
-      </button>
+      <div className="topnav-right">
+        <PresenceBadge />
+        <button type="button" className="topnav-lang" onClick={toggle}>
+          {lang === "ar" ? "English" : "عربي"}
+        </button>
+      </div>
     </nav>
   );
 }

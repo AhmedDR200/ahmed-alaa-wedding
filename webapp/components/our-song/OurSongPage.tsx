@@ -133,6 +133,7 @@ function OurSongView() {
     if (typeof window === "undefined") return 0;
     return parseInt(window.localStorage.getItem(PLAY_KEY) ?? "0", 10);
   });
+  const [playerLoaded, setPlayerLoaded] = useState(false);
   const [bumping, setBumping] = useState(false);
   const [secretVisible, setSecretVisible] = useState(false);
   const secretBoxRef = useRef<HTMLDivElement>(null);
@@ -247,13 +248,32 @@ function OurSongView() {
                 <span>{t.pressPlay}</span>
               </div>
               <div className="player-frame">
-                <iframe
-                  src="https://open.spotify.com/embed/track/0tgVpDi06FyKpA1z0VMD4v?utm_source=generator&theme=0"
-                  title="Listen on Spotify"
-                  allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-                  allowFullScreen
-                  loading="lazy"
-                />
+                {playerLoaded ? (
+                  <iframe
+                    src="https://open.spotify.com/embed/track/0tgVpDi06FyKpA1z0VMD4v?utm_source=generator&theme=0&autoplay=1"
+                    title="Listen on Spotify"
+                    allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                    allowFullScreen
+                    loading="lazy"
+                  />
+                ) : (
+                  <button
+                    type="button"
+                    className="player-facade"
+                    aria-label={`${t.pressPlay} — Perfect, Ed Sheeran`}
+                    onClick={() => setPlayerLoaded(true)}
+                  >
+                    <span className="player-facade-art" aria-hidden="true">
+                      <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M8 5v14l11-7z" />
+                      </svg>
+                    </span>
+                    <span className="player-facade-meta">
+                      <span className="player-facade-title">Perfect</span>
+                      <span className="player-facade-artist">Ed Sheeran</span>
+                    </span>
+                  </button>
+                )}
               </div>
               <div
                 className="player-note secret-tap-hint"
