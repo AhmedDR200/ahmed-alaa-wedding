@@ -65,15 +65,40 @@ const aaMajara = localFont({
   display: "swap",
 });
 
+const SITE_TITLE = "Ahmed & Alaa — August 25, 2026";
+const SITE_DESCRIPTION = "A small corner of the internet — for us only.";
+
 export const metadata: Metadata = {
-  title: "Ahmed & Alaa — August 25, 2026",
-  description: "A love story in progress.",
+  metadataBase: new URL("https://ahmed-loves-alaa.space"),
+  title: SITE_TITLE,
+  description: SITE_DESCRIPTION,
   robots: {
     index: false,
     follow: false,
   },
   icons: {
     icon: "/favicon.svg",
+  },
+  openGraph: {
+    type: "website",
+    url: "https://ahmed-loves-alaa.space",
+    siteName: SITE_TITLE,
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+    images: [
+      {
+        url: "/img/og-share.png",
+        width: 1536,
+        height: 1024,
+        alt: "Ahmed & Alaa — August 25, 2026",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+    images: ["/img/og-share.png"],
   },
 };
 
