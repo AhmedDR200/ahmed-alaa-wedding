@@ -1,0 +1,88 @@
+/* ───────────────────────────────────────────────────────────
+   Site-wide background kitties
+   Pixel-cat silhouettes scattered behind every page. The cat shape is a
+   CSS mask, so the colour is just `background-color` — that lets us re-tint
+   the cats per page (dark on pink pages, light on dark-purple pages).
+   Mounted once in app/layout.tsx (BackgroundKitties.tsx).
+   Kept in its own file to avoid clobbering pixel-skin.css edits.
+   ─────────────────────────────────────────────────────────── */
+
+/* Make <body> a stacking context so the fixed kitty layer below resolves
+   *inside* body instead of against the root. Without this, a fixed
+   z-index:-1 element paints behind body's OWN background (the pink/purple
+   gradient + pixel texture) and the cats vanish. With body isolated, a
+   negative-z child paints above body's background but below every content
+   node (which all live at body's normal/positive stacking levels), so the
+   cats sit on top of the background texture yet behind all real content,
+   the topnav, gate, modals and the custom cursor. isolation does not create
+   a containing block for fixed elements, so nothing shifts position. */
+body {
+  isolation: isolate;
+}
+
+.bg-kitties {
+  position: fixed;
+  inset: 0;
+  z-index: -1; /* within body: above its background, below all content */
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.bg-kitty {
+  position: absolute;
+  transform-origin: center;
+  /* default tint: light pink for the dark-purple pages
+     (/our-song, /us, /secrets, /for-alaa, /memes, /invite, /maintenance) */
+  background-color: #ffd9e6;
+  opacity: 0.26;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  -webkit-mask-size: 100% 100%;
+  animation: bgKittyDrift 7s ease-in-out infinite;
+  will-change: transform;
+}
+
+/* soft-pink pages: dark silhouettes read best (and stay cute) */
+body:has(.home-page) .bg-kitty,
+body:has(.flame-page) .bg-kitty {
+  background-color: #1a1320;
+  opacity: 0.22;
+}
+
+@keyframes bgKittyDrift {
+  0%,
+  100% {
+    translate: 0 0;
+  }
+  50% {
+    translate: 0 -8px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bg-kitty {
+    animation: none;
+  }
+}
+
+/* ── reveal kitties on the opaque, isolated pink pages ──
+   .home-page / .flame-page paint an opaque gradient on the wrapper
+   (with isolation: isolate), which would hide a body-level layer.
+   Relocate those gradients to <body> so the fixed kitties (z-index:-1)
+   sit between the background and the page content on every route. */
+body:has(.home-page),
+body:has(.flame-page) {
+  background:
+    radial-gradient(900px 520px at 50% 0%, rgba(255, 210, 225, 0.65), transparent 70%),
+    radial-gradient(700px 480px at 20% 55%, rgba(255, 196, 214, 0.35), transparent 65%),
+    radial-gradient(700px 480px at 80% 75%, rgba(247, 185, 207, 0.35), transparent 65%),
+    linear-gradient(180deg, #ffe8f2 0%, #ffd9e8 38%, #ffd0e3 72%, #ffc6dd 100%) !important;
+}
+
+.home-page,
+.flame-page {
+  background: transparent !important;
+}

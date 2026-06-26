@@ -80,34 +80,34 @@ a {
   padding: 5rem 0;
 }
 
-.cursor-dot,
-.cursor-ring {
+.cursor-kitty {
   position: fixed;
   top: 0;
-  left: 0;
-  border-radius: 9999px;
+  left: -100px;
+  width: 24px;
+  height: 31px;
   pointer-events: none;
-  z-index: 10000;
-  transform: translate(-50%, -50%);
+  z-index: 100001;
+  /* Hotspot = the kitty's left ear tip (top-left of the sprite). */
+  transform-origin: 2px 2px;
+  transform: scale(1);
+  opacity: 0;
+  filter: drop-shadow(1px 2px 0 rgba(26, 19, 32, 0.25));
+  transition: transform 0.14s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.2s ease;
+  will-change: left, top, transform;
 }
 
-.cursor-dot {
-  width: 8px;
-  height: 8px;
-  background: var(--gold);
+.cursor-kitty svg {
+  display: block;
 }
 
-.cursor-ring {
-  width: 34px;
-  height: 34px;
-  border: 1px solid color-mix(in srgb, var(--gold) 70%, transparent);
-  transition: width 0.2s ease, height 0.2s ease, border-color 0.2s ease;
+.cursor-kitty.visible {
+  opacity: 1;
 }
 
-.cursor-ring.active {
-  width: 48px;
-  height: 48px;
-  border-color: color-mix(in srgb, var(--gold) 100%, transparent);
+/* tiny "perk up" reaction over interactive elements */
+.cursor-kitty.perk {
+  transform: scale(1.22) rotate(-4deg);
 }
 
 .loader {
@@ -277,8 +277,7 @@ a {
     cursor: auto;
   }
 
-  .cursor-dot,
-  .cursor-ring {
+  .cursor-kitty {
     display: none;
   }
 

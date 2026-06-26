@@ -37,6 +37,7 @@ const T = {
     today: "Today Is The Day",
     closing: "Your presence is the greatest gift of all.",
     madeWith: "Made with love",
+    weddingDate: "August 25, 2026",
     langLabel: "عربي",
   },
   ar: {
@@ -58,6 +59,7 @@ const T = {
     today: "اليوم هو اليوم",
     closing: "حضوركم أغلى هدية.",
     madeWith: "صُنع بحب",
+    weddingDate: "٢٥ أغسطس ٢٠٢٦",
     langLabel: "English",
   },
 } as const;
@@ -330,7 +332,7 @@ export default function InvitePage() {
           <span className="orn-line" />
         </div>
         <div className="foot-main">
-          <strong>Ahmed &amp; Alaa</strong> · August 25, 2026
+          <strong>Ahmed &amp; Alaa</strong> · {t.weddingDate}
         </div>
         <div className="foot-sub">{t.madeWith}</div>
         <Link className="foot-link" href="/" aria-label="hidden">

@@ -37,6 +37,7 @@ type Labels = {
   fridaysToPlan: string;
   todayIsTheDay: string;
   ahmedAndAlaa: string;
+  weddingDate: string;
 };
 
 type Props = {
@@ -89,7 +90,7 @@ export default function CountdownStats({
             <em>!</em>
           </div>
           <div className="celebration-sub">
-            {labels.ahmedAndAlaa} — August 25, 2026
+            {labels.ahmedAndAlaa} — {labels.weddingDate}
           </div>
         </div>
       </div>

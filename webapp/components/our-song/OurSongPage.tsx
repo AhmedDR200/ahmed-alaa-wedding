@@ -4,7 +4,6 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import "@/styles/legacy/our-song.css";
 
 import LegacyTopnav from "@/components/shared/LegacyTopnav";
-import PageGate from "@/components/shared/PageGate";
 import Starfield from "@/components/our-song/Starfield";
 import SongCard from "@/components/our-song/SongCard";
 import { useLanguage } from "@/lib/i18n";
@@ -107,24 +106,6 @@ const MORE_SONGS = [
   },
 ];
 
-const NOTE_DECORATION = (
-  <div className="gate-note" aria-hidden="true">
-    <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <linearGradient id="noteGrad" x1="0%" y1="100%" x2="100%" y2="0%">
-          <stop offset="0%" stopColor="#7A5A28" />
-          <stop offset="60%" stopColor="#B8975A" />
-          <stop offset="100%" stopColor="#EEE0C4" />
-        </linearGradient>
-      </defs>
-      <path
-        d="M28 10 L28 46 Q28 54 20 54 Q12 54 12 47 Q12 41 20 41 Q24 41 26 43 L26 14 L52 8 L52 38 Q52 46 44 46 Q36 46 36 39 Q36 33 44 33 Q48 33 50 35 L50 14 Z"
-        fill="url(#noteGrad)"
-      />
-    </svg>
-  </div>
-);
-
 function OurSongView() {
   const { lang } = useLanguage();
   const t = T[lang];
@@ -208,7 +189,7 @@ function OurSongView() {
     <>
       <Starfield />
       <LegacyTopnav />
-      <div className="page">
+      <div className="page our-song-page">
         <div className="header-block">
           <div
             className="header-eyebrow secret-tap-hint"
@@ -348,17 +329,5 @@ function OurSongView() {
 }
 
 export default function OurSongPage() {
-  const { lang } = useLanguage();
-  const t = T[lang];
-  return (
-    <PageGate
-      storageKey="song_auth_v1"
-      password="perfect-one"
-      title={t.gateTitle}
-      subtitle={t.gateSub}
-      decoration={NOTE_DECORATION}
-    >
-      <OurSongView />
-    </PageGate>
-  );
+  return <OurSongView />;
 }

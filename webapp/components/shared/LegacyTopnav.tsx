@@ -73,25 +73,6 @@ const ITEMS: NavItem[] = [
     ),
   },
   {
-    href: "/notes",
-    page: "notes",
-    en: "Notes",
-    ar: "رسائل",
-    icon: (
-      <svg
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.7"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <path d="M4 4h16v12H7l-3 3V4z" />
-        <path d="M8 9h8M8 12h5" />
-      </svg>
-    ),
-  },
-  {
     href: "/memes",
     page: "memes",
     en: "Memes",

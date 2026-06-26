@@ -5,7 +5,6 @@ import "@/styles/legacy/us.css";
 import { useEffect, useMemo, useRef } from "react";
 
 import LegacyTopnav from "@/components/shared/LegacyTopnav";
-import PageGate from "@/components/shared/PageGate";
 import { useLanguage } from "@/lib/i18n";
 
 type Moment = {
@@ -64,15 +63,6 @@ const T = {
   },
 } as const;
 
-const GATE_MOSAIC = (
-  <div className="gate-mosaic" aria-hidden="true">
-    <span />
-    <span />
-    <span />
-    <span />
-  </div>
-);
-
 function UsView() {
   const { lang } = useLanguage();
   const t = T[lang];
@@ -109,7 +99,7 @@ function UsView() {
   return (
     <>
       <LegacyTopnav />
-      <div className="page">
+      <div className="page us">
         <div className="header-block">
           <div className="header-eyebrow">{t.eyebrow}</div>
           <h1 className="header-title">{t.title}</h1>
@@ -170,17 +160,5 @@ function UsView() {
 }
 
 export default function UsPage() {
-  const { lang } = useLanguage();
-  const t = T[lang];
-  return (
-    <PageGate
-      storageKey="us_auth_v1"
-      password="you-and-me"
-      title={t.gateTitle}
-      subtitle={t.gateSub}
-      decoration={GATE_MOSAIC}
-    >
-      <UsView />
-    </PageGate>
-  );
+  return <UsView />;
 }

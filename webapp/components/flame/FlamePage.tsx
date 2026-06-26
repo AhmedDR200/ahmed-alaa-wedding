@@ -6,7 +6,6 @@ import "@/styles/legacy/flame.css";
 import FlameSvg from "@/components/flame/FlameSvg";
 import HeartButton from "@/components/flame/HeartButton";
 import LegacyTopnav from "@/components/shared/LegacyTopnav";
-import PageGate from "@/components/shared/PageGate";
 import { formatShortDate, shiftKey, todayKey } from "@/lib/cairo";
 import {
   bestStreak,
@@ -61,14 +60,6 @@ const MESSAGES = {
   },
 };
 
-const FLAME_GATE_DECOR = (
-  <div className="gate-flame">
-    <div className="gf gf1" />
-    <div className="gf gf2" />
-    <div className="gf gf3" />
-  </div>
-);
-
 function loadFromCache(): FlameRecord {
   if (typeof window === "undefined") return normalizeFlameRecord({});
   try {
@@ -96,7 +87,7 @@ function burstParticles() {
       el.textContent = chars[Math.floor(Math.random() * chars.length)];
       el.style.left = `${cx}px`;
       el.style.top = `${cy}px`;
-      el.style.color = Math.random() > 0.5 ? "#D4B483" : "#B8975A";
+      el.style.color = Math.random() > 0.5 ? "#e23b4e" : "#f48fb1";
       const angle = Math.random() * Math.PI * 2;
       const dist = 80 + Math.random() * 180;
       el.style.setProperty("--px", `${Math.cos(angle) * dist}px`);
@@ -226,7 +217,7 @@ function FlameView() {
   return (
     <>
       <LegacyTopnav />
-      <div className="page">
+      <div className="page flame-page">
         <div className="streak-header">
           <div className="streak-num">{streak}</div>
           <div className="streak-label">{msg.streakLabel}</div>
@@ -319,15 +310,5 @@ function FlameView() {
 }
 
 export default function FlamePage() {
-  return (
-    <PageGate
-      storageKey="flame_auth_v1"
-      password="loving-husband"
-      title="Our Daily Flame"
-      subtitle="This space is just for us"
-      decoration={FLAME_GATE_DECOR}
-    >
-      <FlameView />
-    </PageGate>
-  );
+  return <FlameView />;
 }

@@ -242,7 +242,7 @@
       border-radius: 50%;
       background: var(--gold);
       pointer-events: none;
-      z-index: 9999;
+      z-index: 100001;
       transform: translate(-50%, -50%);
       transition: transform .1s ease;
     }
@@ -252,7 +252,7 @@
       border-radius: 50%;
       border: 1px solid rgba(184,151,90,.5);
       pointer-events: none;
-      z-index: 9998;
+      z-index: 100001;
       transform: translate(-50%, -50%);
       transition: transform .18s ease, width .2s, height .2s;
     }

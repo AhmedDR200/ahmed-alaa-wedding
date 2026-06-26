@@ -14,20 +14,20 @@ export default function FlameSvg({ state }: FlameSvgProps) {
       >
         <defs>
           <linearGradient id="bigFlameOuter" x1="50%" y1="100%" x2="50%" y2="0%">
-            <stop offset="0%" stopColor="#7A5A28" />
-            <stop offset="35%" stopColor="#B8975A" />
-            <stop offset="75%" stopColor="#D4B483" />
-            <stop offset="100%" stopColor="#EEE0C4" />
+            <stop offset="0%" stopColor="#b85a55" />
+            <stop offset="35%" stopColor="#e23b4e" />
+            <stop offset="75%" stopColor="#f48fb1" />
+            <stop offset="100%" stopColor="#ffe9f0" />
           </linearGradient>
           <linearGradient id="bigFlameInner" x1="50%" y1="100%" x2="50%" y2="0%">
-            <stop offset="0%" stopColor="#D4B483" stopOpacity="0" />
-            <stop offset="55%" stopColor="#EEE0C4" stopOpacity=".75" />
-            <stop offset="100%" stopColor="#FFF6DC" />
+            <stop offset="0%" stopColor="#f48fb1" stopOpacity="0" />
+            <stop offset="55%" stopColor="#ffd3e1" stopOpacity=".75" />
+            <stop offset="100%" stopColor="#fff6f0" />
           </linearGradient>
           <radialGradient id="bigFlameCore" cx="50%" cy="70%" r="55%">
-            <stop offset="0%" stopColor="#FFFBE8" />
-            <stop offset="60%" stopColor="#F4E0A8" stopOpacity=".9" />
-            <stop offset="100%" stopColor="#D4B483" stopOpacity="0" />
+            <stop offset="0%" stopColor="#fff6f0" />
+            <stop offset="60%" stopColor="#ffd3e1" stopOpacity=".9" />
+            <stop offset="100%" stopColor="#f48fb1" stopOpacity="0" />
           </radialGradient>
         </defs>
         <path

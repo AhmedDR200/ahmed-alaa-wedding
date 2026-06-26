@@ -3,7 +3,6 @@
 import "@/styles/legacy/for-alaa.css";
 
 import LegacyTopnav from "@/components/shared/LegacyTopnav";
-import PageGate from "@/components/shared/PageGate";
 import { useLanguage } from "@/lib/i18n";
 
 const T = {
@@ -30,42 +29,6 @@ const T = {
     gateHint: "تلميح: اسمكِ وما تكونينه لي",
   },
 } as const;
-
-const ROSE_DECORATION = (
-  <div className="gate-rose" aria-hidden="true">
-    <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <radialGradient id="gateRoseGrad" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stopColor="#FFEEF3" />
-          <stop offset="55%" stopColor="#F48FB1" />
-          <stop offset="100%" stopColor="#C2185B" />
-        </radialGradient>
-      </defs>
-      <g transform="translate(32 32)">
-        <g fill="url(#gateRoseGrad)">
-          <path d="M 0 0 C -10 -4 -14 -16 -6 -22 C 0 -25 6 -22 6 -16 C 6 -10 0 -8 0 0 Z" />
-          <path
-            d="M 0 0 C -10 -4 -14 -16 -6 -22 C 0 -25 6 -22 6 -16 C 6 -10 0 -8 0 0 Z"
-            transform="rotate(72)"
-          />
-          <path
-            d="M 0 0 C -10 -4 -14 -16 -6 -22 C 0 -25 6 -22 6 -16 C 6 -10 0 -8 0 0 Z"
-            transform="rotate(144)"
-          />
-          <path
-            d="M 0 0 C -10 -4 -14 -16 -6 -22 C 0 -25 6 -22 6 -16 C 6 -10 0 -8 0 0 Z"
-            transform="rotate(216)"
-          />
-          <path
-            d="M 0 0 C -10 -4 -14 -16 -6 -22 C 0 -25 6 -22 6 -16 C 6 -10 0 -8 0 0 Z"
-            transform="rotate(288)"
-          />
-        </g>
-        <circle cx="0" cy="0" r="3" fill="#88143E" />
-      </g>
-    </svg>
-  </div>
-);
 
 function ForAlaaView() {
   const { lang } = useLanguage();
@@ -111,17 +74,5 @@ function ForAlaaView() {
 }
 
 export default function ForAlaaPage() {
-  const { lang } = useLanguage();
-  const t = T[lang];
-  return (
-    <PageGate
-      storageKey="alaa_auth_v1"
-      password="alaa-core"
-      title={t.gateTitle}
-      subtitle={t.gateSub}
-      decoration={ROSE_DECORATION}
-    >
-      <ForAlaaView />
-    </PageGate>
-  );
+  return <ForAlaaView />;
 }

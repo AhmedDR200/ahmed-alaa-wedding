@@ -13,7 +13,6 @@ import {
 } from "react";
 
 import LegacyTopnav from "@/components/shared/LegacyTopnav";
-import PageGate from "@/components/shared/PageGate";
 import { useLanguage } from "@/lib/i18n";
 import {
   appendSecret,
@@ -123,43 +122,6 @@ const T = {
     },
   },
 } as const;
-
-const GATE_SEAL_DECOR = (
-  <div className="gate-seal" aria-hidden="true">
-    <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <radialGradient id="waxGrad" cx="50%" cy="40%" r="60%">
-          <stop offset="0%" stopColor="#E27358" />
-          <stop offset="55%" stopColor="#C8553D" />
-          <stop offset="100%" stopColor="#7A2A1C" />
-        </radialGradient>
-      </defs>
-      <rect
-        x="6"
-        y="16"
-        width="52"
-        height="36"
-        rx="3"
-        fill="none"
-        stroke="#B8975A"
-        strokeWidth="1.5"
-      />
-      <path d="M6 19 L32 38 L58 19" fill="none" stroke="#B8975A" strokeWidth="1.5" />
-      <circle cx="32" cy="38" r="9" fill="url(#waxGrad)" stroke="#3A1208" strokeWidth="0.8" />
-      <text
-        x="32"
-        y="42"
-        textAnchor="middle"
-        fontFamily="Cormorant Garamond, serif"
-        fontStyle="italic"
-        fontSize="10"
-        fill="#FFE9DC"
-      >
-        A
-      </text>
-    </svg>
-  </div>
-);
 
 type ToastState = { msg: string; kind: "" | "ok" | "err" } | null;
 
@@ -597,17 +559,5 @@ function SecretsView() {
 }
 
 export default function SecretsPage() {
-  const { lang } = useLanguage();
-  const t = T[lang];
-  return (
-    <PageGate
-      storageKey="secrets_auth_v1"
-      password="between-us"
-      title={t.gateTitle}
-      subtitle={t.gateSub}
-      decoration={GATE_SEAL_DECOR}
-    >
-      <SecretsView />
-    </PageGate>
-  );
+  return <SecretsView />;
 }

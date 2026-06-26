@@ -8,7 +8,6 @@ import {
   useMemo,
   useRef,
   useState,
-  type FormEvent,
 } from "react";
 
 import ConfettiCanvas, {
@@ -24,8 +23,6 @@ import LegacyTopnav from "@/components/shared/LegacyTopnav";
 import { useLanguage } from "@/lib/i18n";
 import { LETTER_PARAS, REASONS, T, TIMELINE } from "./HomeData";
 
-const AUTH_KEY = "home_auth_v1";
-const PASS = "alaa-core";
 const TZ = "Africa/Cairo";
 
 function cairoLongDate(lang: "en" | "ar"): string {
@@ -48,69 +45,6 @@ function cairoDayKey(): string {
   const o: Record<string, string> = {};
   for (const p of parts) o[p.type] = p.value;
   return `${o.year}-${o.month}-${o.day}`;
-}
-
-function HomeGate({ onUnlock }: { onUnlock: () => void }) {
-  const { lang, toggle } = useLanguage();
-  const t = T[lang];
-  const [value, setValue] = useState("");
-  const [err, setErr] = useState("");
-  const [shake, setShake] = useState(false);
-
-  function submit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    if (value.trim().toLowerCase() === PASS) {
-      onUnlock();
-      return;
-    }
-    setErr(lang === "ar" ? "ليس هذا السرّ ♡" : "That's not the secret ♡");
-    setValue("");
-    setShake(false);
-    requestAnimationFrame(() => setShake(true));
-    window.setTimeout(() => setErr(""), 2400);
-  }
-
-  return (
-    <div id="gate">
-      <div className="gate-inner">
-        <div className="gate-mono">A &amp; A</div>
-        <div className="gate-title">{t.gateTitle}</div>
-        <div className="gate-sub">{t.gateSub}</div>
-        <div className="gate-diamond" aria-hidden="true" />
-        <form onSubmit={submit}>
-          <div
-            className={`gate-field${shake ? " shake" : ""}`}
-            id="gate-field"
-            onAnimationEnd={() => setShake(false)}
-          >
-            <input
-              type="password"
-              id="gate-input"
-              placeholder={
-                lang === "ar" ? "السرّ بيننا" : "Enter your secret"
-              }
-              autoComplete="off"
-              value={value}
-              onChange={(e) => setValue(e.target.value)}
-            />
-            <button type="submit" aria-label="Enter">
-              →
-            </button>
-          </div>
-          <div className="gate-error">{err}</div>
-          <div className="gate-hint">{t.gateHint}</div>
-        </form>
-        <button
-          type="button"
-          className="gate-lang"
-          id="gate-lang-btn"
-          onClick={toggle}
-        >
-          {lang === "en" ? "عربي" : "English"}
-        </button>
-      </div>
-    </div>
-  );
 }
 
 function HomeView() {
@@ -179,7 +113,7 @@ function HomeView() {
   }, [lang, t]);
 
   return (
-    <>
+    <div className="home-page">
       <ScrollProgress />
       <LegacyTopnav />
       <Reveal />
@@ -214,7 +148,7 @@ function HomeView() {
           <div className="hero-names">
             {lang === "ar" ? (
               <>
-                أحمد <em>&amp;</em> ألاء
+                أحمد <em>&amp;</em> آلاء
               </>
             ) : (
               <>
@@ -244,6 +178,7 @@ function HomeView() {
           fridaysToPlan: t.fridaysToPlan,
           todayIsTheDay: t.todayIsTheDay,
           ahmedAndAlaa: t.ahmedAndAlaa,
+          weddingDate: t.letterDate,
         }}
         onMilestone={showMilestone}
         onWeddingDay={onWeddingDay}
@@ -266,45 +201,40 @@ function HomeView() {
         <div className="quote-attr">{t.quoteAttr}</div>
       </div>
 
-      <div className="section-wrap reveal">
+      <div className="story-section section-wrap reveal">
         <div className="section-heading">
           {t.storyHeadingPrefix} <em>{t.storyHeadingEm}</em>
         </div>
         <div className="section-sub">{t.storySub}</div>
-        <div className="timeline reveal reveal-stagger">
+        <div className="story-timeline reveal reveal-stagger">
           {TIMELINE.map((item) => (
-            <div key={item.date.line1} className="tl-item">
-              <div className="tl-date-col">
-                <div className="tl-date">
-                  {item.date.line1}
-                  <br />
-                  {item.date.line2}
-                </div>
+            <article key={item.title.en} className="story-card">
+              <header className="story-card-bar">
+                <span className="story-card-date">{item.date[lang]}</span>
+                <span className="story-card-dots" aria-hidden="true">
+                  <b>_</b>
+                  <b>□</b>
+                  <b>×</b>
+                </span>
+              </header>
+              <div className="story-card-strip" aria-hidden="true">
+                ♥ <i>·</i> ♥ <i>·</i> ♥
               </div>
-              <div className="tl-line-col">
-                <div className="tl-dot" />
-                <div className="tl-connector" />
+              <div className="story-card-body">
+                <h3 className="story-card-title">{item.title[lang]}</h3>
+                <p className="story-card-desc">{item.desc[lang]}</p>
               </div>
-              <div className="tl-body">
-                <div className="tl-title">{item.title[lang]}</div>
-                <div className="tl-desc">{item.desc[lang]}</div>
-              </div>
-            </div>
+            </article>
           ))}
         </div>
       </div>
 
       <div className="reasons-section">
         <div className="section-wrap reveal">
-          <div className="section-heading" style={{ color: "var(--white)" }}>
+          <div className="section-heading">
             {t.reasonsHeadingPrefix} <em>{t.reasonsHeadingEm}</em>
           </div>
-          <div
-            className="section-sub"
-            style={{ color: "rgba(255,255,255,.4)" }}
-          >
-            {t.reasonsSub}
-          </div>
+          <div className="section-sub">{t.reasonsSub}</div>
           <div className="reasons-grid" id="reasons-grid">
             {REASONS.map((r, i) => (
               <div key={r.title.en} className="reason-item">
@@ -369,23 +299,13 @@ function HomeView() {
       </div>
 
       <footer>
-        <strong>Ahmed &amp; Alaa</strong> &nbsp;·&nbsp; August 25, 2026 &nbsp;·&nbsp;
+        <strong>Ahmed &amp; Alaa</strong> &nbsp;·&nbsp; {t.letterDate} &nbsp;·&nbsp;
         <span>{t.madeWith}</span>
       </footer>
-    </>
+    </div>
   );
 }
 
 export default function HomePage() {
-  const stored =
-    typeof window !== "undefined" &&
-    sessionStorage.getItem(AUTH_KEY) === "yes";
-  const [unlocked, setUnlocked] = useState(stored);
-
-  const unlock = useCallback(() => {
-    sessionStorage.setItem(AUTH_KEY, "yes");
-    setUnlocked(true);
-  }, []);
-
-  return unlocked ? <HomeView /> : <HomeGate onUnlock={unlock} />;
+  return <HomeView />;
 }

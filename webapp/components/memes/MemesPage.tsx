@@ -3,36 +3,15 @@
 import "@/styles/legacy/memes.css";
 
 import {
-  useCallback,
   useEffect,
   useState,
   useSyncExternalStore,
-  type FormEvent,
 } from "react";
 
 import LegacyTopnav from "@/components/shared/LegacyTopnav";
 import { useLanguage } from "@/lib/i18n";
 
-const AUTH_KEY = "memes_auth_v1";
-const PASS = "sukuna-wins";
 const NUH_KEY = "memes_nuh_count_v1";
-
-const WRONG = {
-  en: [
-    "Wrong. Read chapter 236 again, habibti.",
-    "Cope. Try again.",
-    "Nah, you'd lose.",
-    "Six Eyes can't see this password either.",
-    "Stand proud — but try again.",
-  ],
-  ar: [
-    "غلط. اقري تشابتر ٢٣٦ تاني يا حبيبتي.",
-    "كوب. حاولي تاني.",
-    "لا، حتخسري.",
-    "حتى العيون الست مش شايفة الباسوورد ده.",
-    "افخري بنفسك — وحاولي تاني.",
-  ],
-};
 
 const REPLIES = {
   en: [
@@ -81,6 +60,8 @@ const T = {
       "A small museum of W's against my fiancée — opened with love, signed in cursed energy.",
     ahmed: "Ahmed",
     alaa: "Alaa",
+    scoreSukuna: "Sukuna",
+    scoreGojoNanami: "Gojo · Nanami",
     scoreTag: "Canon — undefeated · Casualties: 2 and counting",
     exhibitA: "Exhibit A",
     bannerTop: "HE LOVES SUKUNA",
@@ -150,6 +131,8 @@ const T = {
     heroSub: "متحف صغير لانتصاراتي على خطيبتي — افتُتح بالحب، ووُقّع بالطاقة الملعونة.",
     ahmed: "أحمد",
     alaa: "آلاء",
+    scoreSukuna: "ساكونا",
+    scoreGojoNanami: "غوجو · نانامي",
     scoreTag: "حسب المانجا — بدون هزائم · القتلى: ٢ والعدّ مستمر",
     exhibitA: "الدليل أ",
     bannerTop: "هو بيحب ساكونا",
@@ -209,88 +192,6 @@ const T = {
 function subscribeStorage(callback: () => void) {
   window.addEventListener("storage", callback);
   return () => window.removeEventListener("storage", callback);
-}
-
-function useUnlocked(): [boolean, () => void] {
-  const stored = useSyncExternalStore(
-    subscribeStorage,
-    () => sessionStorage.getItem(AUTH_KEY) === "yes",
-    () => false,
-  );
-  const [manual, setManual] = useState(false);
-  const unlock = useCallback(() => {
-    sessionStorage.setItem(AUTH_KEY, "yes");
-    setManual(true);
-  }, []);
-  return [stored || manual, unlock];
-}
-
-function MemesGate({
-  onUnlock,
-}: {
-  onUnlock: () => void;
-}) {
-  const { lang, toggle } = useLanguage();
-  const t = T[lang];
-  const [value, setValue] = useState("");
-  const [err, setErr] = useState("");
-  const [shake, setShake] = useState(false);
-
-  function submit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    if (value.trim().toLowerCase() === PASS) {
-      onUnlock();
-      return;
-    }
-    const choices = WRONG[lang];
-    setErr(choices[Math.floor(Math.random() * choices.length)]);
-    setValue("");
-    setShake(false);
-    requestAnimationFrame(() => setShake(true));
-    window.setTimeout(() => setErr(""), 3200);
-  }
-
-  return (
-    <div id="gate">
-      <div className="gate-inner">
-        <div className="gate-mono">A &amp; A</div>
-        <div className="gate-title">{t.gateTitle}</div>
-        <div className="gate-sub">{t.gateSub}</div>
-        <div className="gate-diamond" aria-hidden="true" />
-        <form onSubmit={submit}>
-          <div
-            className={`gate-field${shake ? " shake" : ""}`}
-            id="gate-field"
-            onAnimationEnd={() => setShake(false)}
-          >
-            <input
-              type="password"
-              id="gate-input"
-              placeholder={t.gatePh}
-              autoComplete="off"
-              value={value}
-              onChange={(e) => setValue(e.target.value)}
-            />
-            <button type="submit" aria-label="Enter">
-              →
-            </button>
-          </div>
-          <div className="gate-error" id="gate-error">
-            {err}
-          </div>
-          <div className="gate-hint">{t.gateHint}</div>
-        </form>
-        <button
-          type="button"
-          className="gate-lang"
-          id="gate-lang-btn"
-          onClick={toggle}
-        >
-          {t.gateLangLabel}
-        </button>
-      </div>
-    </div>
-  );
 }
 
 function useReveal() {
@@ -374,7 +275,7 @@ function MemesContent() {
                 className="scoreboard-name"
                 style={{ color: "var(--sukuna-red)" }}
               >
-                Sukuna
+                {t.scoreSukuna}
               </div>
             </div>
             <div className="scoreboard-mid" />
@@ -385,7 +286,7 @@ function MemesContent() {
                 className="scoreboard-name"
                 style={{ color: "var(--gojo-blue)" }}
               >
-                Gojo · Nanami
+                {t.scoreGojoNanami}
               </div>
             </div>
           </div>
@@ -572,6 +473,5 @@ function MemesContent() {
 }
 
 export default function MemesPage() {
-  const [unlocked, unlock] = useUnlocked();
-  return unlocked ? <MemesContent /> : <MemesGate onUnlock={unlock} />;
+  return <MemesContent />;
 }

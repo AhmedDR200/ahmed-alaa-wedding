@@ -79,7 +79,7 @@ export const REASONS = [
 
 export const TIMELINE = [
   {
-    date: { line1: "March 19", line2: "2023" },
+    date: { en: "March 19 · 2023", ar: "١٩ مارس · ٢٠٢٣" },
     title: { en: "We First Met", ar: "أول لقاء" },
     desc: {
       en: "Every great love story has a beginning. Ours was no different — and we wouldn't change a single moment of it.",
@@ -87,7 +87,7 @@ export const TIMELINE = [
     },
   },
   {
-    date: { line1: "December 9", line2: "2025" },
+    date: { en: "December 9 · 2025", ar: "٩ ديسمبر · ٢٠٢٥" },
     title: { en: "He Asked, She Said Yes", ar: "سألها... فقالت نعم" },
     desc: {
       en: "The question that changed everything. Two words that meant the whole world. One year later, we make it forever.",
@@ -95,7 +95,7 @@ export const TIMELINE = [
     },
   },
   {
-    date: { line1: "August 25", line2: "2026" },
+    date: { en: "August 25 · 2026", ar: "٢٥ أغسطس · ٢٠٢٦" },
     title: { en: "The Wedding Day", ar: "يوم الزفاف" },
     desc: {
       en: "The day we say \"I do\" and begin our forever together. We can't wait to celebrate surrounded by the people we love most.",
