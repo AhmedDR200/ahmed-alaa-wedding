@@ -6,6 +6,11 @@ import { usePathname } from "next/navigation";
 import GateKitties from "@/components/shared/GateKitties";
 import { useLanguage } from "@/lib/i18n";
 
+// Single shared source of truth for the unlock password across every gated
+// page. Matching is case-insensitive and trims surrounding whitespace (see
+// `submit` below), so keep this value lowercase.
+export const GATE_PASSWORD = "you-are-perfect";
+
 type PageGateProps = {
   storageKey: string;
   password: string;

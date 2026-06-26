@@ -386,13 +386,25 @@ textarea::placeholder {
   color: rgba(90, 51, 64, 0.45) !important;
 }
 
-/* ── gate (password screens) ── */
+/* ── gate (single site-wide password screen, mounted in layout) ── */
 #gate {
-  position: relative;
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   overflow: hidden;
+  transition: opacity 0.8s ease, visibility 0.8s;
   background:
     radial-gradient(900px 600px at 50% -10%, rgba(255, 170, 200, 0.25), transparent 60%),
     linear-gradient(160deg, #3a2540 0%, #5a2f4d 45%, #7a3a55 100%) !important;
+}
+
+#gate.hide {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
 }
 
 .gate-kitties {
@@ -1498,4 +1510,135 @@ body:has(.flame-page) {
 .our-song-page .play-counter-label {
   color: var(--coral-deep) !important;
   opacity: 0.85;
+}
+
+/* ── countdown cute pass (home) ── kitty-ear flip cards + heart separators ── */
+.home-page .countdown-row {
+  align-items: center;
+  gap: clamp(16px, 4vw, 56px);
+}
+
+.home-page .count-unit {
+  position: relative;
+  padding: clamp(16px, 2.2vw, 26px) clamp(14px, 1.8vw, 22px) clamp(12px, 1.6vw, 18px);
+  min-width: clamp(96px, 12vw, 132px);
+  gap: 10px;
+  border-width: 4px !important;
+  border-radius: 16px !important;
+  box-shadow:
+    0 6px 0 rgba(184, 90, 85, 0.4),
+    inset 0 0 0 3px rgba(255, 255, 255, 0.6) !important;
+  overflow: visible !important;
+  animation: countBob 3.4s ease-in-out infinite;
+  transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+.home-page .count-unit:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 10px 0 rgba(184, 90, 85, 0.4),
+    inset 0 0 0 3px rgba(255, 255, 255, 0.7) !important;
+}
+
+.home-page .countdown-row .count-unit:nth-child(3) {
+  animation-delay: 0.28s;
+}
+.home-page .countdown-row .count-unit:nth-child(5) {
+  animation-delay: 0.56s;
+}
+.home-page .countdown-row .count-unit:nth-child(7) {
+  animation-delay: 0.84s;
+}
+
+/* kitty ears poking out of the top of each card */
+.home-page .count-unit::before,
+.home-page .count-unit::after {
+  content: "";
+  position: absolute;
+  top: -13px;
+  width: 0;
+  height: 0;
+  border-left: 12px solid transparent;
+  border-right: 12px solid transparent;
+  border-bottom: 17px solid var(--coral-deep);
+  z-index: 1;
+}
+.home-page .count-unit::before {
+  left: 16px;
+  transform: rotate(-14deg);
+}
+.home-page .count-unit::after {
+  right: 16px;
+  transform: rotate(14deg);
+}
+
+/* ticket-tear perforation between number and label */
+.home-page .count-bar {
+  height: 0 !important;
+  background: none !important;
+  border-top: 3px dashed var(--coral-deep) !important;
+  opacity: 0.55;
+}
+
+.home-page .count-label {
+  font-weight: 700 !important;
+}
+
+/* heart separators instead of the dot */
+.home-page .count-sep {
+  position: relative;
+  color: transparent !important;
+  padding-bottom: clamp(14px, 1.6vw, 18px);
+}
+.home-page .count-sep::after {
+  content: "♥";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--red);
+  font-size: round(clamp(24px, 3vw, 34px), 2px);
+  animation: countHeart 1.5s ease-in-out infinite;
+}
+
+/* sweeter eyebrow with little hearts */
+.home-page .countdown-section .section-eyebrow {
+  color: var(--coral-deep) !important;
+}
+.home-page .countdown-section .section-eyebrow::before {
+  content: "♡ ";
+  color: var(--red);
+}
+.home-page .countdown-section .section-eyebrow::after {
+  content: " ♡";
+  color: var(--red);
+}
+
+@keyframes countBob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes countHeart {
+  0%,
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.85;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.18);
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-page .count-unit,
+  .home-page .count-sep::after {
+    animation: none !important;
+  }
 }

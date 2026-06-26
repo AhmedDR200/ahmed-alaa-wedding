@@ -12,6 +12,7 @@ import localFont from "next/font/local";
 import { LanguageProvider } from "@/lib/i18n";
 import CustomCursor from "@/components/shared/CustomCursor";
 import BackgroundKitties from "@/components/shared/BackgroundKitties";
+import SiteGate from "@/components/shared/SiteGate";
 import "./globals.css";
 import "../styles/pixel-skin.css";
 import "../styles/background-kitties.css";
@@ -89,7 +90,9 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col">
         <BackgroundKitties />
         <CustomCursor />
-        <LanguageProvider>{children}</LanguageProvider>
+        <LanguageProvider>
+          <SiteGate>{children}</SiteGate>
+        </LanguageProvider>
       </body>
     </html>
   );
