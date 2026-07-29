@@ -206,7 +206,7 @@
       z-index: 8000;
       background: linear-gradient(135deg, var(--charcoal), #2a1f0e);
       border-bottom: 1px solid var(--gold);
-      padding: 16px 24px;
+      padding: 16px 56px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -226,11 +226,12 @@
       background: none;
       border: none;
       color: var(--muted);
-      font-size: 14px;
+      font-size: 16px;
       cursor: pointer;
-      padding: 4px 8px;
+      padding: 10px 14px;
       position: absolute;
-      right: 20px;
+      right: 12px;
+      line-height: 1;
     }
     .milestone-close:hover { color: var(--gold); }
 
@@ -1070,7 +1071,7 @@
     }
     .streak-tile:hover { transform: scale(1.5); z-index: 10; }
     .s-empty    { background: rgba(184,151,90,.07); }
-    .s-out      { background: transparent; pointer-events: none; }
+    .s-out      { background: rgba(184,151,90,.07); pointer-events: none; }
     .s-future   { background: rgba(184,151,90,.07); }
     .s-missed   { background: rgba(184,151,90,.16); }
     .s-visited  { background: var(--gold); }

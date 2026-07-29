@@ -461,6 +461,22 @@
         background: linear-gradient(to right, rgba(184,151,90,.45), transparent); }
       .tl-title { font-size: 20px; }
       .tl-caption { font-size: 12px; }
+      /* a 3-up photo row shrinks to unreadable thumbnails inside the narrow
+         stacked card — drop to 2 columns on phones */
+      .tl-photos[data-count="3"] { grid-template-columns: 1fr 1fr; }
+    }
+    /* RTL mobile: mirror the single-column spine to the right edge */
+    @media (max-width: 720px) {
+      [dir="rtl"] .timeline::before { left: auto; right: 18px; }
+      [dir="rtl"] .tl-item,
+      [dir="rtl"] .tl-item.right { padding: 22px 48px 22px 0; }
+      [dir="rtl"] .tl-item .tl-node,
+      [dir="rtl"] .tl-item.right .tl-node { left: auto; right: 11px; }
+      [dir="rtl"] .tl-item::before,
+      [dir="rtl"] .tl-item.right::before {
+        left: auto; right: 25px;
+        background: linear-gradient(to left, rgba(184,151,90,.45), transparent);
+      }
     }
     /* RTL: mirror so cards open from the correct side */
     [dir="rtl"] .tl-item:not(.right)::before { background: linear-gradient(to right, transparent, rgba(184,151,90,.45)); }

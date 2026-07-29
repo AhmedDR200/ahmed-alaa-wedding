@@ -234,10 +234,19 @@
     }
     .hero-title em {
       font-style: italic;
+      color: var(--sukuna-red);
       background: linear-gradient(90deg, var(--sukuna-red) 0%, var(--gold-lt) 50%, var(--gojo-blue) 100%);
       -webkit-background-clip: text; background-clip: text;
       -webkit-text-fill-color: transparent;
     }
+    /* if background-clip:text is unsupported, fall back to a solid colour
+       instead of transparent (would otherwise render the title invisible) */
+    @supports not ((-webkit-background-clip: text) or (background-clip: text)) {
+      .hero-title em { -webkit-text-fill-color: currentColor; color: var(--sukuna-red); }
+    }
+    /* Arabic has no true italic (Amiri fakes a slant) — the whole Arabic
+       title lives in this <em>, so keep it upright */
+    [lang="ar"] .hero-title em { font-style: normal; }
     [lang="ar"] .hero-title { font-family: 'Amiri', serif; font-weight: 400; }
     .hero-sub {
       font-family: 'Cormorant Garamond', serif;
