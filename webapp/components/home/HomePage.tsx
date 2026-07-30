@@ -15,6 +15,7 @@ import ConfettiCanvas, {
 } from "@/components/home/ConfettiCanvas";
 import CountdownStats from "@/components/home/CountdownStats";
 import HeroParallax from "@/components/home/HeroParallax";
+import KatbKitabCountdown from "@/components/home/KatbKitabCountdown";
 import PetalsCanvas from "@/components/home/PetalsCanvas";
 import Reveal from "@/components/home/Reveal";
 import ScrollProgress from "@/components/home/ScrollProgress";
@@ -165,6 +166,25 @@ function HomeView() {
           <div className="scroll-arrow" />
         </div>
       </section>
+
+      <KatbKitabCountdown
+        labels={{
+          eyebrow: t.katbEyebrow,
+          days: t.days,
+          hours: t.hours,
+          mins: t.mins,
+          secs: t.secs,
+          todayLabel: t.katbToday,
+          coupleLabel: t.ahmedAndAlaa,
+          dateLabel: t.katbDate,
+        }}
+      />
+
+      <div className="ornament reveal" style={{ margin: "0 auto" }}>
+        <div className="ornament-line" />
+        <div className="ornament-diamond" />
+        <div className="ornament-line" />
+      </div>
 
       <CountdownStats
         labels={{
